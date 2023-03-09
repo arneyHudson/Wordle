@@ -4,6 +4,7 @@ This is the repository for the course project for SE2800.  The project is develo
 
 ## Group Members
 Hudson Arney
+Nathaniel Zawarus
 
 ## Installation Instructions
 
