@@ -112,7 +112,7 @@ public class Wordle {
     public static Color[] perWordLetterCheck(String theGuess, String theTruth){
         int WORD_LENGTH = 5; // un-hardcode this if a better constant becomes extant
         Color DIRECT_COLOR = Color.GREEN;
-        Color INDIRECT_COLOR = Color.GRAY;
+        Color INDIRECT_COLOR = Color.YELLOW;
         Color NONE_COLOR = Color.GRAY;
         Color[] ret = new Color[WORD_LENGTH];
         List<Character> guessNonDirectLetters = new ArrayList<>();
