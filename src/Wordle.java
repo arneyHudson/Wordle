@@ -6,6 +6,8 @@
  * Date:       3/13/2023
  */
 
+import javafx.scene.paint.Color;
+
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -104,6 +106,52 @@ public class Wordle {
 
     private boolean checkRealWord(String guess){
         return words.contains(guess);
+    }
+
+
+    /**
+     * Returns a 1x5 array of colors to use in the GUI representation of the letters.
+     * @param theGuess The guess word to compare against the true word
+     * @param theTruth The true word to be compared against
+     * @return A 1x5 Array where each color is respective to the letter of the guess word
+     */
+    public static Color[] perWordLetterCheck(String theGuess, String theTruth){
+        int WORD_LENGTH = 5; // un-hardcode this if a better constant becomes extant
+        Color DIRECT_COLOR = Color.GREEN;
+        Color INDIRECT_COLOR = Color.YELLOW;
+        Color NONE_COLOR = Color.GRAY;
+        Color[] ret = new Color[WORD_LENGTH];
+        List<Character> guessNonDirectLetters = new ArrayList<>();
+        List<Character> truthNonDirectLetters = new ArrayList<>();
+        /*
+         * Phase 1: Direct Check (check for perfect guesses, then remove those letters from both
+         * Phase 2: Indirect Check (check remaining letters, removing when an indirect is found
+         */
+
+        // Direct Check
+
+        for(int i = 0; i < WORD_LENGTH; ++i){
+            if(theGuess.charAt(i) == theTruth.charAt(i)){
+                guessNonDirectLetters.add('0'); // to maintain spacing, no word has '0' in it.
+                ret[i] = DIRECT_COLOR;
+            } else {
+                guessNonDirectLetters.add(theGuess.charAt(i));
+                truthNonDirectLetters.add(theTruth.charAt(i));
+            }
+        }
+
+        // Indirect Check
+
+        for(int i = 0; i < WORD_LENGTH; ++i){
+            if(truthNonDirectLetters.contains(guessNonDirectLetters.get(i))){
+                ret[i] = INDIRECT_COLOR;
+                truthNonDirectLetters.remove(guessNonDirectLetters.get(i));
+            } else if ((!truthNonDirectLetters.contains(guessNonDirectLetters.get(i))) &&
+            ret[i] == null){
+                ret[i] = NONE_COLOR;
+            }
+        }
+        return ret;
     }
 
     /**
