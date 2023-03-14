@@ -10,8 +10,8 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  A class that represents the Wordle game which can generate a
@@ -20,11 +20,11 @@ import java.util.Map;
 public class Wordle {
     private static final int MAX_GUESSES = 6;
     private int remainingGuesses;
-    private Map<String, Integer> previousGuesses;
+    private Set<String> previousGuesses;
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
-        this.previousGuesses = new HashMap<String, Integer>();
+        this.previousGuesses = new HashSet<String>();
     }
 
     /**
@@ -43,7 +43,7 @@ public class Wordle {
                 System.out.println("Congratulations, you found the secret word!");
                 return;
             }
-            previousGuesses.put(guess, 1);
+            previousGuesses.add(guess);
             remainingGuesses--;
         }
         System.out.println("Sorry, you ran out of guesses. The secret word was " + secretWord + ".");
@@ -89,7 +89,7 @@ public class Wordle {
             String guess = scanner.next().toLowerCase();
             if (guess.length() != 5) {
                 System.out.println("Invalid guess. Please enter a 5-letter word.");
-            } else if (previousGuesses.containsKey(guess)) {
+            } else if (previousGuesses.contains(guess)) {
                 System.out.println("You already guessed that word. Please enter a new word.");
             } else {
                 return guess;
