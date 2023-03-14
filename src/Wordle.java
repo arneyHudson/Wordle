@@ -148,8 +148,6 @@ public class Wordle {
         return ret;
     }
 
-}
-
     /**
      * Meathod that takes in a guess and a secret word and checks if
      * any of the letters are in the secret word and adds them to the Map.
