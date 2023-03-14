@@ -21,6 +21,7 @@ public class Wordle {
     private static final int MAX_GUESSES = 6;
     private int remainingGuesses;
     private Set<String> previousGuesses;
+    private List<String> words = new ArrayList<String>();
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
@@ -57,7 +58,6 @@ public class Wordle {
         try {
             FileInputStream fileInputStream = new FileInputStream("src\\wordle-official.txt");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
-            List<String> words = new ArrayList<String>();
             String word;
             while ((word = bufferedReader.readLine()) != null) {
                 if (word.length() == 5) {
@@ -89,11 +89,17 @@ public class Wordle {
             String guess = scanner.next().toLowerCase();
             if (guess.length() != 5) {
                 System.out.println("Invalid guess. Please enter a 5-letter word.");
+            } else if(!checkRealWord(guess)){
+                System.out.println("Not in word list.");
             } else if (previousGuesses.contains(guess)) {
                 System.out.println("You already guessed that word. Please enter a new word.");
             } else {
                 return guess;
             }
         }
+    }
+
+    private boolean checkRealWord(String guess){
+        return words.contains(guess);
     }
 }
