@@ -6,12 +6,10 @@
  * Date:       3/13/2023
  */
 
+import java.awt.*;
 import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  A class that represents the Wordle game which can generate a
@@ -25,7 +23,7 @@ public class Wordle {
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
-        this.previousGuesses = new HashSet<String>();
+        this.previousGuesses = new HashMap<String, Integer>();
     }
 
     /**
@@ -37,14 +35,19 @@ public class Wordle {
         System.out.println("The secret word is a 5-letter word. Good luck!");
         String secretWord = generateSecretWord();
 
+        Map<Character, Color> lettersGuessed = new HashMap<>();
+
         while (remainingGuesses > 0) {
             System.out.println("Guesses remaining: " + remainingGuesses);
             String guess = getValidGuess();
+
+            checkLetters(secretWord, guess, lettersGuessed);
+
             if (guess.equals(secretWord)) {
                 System.out.println("Congratulations, you found the secret word!");
                 return;
             }
-            previousGuesses.add(guess);
+            previousGuesses.put(guess, 1);
             remainingGuesses--;
         }
         System.out.println("Sorry, you ran out of guesses. The secret word was " + secretWord + ".");
