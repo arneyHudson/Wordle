@@ -6,12 +6,10 @@
  * Date:       3/13/2023
  */
 
+import java.awt.*;
 import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  A class that represents the Wordle game which can generate a
@@ -20,12 +18,12 @@ import java.util.Set;
 public class Wordle {
     private static final int MAX_GUESSES = 6;
     private int remainingGuesses;
-    private Set<String> previousGuesses;
+    private Map<String, Integer> previousGuesses;
     private List<String> words = new ArrayList<String>();
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
-        this.previousGuesses = new HashSet<String>();
+        this.previousGuesses = new HashMap<String, Integer>();
     }
 
     /**
@@ -37,14 +35,19 @@ public class Wordle {
         System.out.println("The secret word is a 5-letter word. Good luck!");
         String secretWord = generateSecretWord();
 
+        Map<Character, Color> lettersGuessed = new HashMap<>();
+
         while (remainingGuesses > 0) {
             System.out.println("Guesses remaining: " + remainingGuesses);
             String guess = getValidGuess();
+
+            checkLetters(secretWord, guess, lettersGuessed);
+
             if (guess.equals(secretWord)) {
                 System.out.println("Congratulations, you found the secret word!");
                 return;
             }
-            previousGuesses.add(guess);
+            previousGuesses.put(guess, 1);
             remainingGuesses--;
         }
         System.out.println("Sorry, you ran out of guesses. The secret word was " + secretWord + ".");
@@ -91,7 +94,7 @@ public class Wordle {
                 System.out.println("Invalid guess. Please enter a 5-letter word.");
             } else if(!checkRealWord(guess)){
                 System.out.println("Not in word list.");
-            } else if (previousGuesses.contains(guess)) {
+            } else if (previousGuesses.containsKey(guess)) {
                 System.out.println("You already guessed that word. Please enter a new word.");
             } else {
                 return guess;
@@ -101,5 +104,21 @@ public class Wordle {
 
     private boolean checkRealWord(String guess){
         return words.contains(guess);
+    }
+
+    /**
+     * Meathod that takes in a guess and a secret word and checks if
+     * any of the letters are in the secret word and adds them to the Map.
+     * If the letter is in the word its saved as Color.GREEN and Color.GRAY
+     * if it isn't
+     * @param secretWord the word the user is trying to guess
+     * @param guess the word the user did guess
+     * @param guessedLetters the map of guessed letters
+     * @author Collin Schmocker
+     */
+    private void checkLetters(String secretWord, String guess, Map<Character, Color> guessedLetters) {
+        for(char character: guess.toUpperCase().toCharArray()) {
+            guessedLetters.put(character, secretWord.indexOf(character) == -1 ? Color.GREEN: Color.GRAY);
+        }
     }
 }
