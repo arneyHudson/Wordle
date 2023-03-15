@@ -19,6 +19,7 @@ public class Wordle {
     private static final int MAX_GUESSES = 6;
     private int remainingGuesses;
     private Map<String, Integer> previousGuesses;
+    private Map<Character, Color> lettersGuessed;
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
@@ -115,4 +116,9 @@ public class Wordle {
             guessedLetters.put(character, secretWord.indexOf(character) == -1 ? Color.GREEN: Color.GRAY);
         }
     }
+
+    public int getRemainingGuesses() {
+        return remainingGuesses;
+    }
+
 }
