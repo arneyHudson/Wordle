@@ -1,4 +1,4 @@
-/*
+package Group1;/*
  * Course:     SE 2800
  * Term:       Spring 2023
  * Assignment: Lab 1: User Stories

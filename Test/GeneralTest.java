@@ -1,3 +1,4 @@
+import Group1.Wordle;
 import org.junit.jupiter.api.BeforeEach;
 
 public class GeneralTest {

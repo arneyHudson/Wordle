@@ -1,4 +1,4 @@
-/*
+package Group1;/*
  * Course:     SE 2800
  * Term:       Spring 2023
  * Assignment: Lab 1: User Stories
@@ -23,7 +23,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("Wordle.fxml"));
+        loader.setLocation(getClass().getResource("Group1/Wordle.fxml"));
         Parent root = loader.load();
         stage.setScene(new Scene(root));
         stage.setTitle("Wordle?");
