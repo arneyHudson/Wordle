@@ -23,12 +23,17 @@ public class Wordle {
     private Map<String, Integer> previousGuesses;
     private Map<Character, Color> lettersGuessed;
     private List<String> words = new ArrayList<String>();
+    private String secretWord;
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
         this.previousGuesses = new HashMap<String, Integer>();
+        this.secretWord = generateSecretWord();
     }
 
+    public String getSecretWord(){
+        return secretWord;
+    }
     /**
      * Contains the basics for playing the game of wordle
      */
