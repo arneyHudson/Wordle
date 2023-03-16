@@ -22,6 +22,7 @@ public class Wordle {
     private int remainingGuesses;
     private Map<String, Integer> previousGuesses;
     private Map<Character, Color> lettersGuessed;
+    private List<String> words = new ArrayList<String>();
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
