@@ -23,7 +23,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("Group1/Wordle.fxml"));
+        loader.setLocation(getClass().getResource("/Group1/Wordle.fxml"));
         Parent root = loader.load();
         stage.setScene(new Scene(root));
         stage.setTitle("Wordle?");

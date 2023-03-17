@@ -4,7 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -129,6 +131,12 @@ public class wordleController implements Initializable {
         String guess = "";
         for (int i = 0; i < wordleDisplay.getColumnCount(); i++) {
             guess = guess + ((TextField) wordleDisplay.getChildren().get(i + (wordleDisplay.getRowCount() - wordle.getRemainingGuesses()))).getText();
+        }
+        if(wordle.checkRealWord(guess.toLowerCase())){
+
+        } else {
+            Alert invalidWord = new Alert(Alert.AlertType.WARNING,"Not in word list. Please enter a valid 5-letter word.",ButtonType.CLOSE);
+            invalidWord.showAndWait();
         }
 
         /*
