@@ -67,7 +67,7 @@ public class Wordle {
      */
     private String generateSecretWord() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("src\\wordle-official.txt");
+            FileInputStream fileInputStream = new FileInputStream("src/Group1/wordle-official.txt");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
             String word;
             while ((word = bufferedReader.readLine()) != null) {
@@ -110,7 +110,7 @@ public class Wordle {
         }
     }
 
-    private boolean checkRealWord(String guess){
+    public boolean checkRealWord(String guess){
         return words.contains(guess);
     }
 
@@ -176,6 +176,9 @@ public class Wordle {
         }
     }
 
+    public void setRemainingGuesses(int numGuesses){
+        this.remainingGuesses = numGuesses;
+    }
     public int getRemainingGuesses() {
         return remainingGuesses;
     }
