@@ -1,4 +1,4 @@
-/*
+package Group1;/*
  * Course:     SE 2800
  * Term:       Spring 2023
  * Assignment: Lab 1: User Stories
@@ -23,12 +23,17 @@ public class Wordle {
     private Map<String, Integer> previousGuesses;
     private Map<Character, Color> lettersGuessed;
     private List<String> words = new ArrayList<String>();
+    private String secretWord;
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
         this.previousGuesses = new HashMap<String, Integer>();
+        this.secretWord = generateSecretWord();
     }
 
+    public String getSecretWord(){
+        return secretWord;
+    }
     /**
      * Contains the basics for playing the game of wordle
      */
@@ -62,7 +67,7 @@ public class Wordle {
      */
     private String generateSecretWord() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("src\\wordle-official.txt");
+            FileInputStream fileInputStream = new FileInputStream("src/Group1/wordle-official.txt");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
             String word;
             while ((word = bufferedReader.readLine()) != null) {
@@ -105,7 +110,7 @@ public class Wordle {
         }
     }
 
-    private boolean checkRealWord(String guess){
+    public boolean checkRealWord(String guess){
         return words.contains(guess);
     }
 
@@ -171,6 +176,9 @@ public class Wordle {
         }
     }
 
+    public void setRemainingGuesses(int numGuesses){
+        this.remainingGuesses = numGuesses;
+    }
     public int getRemainingGuesses() {
         return remainingGuesses;
     }

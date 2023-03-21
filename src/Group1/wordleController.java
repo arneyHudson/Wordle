@@ -1,9 +1,13 @@
+package Group1;
 import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -110,7 +114,7 @@ public class wordleController implements Initializable {
         }
     }
 
-    /**d
+    /**
      * The setUpKeyboard method the section the user sees their previous input
      * @author Collin Schmocker
      */
@@ -139,6 +143,13 @@ public class wordleController implements Initializable {
         String guess = "";
         for (int i = 0; i < wordleDisplay.getColumnCount(); i++) {
             guess = guess + ((TextField) wordleDisplay.getChildren().get(i + (wordleDisplay.getRowCount() - wordle.getRemainingGuesses()))).getText();
+        }
+        if(wordle.checkRealWord(guess.toLowerCase())){
+            setGuessColor(Arrays.asList(
+                    Wordle.perWordLetterCheck(guess.toLowerCase(), wordle.getSecretWord())));
+        } else {
+            Alert invalidWord = new Alert(Alert.AlertType.WARNING,"Not in word list. Please enter a valid 5-letter word.",ButtonType.CLOSE);
+            invalidWord.showAndWait();
         }
 
         if (wordle.isGameOver()) {

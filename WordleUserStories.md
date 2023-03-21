@@ -12,7 +12,7 @@ An example Wordle board is shown below with 4 guesses.  The first guess is on th
 - Black highlighted letters are not in the reference word.
 - Green highlighted letters are in the word and in the correct location.  
 
-File: You are provided with an official list of wordle words ([wordle-official.txt](src/wordle-official.txt))
+File: You are provided with an official list of wordle words ([wordle-official.txt](src/Group1/wordle-official.txt))
 
 You have been tasked with creating an application to play wordle.  The application must consist of a client interface to allow a player to play the game as described along with an administrator interface that can be used by a game administrator to view statistics and adjust the game as needed for difficulty and usability.
 
