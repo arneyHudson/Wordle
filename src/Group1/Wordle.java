@@ -161,6 +161,52 @@ public class Wordle {
     }
 
     /**
+     * Overloaded method for getLetterHint(String, int, Color[])
+     * Color is default all gray
+     * @param theTruth The reference word to make a hint for
+     * @return A hint based off the reference word
+     */
+    public static String getLetterHint(String theTruth){
+        final int wordLength = 5;
+        final Color[] colorArray = {Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY};
+        return getLetterHint(theTruth, colorArray);
+    }
+
+    /**
+     * For User Story 8, returns a String with a single correct letter in its correct place
+     * All other strings as asterisks
+     * @param theTruth The correct word, used to create a hint from.
+     * @param colors Optionally passed in, in order to avoid making hints for 'green' spaces
+     * @return A string containing the hint.
+     */
+    public static String getLetterHint(String theTruth, Color[] colors){
+        // if all green, disable the button
+        /*
+         * Figure out which positions /can/ be hints
+         * Use math.random to pick one of those positions
+         * Use the code succeeding to come up with the hint.
+         */
+        List<Integer> possiblePositions = new ArrayList<>();
+        for(int i = 0; i < colors.length; ++i){
+            if(colors[i] != Color.GREEN){
+                possiblePositions.add(i);
+            }
+        }
+        final int hintPosition = possiblePositions.get((int)(Math.random()*possiblePositions.size()));
+        final char hintChar = theTruth.charAt(hintPosition);
+        final char hiddenChar = '*';
+        String ret = "";
+        for(int i = 0; i < theTruth.length(); ++i){
+            if(i == hintPosition){
+                ret = ret + hintChar;
+            } else {
+                ret = ret + hiddenChar;
+            }
+        }
+        return ret;
+    }
+
+    /**
      * Meathod that takes in a guess and a secret word and checks if
      * any of the letters are in the secret word and adds them to the Map.
      * If the letter is in the word its saved as Color.GREEN and Color.GRAY
