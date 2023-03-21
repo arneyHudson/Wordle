@@ -175,4 +175,11 @@ public class Wordle {
         return remainingGuesses;
     }
 
+    public boolean isGameOver() {
+        return remainingGuesses == 0;
+    }
+
+    public int getNumGuesses() {
+        return MAX_GUESSES - remainingGuesses;
+    }
 }

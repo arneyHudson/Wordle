@@ -1,13 +1,16 @@
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.event.ActionEvent;
 import javafx.scene.paint.Paint;
 
 import java.net.URL;
@@ -30,6 +33,12 @@ public class wordleController implements Initializable {
     private Button guessButton;
     private GridPane wordleDisplay;
     private Wordle wordle;
+    @FXML
+    private Label numGuessesLabel;
+    @FXML
+    private Label averageNumGuessesLabel;
+    private List<Integer> numGuessesList = new ArrayList<>();
+    private int gamesPlayed;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -41,7 +50,9 @@ public class wordleController implements Initializable {
         setUpKeyboard();
         mainDisplay.getChildren().add(1, wordleDisplay);
         wordle = new Wordle();
-
+        numGuessesLabel = new Label("Current Number of guesses: 0");
+        averageNumGuessesLabel = new Label("Average number of guesses: 0");
+        mainDisplay.getChildren().addAll(numGuessesLabel, averageNumGuessesLabel);
     }
 
     /**
@@ -99,7 +110,7 @@ public class wordleController implements Initializable {
         }
     }
 
-    /**
+    /**d
      * The setUpKeyboard method the section the user sees their previous input
      * @author Collin Schmocker
      */
@@ -130,6 +141,16 @@ public class wordleController implements Initializable {
             guess = guess + ((TextField) wordleDisplay.getChildren().get(i + (wordleDisplay.getRowCount() - wordle.getRemainingGuesses()))).getText();
         }
 
+        if (wordle.isGameOver()) {
+            numGuessesList.add(wordle.getNumGuesses());
+            numGuessesLabel.setText("Number of guesses: " + wordle.getNumGuesses());
+            averageNumGuessesLabel.setText("Average number of guesses: " + getAverageNumGuesses());
+            gamesPlayed++;
+            //... code for starting a new game
+
+            //guessButton.setOnAction(event);
+        }
+
         /*
         //Uncomment this section to understand how its setup
         List<Paint> colors = new ArrayList<>();
@@ -149,6 +170,18 @@ public class wordleController implements Initializable {
         System.out.println(guess);
          */
 
+    }
+
+    private double getAverageNumGuesses() {
+        if (numGuessesList.isEmpty()) {
+            return 0.0;
+        } else {
+            int totalNumGuesses = 0;
+            for (int numGuesses : numGuessesList) {
+                totalNumGuesses += numGuesses;
+            }
+            return (double) totalNumGuesses / numGuessesList.size();
+        }
     }
 
     /**
