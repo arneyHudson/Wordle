@@ -133,7 +133,8 @@ public class wordleController implements Initializable {
             guess = guess + ((TextField) wordleDisplay.getChildren().get(i + (wordleDisplay.getRowCount() - wordle.getRemainingGuesses()))).getText();
         }
         if(wordle.checkRealWord(guess.toLowerCase())){
-
+            setGuessColor(Arrays.asList(
+                    Wordle.perWordLetterCheck(guess.toLowerCase(), wordle.getSecretWord())));
         } else {
             Alert invalidWord = new Alert(Alert.AlertType.WARNING,"Not in word list. Please enter a valid 5-letter word.",ButtonType.CLOSE);
             invalidWord.showAndWait();
