@@ -224,6 +224,10 @@ public class wordleController implements Initializable {
 
     }
 
+    private void newGame() {
+
+    }
+
     /**
      * Restarts the game when the Play Again button is pressed.
      */
