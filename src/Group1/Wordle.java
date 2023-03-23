@@ -6,10 +6,12 @@ package Group1;/*
  * Date:       3/13/2023
  */
 
+import javafx.scene.paint.Paint;
 import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.io.*;
+import java.security.Guard;
 import java.util.*;
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class Wordle {
     private static final int MAX_GUESSES = 6;
     private int remainingGuesses;
     private Map<String, Integer> previousGuesses;
-    private Map<Character, Color> lettersGuessed;
+    private Map<Character, Paint> lettersGuessed;
     private List<String> words = new ArrayList<String>();
     private String secretWord;
 
@@ -29,6 +31,7 @@ public class Wordle {
         this.remainingGuesses = MAX_GUESSES;
         this.previousGuesses = new HashMap<String, Integer>();
         this.secretWord = generateSecretWord();
+        lettersGuessed = new HashMap<>();
     }
 
     public String getSecretWord(){
@@ -48,8 +51,6 @@ public class Wordle {
         while (remainingGuesses > 0) {
             System.out.println("Guesses remaining: " + remainingGuesses);
             String guess = getValidGuess();
-
-            checkLetters(secretWord, guess, lettersGuessed);
 
             if (guess.equals(secretWord)) {
                 System.out.println("Congratulations, you found the secret word!");
@@ -165,15 +166,17 @@ public class Wordle {
      * any of the letters are in the secret word and adds them to the Map.
      * If the letter is in the word its saved as Color.GREEN and Color.GRAY
      * if it isn't
-     * @param secretWord the word the user is trying to guess
      * @param guess the word the user did guess
-     * @param guessedLetters the map of guessed letters
      * @author Collin Schmocker
      */
-    private void checkLetters(String secretWord, String guess, Map<Character, Color> guessedLetters) {
-        for(char character: guess.toUpperCase().toCharArray()) {
-            guessedLetters.put(character, secretWord.indexOf(character) == -1 ? Color.GREEN: Color.GRAY);
+    public Map<Character, Paint> checkLetters(String guess) {
+        Color[] check = perWordLetterCheck(guess.toLowerCase(), secretWord);
+        char[] characters = guess.toUpperCase().toCharArray();
+        for(int i = 0; i < characters.length; i++) {
+            lettersGuessed.put(characters[i], check[i]);
+            //System.out.println(characters[i] + ": " + check[i]);
         }
+        return lettersGuessed;
     }
 
     public void setRemainingGuesses(int numGuesses){
@@ -183,4 +186,11 @@ public class Wordle {
         return remainingGuesses;
     }
 
+    public boolean isGameOver() {
+        return remainingGuesses == 0;
+    }
+
+    public int getNumGuesses() {
+        return previousGuesses.size();
+    }
 }

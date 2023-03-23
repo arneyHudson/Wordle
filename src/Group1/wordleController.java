@@ -1,4 +1,5 @@
 package Group1;
+import javafx.event.EventHandler;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,11 +8,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.event.ActionEvent;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
@@ -33,6 +38,17 @@ public class wordleController implements Initializable {
     private Button guessButton;
     private GridPane wordleDisplay;
     private Wordle wordle;
+    @FXML
+    private Label numGuessesLabel;
+    @FXML
+    private Label averageNumGuessesLabel;
+    @FXML
+    private Button playAgainButton;
+    private List<Integer> numGuessesList = new ArrayList<>();
+    private int gamesPlayed = 0;
+    private int numGuesses = 0;
+    private int totalNumGuesses = 0;
+    boolean correctGuess = false;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -44,7 +60,11 @@ public class wordleController implements Initializable {
         setUpKeyboard();
         mainDisplay.getChildren().add(1, wordleDisplay);
         wordle = new Wordle();
-
+        numGuessesLabel = new Label("Current Number of Guesses: 0");
+        averageNumGuessesLabel = new Label("Average number of Guesses: 0.0");
+        playAgainButton = new Button("Play Again!");
+        playAgainButton.setDisable(true);
+        mainDisplay.getChildren().addAll(numGuessesLabel, averageNumGuessesLabel, playAgainButton);
     }
 
     /**
@@ -73,10 +93,20 @@ public class wordleController implements Initializable {
                     String input = textField.getText();
                     if(input.length() >= 1) {
                         if (Character.isLetter(input.charAt(0))) {
-                            textField.setText(input.substring(0, 1).toUpperCase());
                             List<Node> children = wordleDisplay.getChildren();
+                            int col = wordleDisplay.getColumnCount();
+                            int row = wordleDisplay.getRowCount();
+                            int remain =  wordle.getRemainingGuesses();
+                            textField.setText(input.substring(0, 1).toUpperCase());
                             int index = children.indexOf(textField);
-                            if(((index != 0) && (index % (secretWordLength - 1) == 0))) {
+                            boolean full = true;
+                            for (int k = 0; k < col; k++) {
+                                if(full && ((TextField)children.get(k + col * (row - remain))).getText().equals("")) {
+                                    full = false;
+                                }
+                            }
+                            guessButton.setDisable(!full);
+                            if (((index != 0) && ((index + 1) % secretWordLength == 0))) {
                                 guessButton.requestFocus();
                             } else {
                                 children.get(index + 1).requestFocus();
@@ -85,14 +115,6 @@ public class wordleController implements Initializable {
                             textField.setText("");
                         }
                     }
-                    boolean full = true;
-                    int range = (wordleDisplay.getRowCount() - wordle.getRemainingGuesses())*secretWordLength;
-                    for(Node node: wordleDisplay.getChildren().subList(range*secretWordLength, range*secretWordLength + secretWordLength)) {
-                        if(full && ((TextField) node).getText().equals("")) {
-                            full = false;
-                        }
-                    }
-                    guessButton.setDisable(!full);
                 });
                 wordleDisplay.add(textField, j, i);
             }
@@ -129,15 +151,55 @@ public class wordleController implements Initializable {
     @FXML
     public void guess() {
         String guess = "";
-        for (int i = 0; i < wordleDisplay.getColumnCount(); i++) {
-            guess = guess + ((TextField) wordleDisplay.getChildren().get(i + (wordleDisplay.getRowCount() - wordle.getRemainingGuesses()))).getText();
+        List<Node> children = wordleDisplay.getChildren();
+        int col = wordleDisplay.getColumnCount();
+        int row = wordleDisplay.getRowCount();
+        int remain =  wordle.getRemainingGuesses();
+
+        for (int i = 0; i < col; i++) {
+            guess = guess + ((TextField) children.get(i + col * (row - remain))).getText();
         }
         if(wordle.checkRealWord(guess.toLowerCase())){
+            for (int i = 0; i < col; i++) {
+                children.get(i + col * (row -remain)).setDisable(true);
+                ((TextField)children.get(i + col * (row - remain))).setEditable(false);
+            }
             setGuessColor(Arrays.asList(
                     Wordle.perWordLetterCheck(guess.toLowerCase(), wordle.getSecretWord())));
+            setGuessedLetterColors(wordle.checkLetters(guess));
+            if (wordle.getRemainingGuesses() != 1 && !wordle.getSecretWord().equals(guess.toLowerCase())) {
+                wordle.setRemainingGuesses(remain - 1);
+                remain = wordle.getRemainingGuesses();
+                for (int i = 0; i < col; i++) {
+                    children.get(i + col * (row - remain)).setDisable(false);
+                    ((TextField) children.get(i + col * (row - remain))).setEditable(true);
+                }
+                children.get(col * (row - remain)).requestFocus();
+            }
+            guessButton.setDisable(true);
+            numGuessesList.add(numGuesses++);
+            if(guess.equalsIgnoreCase(wordle.getSecretWord())) {
+                correctGuess = true;
+            }
         } else {
             Alert invalidWord = new Alert(Alert.AlertType.WARNING,"Not in word list. Please enter a valid 5-letter word.",ButtonType.CLOSE);
             invalidWord.showAndWait();
+            children.get(col * (row - remain)).requestFocus();
+        }
+        //numGuessesList.add(numGuesses++);
+        int numCurrentGuesses = numGuessesList.size();
+        numGuessesLabel.setText("Current Number of Guesses: " + numCurrentGuesses);
+
+        if (numCurrentGuesses == 6 || correctGuess) {
+            gamesPlayed++;
+            totalNumGuesses += numGuessesList.size();
+            numGuessesList.clear();
+            averageNumGuessesLabel.setText("Average number of guesses: " + getAverageNumGuesses());
+            playAgainButton.setDisable(false);
+
+            playAgainButton.setOnAction(event -> {
+                restartGame();
+            });
         }
 
         /*
@@ -162,6 +224,33 @@ public class wordleController implements Initializable {
     }
 
     /**
+     * Restarts the game when the Play Again button is pressed.
+     */
+    private void restartGame() {
+        // reset keyboard and wordle display
+        userKeys.getChildren().clear();
+        setUpKeyboard();
+        wordleDisplay.getChildren().clear();
+        setUpWordleDisplay(6, 5);
+        mainDisplay.getChildren().add(1, wordleDisplay);
+        wordle = new Wordle(); // reset the wordle
+        numGuesses = 0; // reset the number of guesses
+        numGuessesLabel.setText("Current Number of Guesses: 0");
+        correctGuess = false; // reset correct guess flag
+        guessButton.setDisable(false); // enable guess button
+        playAgainButton.setDisable(true); // disable play again button
+    }
+
+    /**
+     * Will print the average number of guesses after a round is finsihed.
+     * @return the average
+     */
+    private double getAverageNumGuesses() {
+        double average = (double) totalNumGuesses / gamesPlayed;
+        return Math.round(average * 100.0) / 100.0;
+    }
+
+    /**
      * The setGuessColor sets the current row that was guess to a list of colors
      * @param colors a list of JavaFX Paint objects the same size as the length of the secretWords
      *               @author Collin Schmocker
@@ -169,7 +258,7 @@ public class wordleController implements Initializable {
     private void setGuessColor(List<Paint> colors) {
         for (int i = 0; i < wordleDisplay.getColumnCount(); i++) {
             String style = "-fx-control-inner-background: #" + colors.get(i).toString().substring(2);
-            wordleDisplay.getChildren().get(i + (wordleDisplay.getRowCount() - wordle.getRemainingGuesses())).setStyle(style);
+            wordleDisplay.getChildren().get(i + wordleDisplay.getColumnCount() * (wordleDisplay.getRowCount() - wordle.getRemainingGuesses())).setStyle(style);
         }
     }
 
