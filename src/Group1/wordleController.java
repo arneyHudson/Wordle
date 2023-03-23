@@ -1,4 +1,6 @@
 package Group1;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,10 +9,13 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.event.ActionEvent;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
@@ -34,6 +39,17 @@ public class wordleController implements Initializable {
     private Button guessButton;
     private GridPane wordleDisplay;
     private Wordle wordle;
+    @FXML
+    private Label numGuessesLabel;
+    @FXML
+    private Label averageNumGuessesLabel;
+    @FXML
+    private Button playAgainButton;
+    private List<Integer> numGuessesList = new ArrayList<>();
+    private int gamesPlayed = 0;
+    private int numGuesses = 0;
+    private int totalNumGuesses = 0;
+    boolean correctGuess = false;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -45,7 +61,11 @@ public class wordleController implements Initializable {
         setUpKeyboard();
         mainDisplay.getChildren().add(1, wordleDisplay);
         wordle = new Wordle();
-
+        numGuessesLabel = new Label("Current Number of Guesses: 0");
+        averageNumGuessesLabel = new Label("Average number of Guesses: 0.0");
+        playAgainButton = new Button("Play Again!");
+        playAgainButton.setDisable(true);
+        mainDisplay.getChildren().addAll(numGuessesLabel, averageNumGuessesLabel, playAgainButton);
     }
 
     /**
@@ -158,10 +178,29 @@ public class wordleController implements Initializable {
                 children.get(col * (row - remain)).requestFocus();
             }
             guessButton.setDisable(true);
+            numGuessesList.add(numGuesses++);
+            if(guess.equalsIgnoreCase(wordle.getSecretWord())) {
+                correctGuess = true;
+            }
         } else {
             Alert invalidWord = new Alert(Alert.AlertType.WARNING,"Not in word list. Please enter a valid 5-letter word.",ButtonType.CLOSE);
             invalidWord.showAndWait();
             children.get(col * (row - remain)).requestFocus();
+        }
+        //numGuessesList.add(numGuesses++);
+        int numCurrentGuesses = numGuessesList.size();
+        numGuessesLabel.setText("Current Number of Guesses: " + numCurrentGuesses);
+
+        if (numCurrentGuesses == 6 || correctGuess) {
+            gamesPlayed++;
+            totalNumGuesses += numGuessesList.size();
+            numGuessesList.clear();
+            averageNumGuessesLabel.setText("Average number of guesses: " + getAverageNumGuesses());
+            playAgainButton.setDisable(false);
+
+            playAgainButton.setOnAction(event -> {
+                restartGame();
+            });
         }
 
         /*
@@ -187,6 +226,42 @@ public class wordleController implements Initializable {
 
     private void newGame() {
 
+    }
+
+    /**
+     * Restarts the game when the Play Again button is pressed.
+     */
+    private void restartGame() {
+        // reset keyboard and wordle display
+        ObservableList<Node> children = userKeys.getChildren();
+        for (Node node : children) {
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                ObservableList<Node> hboxChildren = hbox.getChildren();
+                hboxChildren.removeIf(child -> child instanceof TextField);
+            }
+        }
+
+        wordleDisplay.getChildren().clear();
+        setUpKeyboard();
+        setUpWordleDisplay(6, 5);
+        mainDisplay.getChildren().add(1, wordleDisplay);
+        wordle = new Wordle(); // reset the wordle
+
+        numGuesses = 0; // reset the number of guesses
+        numGuessesLabel.setText("Current Number of Guesses: 0");
+        correctGuess = false; // reset correct guess flag
+        guessButton.setDisable(false); // enable guess button
+        playAgainButton.setDisable(true); // disable play again button
+    }
+
+    /**
+     * Will print the average number of guesses after a round is finsihed.
+     * @return the average
+     */
+    private double getAverageNumGuesses() {
+        double average = (double) totalNumGuesses / gamesPlayed;
+        return Math.round(average * 100.0) / 100.0;
     }
 
     /**
