@@ -168,16 +168,20 @@ public class Wordle {
      * @return A hint based off the reference word
      */
     public static String getLetterHint(String theTruth){
-        final int wordLength = 5;
-        final Color[] colorArray = {Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY};
+        Color[] colorArray = new Color[theTruth.length()];
+        Arrays.fill(colorArray, Color.GRAY);
         return getLetterHint(theTruth, colorArray);
     }
 
     /**
      * For User Story 8, returns a String with a single correct letter in its correct place
      * All other strings as asterisks
+     *
+     * NOTE: The color array MUST be the same length as the word.
      * @param theTruth The correct word, used to create a hint from.
      * @param colors Optionally passed in, in order to avoid making hints for 'green' spaces
+     * @throws IllegalArgumentException when the length of the color array is not equal to the
+     * length of the 'true' string.
      * @return A string containing the hint.
      */
     public static String getLetterHint(String theTruth, Color[] colors){
@@ -187,6 +191,10 @@ public class Wordle {
          * Use math.random to pick one of those positions
          * Use the code succeeding to come up with the hint.
          */
+        if(colors.length != theTruth.length()){
+            throw new IllegalArgumentException("Color Array and String length are not equal!");
+        }
+
         List<Integer> possiblePositions = new ArrayList<>();
         for(int i = 0; i < colors.length; ++i){
             if(colors[i] != Color.GREEN){
