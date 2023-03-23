@@ -17,7 +17,7 @@ public class Feature8Test {
     public void highIntensity(){
         final int WORD_LENGTH = 5;
         final String THE_TRUTH = "funny";
-        final int testNumber = 100;
+        final int testNumber = 10_000;
         final Color[] baseArray = {Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY};
         boolean greenFound;
         for(int i = 0; i < testNumber; ++i){
@@ -67,4 +67,33 @@ public class Feature8Test {
 
     }
 
+    @Test
+    public void highIntensityOcclusion(){
+        final String THE_TRUTH = "aeiou";
+        final int testNumber = 10_000;
+        final Color[] oneArray = {Color.GREEN,Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY};
+        final Color[] twoArray = {Color.GRAY,Color.GREEN,Color.GRAY,Color.GRAY,Color.GRAY};
+        final Color[] threeArray = {Color.GRAY,Color.GRAY,Color.GREEN,Color.GRAY,Color.GRAY};
+        final Color[] fourArray = {Color.GRAY,Color.GRAY,Color.GRAY,Color.GREEN,Color.GRAY};
+        final Color[] fiveArray = {Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY,Color.GREEN};
+        final Color[][] theHorror = {oneArray, twoArray, threeArray, fourArray, fiveArray};
+        /*
+         * This is similar to the previous test, however, it tests the exact opposite
+         * Instead of confirming that the correct letter is in the only place it can be,
+         * this confirms that an asterisk is always in the 'forbidden' place, which is
+         * marked by a green coloring in the input color array.
+         *
+         * The test in then repeated a large number of times in order to confirm that
+         * the asterisk is intentionally placed there and not a result of luck
+         *
+         * At a test number of 10,000, the probability of the code passing the test unintentionally
+         * with a word of length 5 is 0.80 to the ten-thousandth power, which is about 7.94x10^-970
+         */
+        for (int i = 0; i < THE_TRUTH.length(); ++i){
+            for(int j = 0; j < testNumber; ++j){
+                Assertions.assertEquals(
+                        Wordle.getLetterHint(THE_TRUTH, theHorror[i]).charAt(i), '*');
+            }
+        }
+    }
 }
