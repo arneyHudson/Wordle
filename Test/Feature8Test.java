@@ -67,6 +67,10 @@ public class Feature8Test {
 
     }
 
+    /**
+     * @author Golvachi
+     * @version 1.0
+     */
     @Test
     public void highIntensityOcclusion(){
         final String THE_TRUTH = "aeiou";
