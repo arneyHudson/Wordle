@@ -43,7 +43,7 @@ public class Feature8Test {
      * The method tests to make sure that the hint word has the hint letter in the non-green index.
      */
     @Test
-    public void greenInOne(){
+    public void grayInOne(){
         final int WORD_LENGTH = 5;
         final String THE_TRUTH = "funny";
         final Color[] oneArray = {Color.GRAY,Color.GREEN,Color.GREEN,Color.GREEN,Color.GREEN};
