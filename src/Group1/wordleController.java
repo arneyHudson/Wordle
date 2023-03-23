@@ -1,4 +1,5 @@
 package Group1;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 
 import javafx.fxml.FXML;
@@ -228,12 +229,21 @@ public class wordleController implements Initializable {
      */
     private void restartGame() {
         // reset keyboard and wordle display
-        userKeys.getChildren().clear();
-        setUpKeyboard();
+        ObservableList<Node> children = userKeys.getChildren();
+        for (Node node : children) {
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                ObservableList<Node> hboxChildren = hbox.getChildren();
+                hboxChildren.removeIf(child -> child instanceof TextField);
+            }
+        }
+
         wordleDisplay.getChildren().clear();
+        setUpKeyboard();
         setUpWordleDisplay(6, 5);
         mainDisplay.getChildren().add(1, wordleDisplay);
         wordle = new Wordle(); // reset the wordle
+
         numGuesses = 0; // reset the number of guesses
         numGuessesLabel.setText("Current Number of Guesses: 0");
         correctGuess = false; // reset correct guess flag
