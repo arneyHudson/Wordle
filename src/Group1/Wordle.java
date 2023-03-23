@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  A class that represents the Wordle game which can generate a
- random word and let the user guess up to 6 guesses.
+ random word Rand let the user guess up to 6 guesses.
  */
 public class Wordle {
     private static final int MAX_GUESSES = 6;
@@ -174,7 +174,7 @@ public class Wordle {
         char[] characters = guess.toUpperCase().toCharArray();
         for(int i = 0; i < characters.length; i++) {
             lettersGuessed.put(characters[i], check[i]);
-            System.out.println(characters[i] + ": " + check[i]);
+            //System.out.println(characters[i] + ": " + check[i]);
         }
         return lettersGuessed;
     }
@@ -186,4 +186,11 @@ public class Wordle {
         return remainingGuesses;
     }
 
+    public boolean isGameOver() {
+        return remainingGuesses == 0;
+    }
+
+    public int getNumGuesses() {
+        return previousGuesses.size();
+    }
 }
