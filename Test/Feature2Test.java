@@ -1,16 +1,15 @@
 import Group1.Wordle;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class Feature2Test {
 
-    @BeforeEach
-    public void startUp(){
-        // neccesary?
-    }
-
+    final Color DIRECT_COLOR = Color.web("#6ca965");
+    final Color INDIRECT_COLOR = Color.web("#c8b653");
+    final Color NONE_COLOR = Color.web("#363636");
 
     /**
      * @author Golvachi
@@ -21,7 +20,7 @@ public class Feature2Test {
         final int wordLength = 5;
         final String guessString = "truth";
         final String truthString = "truth";
-        final Color[] trueArray = {Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN};
+        final Color[] trueArray = {DIRECT_COLOR, DIRECT_COLOR, DIRECT_COLOR, DIRECT_COLOR, DIRECT_COLOR};
         Color[] colorArray = Wordle.perWordLetterCheck(guessString, truthString);
         for(int i = 0; i < wordLength; ++i){
             Assertions.assertEquals(trueArray[i], colorArray[i]);
@@ -38,7 +37,7 @@ public class Feature2Test {
         final int wordLength = 5;
         final String guessString = "mango";
         final String truthString = "wreck";
-        final Color[] trueArray ={Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY};
+        final Color[] trueArray ={NONE_COLOR,NONE_COLOR,NONE_COLOR,NONE_COLOR,NONE_COLOR};
         Color[] colorArray = Wordle.perWordLetterCheck(guessString, truthString);
         for(int i = 0; i < wordLength; ++i){
             Assertions.assertEquals(trueArray[i], colorArray[i]);
@@ -55,7 +54,7 @@ public class Feature2Test {
         final int wordLength = 5;
         final String guessString = "throb";
         final String truthString = "broth";
-        final Color[] trueArray = {Color.YELLOW, Color.YELLOW,Color.YELLOW,Color.YELLOW,Color.YELLOW};
+        final Color[] trueArray = {INDIRECT_COLOR, INDIRECT_COLOR,INDIRECT_COLOR,INDIRECT_COLOR,INDIRECT_COLOR};
         Color[] colorArray = Wordle.perWordLetterCheck(guessString, truthString);
         for(int i = 0; i < wordLength; ++i){
             Assertions.assertEquals(trueArray[i], colorArray[i]);
@@ -70,8 +69,8 @@ public class Feature2Test {
     public void multiplicities(){
         final String threeo = "coolio";
         final String oneo = "creton";
-        final Color[] oArray = {Color.GREEN, Color.YELLOW,
-                Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY};
+        final Color[] oArray = {DIRECT_COLOR, INDIRECT_COLOR,
+                NONE_COLOR, NONE_COLOR, NONE_COLOR, NONE_COLOR};
         Color[] colorArray = Wordle.perWordLetterCheck(threeo, oneo);
         for(int i = 0; i < oArray.length; ++i){
             Assertions.assertEquals(oArray[i], colorArray[i]);
@@ -81,7 +80,7 @@ public class Feature2Test {
 
         final String hurry = "hurry";
         final String rumor = "rumor";
-        final Color[] rArray = {Color.GRAY, Color.GREEN, Color.YELLOW, Color.YELLOW, Color.GRAY};
+        final Color[] rArray = {NONE_COLOR, DIRECT_COLOR, INDIRECT_COLOR, INDIRECT_COLOR, NONE_COLOR};
         colorArray = Wordle.perWordLetterCheck(hurry, rumor);
         for(int i = 0; i < rArray.length; ++i){
             Assertions.assertEquals(rArray[i], colorArray[i]);
@@ -91,7 +90,7 @@ public class Feature2Test {
 
         final String hurri = "hurri";
         final String rumod = "rumod";
-        final Color[] rArray2 = {Color.GRAY, Color.GREEN, Color.YELLOW, Color.GRAY, Color.GRAY};
+        final Color[] rArray2 = {NONE_COLOR, DIRECT_COLOR, INDIRECT_COLOR, NONE_COLOR, NONE_COLOR};
         colorArray = Wordle.perWordLetterCheck(hurry, rumod);
         for(int i = 0; i < rArray2.length; ++i){
             Assertions.assertEquals(rArray2[i], colorArray[i]);
@@ -100,7 +99,7 @@ public class Feature2Test {
 
         final String apple = "apple";
         final String apoge = "apoge";
-        final Color[] pArray = {Color.GREEN, Color.GREEN, Color.GRAY, Color.GRAY, Color.GREEN};
+        final Color[] pArray = {DIRECT_COLOR, DIRECT_COLOR, NONE_COLOR, NONE_COLOR, DIRECT_COLOR};
         colorArray = Wordle.perWordLetterCheck(apple, apoge);
         for(int i = 0; i < pArray.length; ++i){
             Assertions.assertEquals(pArray[i], colorArray[i]);
@@ -109,8 +108,8 @@ public class Feature2Test {
 
         final String apropos = "apropos";
         final String applely = "applely";
-        final Color[] pArray2 = {Color.GREEN, Color.GREEN, Color.GRAY, Color.GRAY, Color.YELLOW,
-                                Color.GRAY, Color.GRAY};
+        final Color[] pArray2 = {DIRECT_COLOR, DIRECT_COLOR, NONE_COLOR, NONE_COLOR, INDIRECT_COLOR,
+                NONE_COLOR, NONE_COLOR};
         colorArray = Wordle.perWordLetterCheck(apropos, applely);
         for(int i = 0; i < pArray2.length; ++i){
             Assertions.assertEquals(pArray2[i], colorArray[i]);
