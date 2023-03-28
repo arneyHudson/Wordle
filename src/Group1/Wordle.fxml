@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="mainDisplay" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="450.0" spacing="10.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Group1.wordleController">
+<VBox fx:id="mainDisplay" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="450.0" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Group1.wordleController">
    <children>
       <Label text="Wordle?">
          <font>
@@ -16,6 +18,12 @@
          </padding>
       </Label>
       <Button fx:id="guessButton" disable="true" mnemonicParsing="false" onAction="#guess" text="Guess" />
+      <Button fx:id="hintButton" mnemonicParsing="false" onAction="#createHint" text="Hint" />
+      <Label fx:id="hintLabel">
+         <font>
+            <Font name="Times New Roman" size="12.0" />
+         </font>
+      </Label>
       <VBox fx:id="userKeys" prefHeight="200.0" prefWidth="100.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" />
