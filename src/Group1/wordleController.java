@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.net.URL;
@@ -206,44 +207,18 @@ public class wordleController implements Initializable {
                 restartGame();
             });
         }
-
-        /*
-        //Uncomment this section to understand how its setup
-        List<Paint> colors = new ArrayList<>();
-        colors.add(Color.GREEN);
-        colors.add(Color.GRAY);
-        colors.add(Color.YELLOW);
-        colors.add(Color.GRAY);
-        colors.add(Color.GRAY);
-        setGuessColor(colors);
-
-        Map<Character, Paint> lettersGuessed = new HashMap<>();
-        lettersGuessed.put('A', Color.GREEN);
-        lettersGuessed.put('D', Color.GRAY);
-        lettersGuessed.put('S', Color.YELLOW);
-        setGuessedLetterColors(lettersGuessed);
-
-        System.out.println(guess);
-         */
-
     }
 
     @FXML
     public void createHint(){
         if (colorBuffer == null){
-            hintLabel.setText(Wordle.getLetterHint(wordle.getSecretWord()));
+            hintLabel.setText(Wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
         } else {
-            hintLabel.setText(Wordle.getLetterHint(wordle.getSecretWord(), colorBuffer));
+            hintLabel.setText(Wordle.getLetterHint(wordle.getSecretWord(), colorBuffer).toUpperCase());
         }
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
     }
-
-    private void newGame() {
-
-    }
-
-
 
     /**
      * Restarts the game when the Play Again button is pressed.
