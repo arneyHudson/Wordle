@@ -41,11 +41,16 @@ public class wordleController implements Initializable {
     private Label averageNumGuessesLabel;
     @FXML
     private Button playAgainButton;
+    @FXML
+    private Button hintButton;
+    @FXML
+    private Label hintLabel;
     private List<Integer> numGuessesList = new ArrayList<>();
     private int gamesPlayed = 0;
     private int numGuesses = 0;
     private int totalNumGuesses = 0;
     boolean correctGuess = false;
+    private Color[] colorBuffer;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -162,8 +167,8 @@ public class wordleController implements Initializable {
                 children.get(i + col * (row -remain)).setDisable(true);
                 ((TextField)children.get(i + col * (row - remain))).setEditable(false);
             }
-            setGuessColor(Arrays.asList(
-                    Wordle.perWordLetterCheck(guess.toLowerCase(), wordle.getSecretWord())));
+            colorBuffer = Wordle.perWordLetterCheck(guess.toLowerCase(), wordle.getSecretWord());
+            setGuessColor(Arrays.asList(colorBuffer));
             setGuessedLetterColors(wordle.checkLetters(guess));
             if (wordle.getRemainingGuesses() != 1 && !wordle.getSecretWord().equals(guess.toLowerCase())) {
                 wordle.setRemainingGuesses(remain - 1);
@@ -195,12 +200,50 @@ public class wordleController implements Initializable {
             averageNumGuessesLabel.setText("Average Number of Guesses: " + getAverageNumGuesses());
             playAgainButton.setDisable(false);
             playAgainButton.requestFocus();
+            hintButton.setDisable(true);
 
             playAgainButton.setOnAction(event -> {
                 restartGame();
             });
         }
+
+        /*
+        //Uncomment this section to understand how its setup
+        List<Paint> colors = new ArrayList<>();
+        colors.add(Color.GREEN);
+        colors.add(Color.GRAY);
+        colors.add(Color.YELLOW);
+        colors.add(Color.GRAY);
+        colors.add(Color.GRAY);
+        setGuessColor(colors);
+
+        Map<Character, Paint> lettersGuessed = new HashMap<>();
+        lettersGuessed.put('A', Color.GREEN);
+        lettersGuessed.put('D', Color.GRAY);
+        lettersGuessed.put('S', Color.YELLOW);
+        setGuessedLetterColors(lettersGuessed);
+
+        System.out.println(guess);
+         */
+
     }
+
+    @FXML
+    public void createHint(){
+        if (colorBuffer == null){
+            hintLabel.setText(Wordle.getLetterHint(wordle.getSecretWord()));
+        } else {
+            hintLabel.setText(Wordle.getLetterHint(wordle.getSecretWord(), colorBuffer));
+        }
+        // Optional code to increase difficulty by only allowing one hint per game
+        hintButton.setDisable(true);
+    }
+
+    private void newGame() {
+
+    }
+
+
 
     /**
      * Restarts the game when the Play Again button is pressed.
@@ -226,6 +269,9 @@ public class wordleController implements Initializable {
         numGuessesLabel.setText("Current Number of Guesses: 0");
         correctGuess = false; // reset correct guess flag
         guessButton.setDisable(false); // enable guess button
+        hintButton.setDisable(false); // enable the hint button
+        colorBuffer = null; // reset color buffer to a null value
+        hintLabel.setText(""); // remove the hint label
         playAgainButton.setDisable(true); // disable play again button
     }
 
