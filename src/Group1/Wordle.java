@@ -115,17 +115,20 @@ public class Wordle {
 
 
     /**
-     * Returns a 1x5 array of colors to use in the GUI representation of the letters.
+     * Returns a 1xn array of colors to use in the GUI representation of the letters.
+     * theGuess and theTruth MUST be the same length.
      * @param theGuess The guess word to compare against the true word
      * @param theTruth The true word to be compared against
-     * @return A 1x5 Array where each color is respective to the letter of the guess word
+     * @return A 1xn Array where each color is respective to the letter of the guess word
      */
     public static Color[] perWordLetterCheck(String theGuess, String theTruth){
-        int WORD_LENGTH = 5; // un-hardcode this if a better constant becomes extant
+        if(theGuess.length() != theTruth.length()){
+          throw new IllegalArgumentException("String lengths are not equal");
+        }
         Color DIRECT_COLOR = Color.web("#6ca965");
         Color INDIRECT_COLOR = Color.web("#c8b653");
         Color NONE_COLOR = Color.web("#363636");
-        Color[] ret = new Color[WORD_LENGTH];
+        Color[] ret = new Color[theGuess.length()];
         List<Character> guessNonDirectLetters = new ArrayList<>();
         List<Character> truthNonDirectLetters = new ArrayList<>();
         /*
@@ -135,7 +138,7 @@ public class Wordle {
 
         // Direct Check
 
-        for(int i = 0; i < WORD_LENGTH; ++i){
+        for(int i = 0; i < theGuess.length(); ++i){
             if(theGuess.charAt(i) == theTruth.charAt(i)){
                 guessNonDirectLetters.add('0'); // to maintain spacing, no word has '0' in it.
                 ret[i] = DIRECT_COLOR;
@@ -147,7 +150,7 @@ public class Wordle {
 
         // Indirect Check
 
-        for(int i = 0; i < WORD_LENGTH; ++i){
+        for(int i = 0; i < theGuess.length(); ++i){
             if(truthNonDirectLetters.contains(guessNonDirectLetters.get(i))){
                 ret[i] = INDIRECT_COLOR;
                 truthNonDirectLetters.remove(guessNonDirectLetters.get(i));
