@@ -26,7 +26,7 @@ public class Main extends Application {
         loader.setLocation(getClass().getResource("/Group1/Wordle.fxml"));
         Parent root = loader.load();
         stage.setScene(new Scene(root));
-        stage.setTitle("Wordle?");
+        stage.setTitle("Wordle");
         stage.show();
     }
 
