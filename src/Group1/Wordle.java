@@ -9,9 +9,7 @@ package Group1;/*
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
 import java.io.*;
-import java.security.Guard;
 import java.util.*;
 import java.util.List;
 
@@ -124,9 +122,9 @@ public class Wordle {
      */
     public static Color[] perWordLetterCheck(String theGuess, String theTruth){
         int WORD_LENGTH = 5; // un-hardcode this if a better constant becomes extant
-        Color DIRECT_COLOR = Color.GREEN;
-        Color INDIRECT_COLOR = Color.YELLOW;
-        Color NONE_COLOR = Color.GRAY;
+        Color DIRECT_COLOR = Color.web("#6ca965");
+        Color INDIRECT_COLOR = Color.web("#c8b653");
+        Color NONE_COLOR = Color.web("#363636");
         Color[] ret = new Color[WORD_LENGTH];
         List<Character> guessNonDirectLetters = new ArrayList<>();
         List<Character> truthNonDirectLetters = new ArrayList<>();
@@ -186,11 +184,4 @@ public class Wordle {
         return remainingGuesses;
     }
 
-    public boolean isGameOver() {
-        return remainingGuesses == 0;
-    }
-
-    public int getNumGuesses() {
-        return previousGuesses.size();
-    }
 }

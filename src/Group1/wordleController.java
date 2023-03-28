@@ -1,6 +1,5 @@
 package Group1;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,10 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.event.ActionEvent;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
@@ -61,11 +57,7 @@ public class wordleController implements Initializable {
         setUpKeyboard();
         mainDisplay.getChildren().add(1, wordleDisplay);
         wordle = new Wordle();
-        numGuessesLabel = new Label("Current Number of Guesses: 0");
-        averageNumGuessesLabel = new Label("Average number of Guesses: 0.0");
-        playAgainButton = new Button("Play Again!");
         playAgainButton.setDisable(true);
-        mainDisplay.getChildren().addAll(numGuessesLabel, averageNumGuessesLabel, playAgainButton);
     }
 
     /**
@@ -76,8 +68,8 @@ public class wordleController implements Initializable {
      */
     private void setUpWordleDisplay(int maxGuesses, int secretWordLength) {
         wordleDisplay = new GridPane();
-        wordleDisplay.setHgap(10);
-        wordleDisplay.setVgap(10);
+        wordleDisplay.setHgap(5);
+        wordleDisplay.setVgap(5);
         wordleDisplay.setAlignment(Pos.CENTER);
 
         for(int i = 0; i < secretWordLength; i++) {
@@ -89,7 +81,10 @@ public class wordleController implements Initializable {
                 TextField textField = new TextField();
                 textField.setEditable(i == 0);
                 textField.setPrefSize(64, 64);
+                textField.setMinSize(48, 48);
                 textField.setAlignment(Pos.CENTER);
+                textField.setStyle("-fx-control-inner-background: #1b1b1b; -fx-text-fill: white; -fx-font-family: Arial;" +
+                        " -fx-font-weight: bold; -fx-font-size: 25px");
                 textField.setOnKeyTyped(keyEvent -> {
                     String input = textField.getText();
                     if(input.length() >= 1) {
@@ -139,6 +134,8 @@ public class wordleController implements Initializable {
                 textField.setPrefSize(32, 32);
                 textField.setText(letter + "");
                 textField.setAlignment(Pos.CENTER);
+                textField.setStyle("-fx-control-inner-background: gray; -fx-text-fill: white; -fx-opacity: 1.0;  " +
+                        "-fx-font-family: Arial; -fx-font-weight: bold;");
                 ((HBox)keyboardDisplay.get(i)).getChildren().add(textField);
             }
         }
@@ -195,48 +192,25 @@ public class wordleController implements Initializable {
             gamesPlayed++;
             totalNumGuesses += numGuessesList.size();
             numGuessesList.clear();
-            averageNumGuessesLabel.setText("Average number of guesses: " + getAverageNumGuesses());
+            averageNumGuessesLabel.setText("Average Number of Guesses: " + getAverageNumGuesses());
             playAgainButton.setDisable(false);
+            playAgainButton.requestFocus();
 
             playAgainButton.setOnAction(event -> {
                 restartGame();
             });
         }
-
-        /*
-        //Uncomment this section to understand how its setup
-        List<Paint> colors = new ArrayList<>();
-        colors.add(Color.GREEN);
-        colors.add(Color.GRAY);
-        colors.add(Color.YELLOW);
-        colors.add(Color.GRAY);
-        colors.add(Color.GRAY);
-        setGuessColor(colors);
-
-        Map<Character, Paint> lettersGuessed = new HashMap<>();
-        lettersGuessed.put('A', Color.GREEN);
-        lettersGuessed.put('D', Color.GRAY);
-        lettersGuessed.put('S', Color.YELLOW);
-        setGuessedLetterColors(lettersGuessed);
-
-        System.out.println(guess);
-         */
-
-    }
-
-    private void newGame() {
-
     }
 
     /**
      * Restarts the game when the Play Again button is pressed.
      */
+    @FXML
     private void restartGame() {
         // reset keyboard and wordle display
         ObservableList<Node> children = userKeys.getChildren();
         for (Node node : children) {
-            if (node instanceof HBox) {
-                HBox hbox = (HBox) node;
+            if (node instanceof HBox hbox) {
                 ObservableList<Node> hboxChildren = hbox.getChildren();
                 hboxChildren.removeIf(child -> child instanceof TextField);
             }
@@ -272,7 +246,9 @@ public class wordleController implements Initializable {
     private void setGuessColor(List<Paint> colors) {
         for (int i = 0; i < wordleDisplay.getColumnCount(); i++) {
             String style = "-fx-control-inner-background: #" + colors.get(i).toString().substring(2);
-            wordleDisplay.getChildren().get(i + wordleDisplay.getColumnCount() * (wordleDisplay.getRowCount() - wordle.getRemainingGuesses())).setStyle(style);
+            wordleDisplay.getChildren().get(i + wordleDisplay.getColumnCount() * (wordleDisplay.getRowCount() -
+                    wordle.getRemainingGuesses())).setStyle(style + "; -fx-text-fill: white; " +
+                    "-fx-font-family: Arial; -fx-opacity: 1.0; -fx-font-weight: bold; -fx-font-size: 25px");
         }
     }
 
@@ -289,7 +265,8 @@ public class wordleController implements Initializable {
                 TextField textField = (TextField) node;
                 if (lettersGuessed.containsKey(textField.getText().toCharArray()[0])) {
                     String style = "-fx-control-inner-background: #" + lettersGuessed.get(textField.getText().toCharArray()[0]).toString().substring(2);
-                    textField.setStyle(style);
+                    textField.setStyle(style + "; -fx-text-fill: white; " +
+                    "-fx-font-family: Arial; -fx-opacity: 1.0; -fx-font-weight: bold;");
                     textField.setDisable(false);
                     textField.setEditable(false);
                 }
