@@ -192,13 +192,13 @@ public class wordleController implements Initializable {
         }
         //numGuessesList.add(numGuesses++);
         int numCurrentGuesses = numGuessesList.size();
-        numGuessesLabel.setText("Current Number of Guesses: " + numCurrentGuesses);
+        numGuessesLabel.setText("Current Guesses: " + numCurrentGuesses);
 
         if (numCurrentGuesses == 6 || correctGuess) {
             gamesPlayed++;
             totalNumGuesses += numGuessesList.size();
             numGuessesList.clear();
-            averageNumGuessesLabel.setText("Average Number of Guesses: " + getAverageNumGuesses());
+            averageNumGuessesLabel.setText("Average Guesses: " + getAverageNumGuesses());
             playAgainButton.setDisable(false);
             playAgainButton.requestFocus();
             hintButton.setDisable(true);
@@ -212,9 +212,9 @@ public class wordleController implements Initializable {
     @FXML
     public void createHint(){
         if (colorBuffer == null){
-            hintLabel.setText(Wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
+            hintLabel.setText("Hint: " + Wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
         } else {
-            hintLabel.setText(Wordle.getLetterHint(wordle.getSecretWord(), colorBuffer).toUpperCase());
+            hintLabel.setText("Hint: " + Wordle.getLetterHint(wordle.getSecretWord(), colorBuffer).toUpperCase());
         }
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
@@ -241,7 +241,7 @@ public class wordleController implements Initializable {
         wordle = new Wordle(); // reset the wordle
 
         numGuesses = 0; // reset the number of guesses
-        numGuessesLabel.setText("Current Number of Guesses: 0");
+        numGuessesLabel.setText("Current Guesses: 0");
         correctGuess = false; // reset correct guess flag
         guessButton.setDisable(false); // enable guess button
         hintButton.setDisable(false); // enable the hint button
