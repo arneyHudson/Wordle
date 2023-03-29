@@ -303,23 +303,22 @@ public class wordleController implements Initializable {
     }
 
     private void commonLetters(Map<Character, Paint> lettersGuessed) {
-
         for (char c : lettersGuessed.keySet()) {
-            if (lettersGuessed.get(c) == Color.GREEN) {
+            if (lettersGuessed.get(c).equals(Color.web("#6ca965"))) {
                 addToFrequency(c);
             }
         }
-        String commonText = "Most common letters: ";
+        String commonText = "Common Letters: ";
         ArrayList<Character> topFiveLetters = sortLetters(letterFrequency);
         for (int i = 0; i < 5; i++) {
             commonText += topFiveLetters.get(i) + " ";
         }
-
+        commonLetterLabel.setText(commonText);
     }
 
     private void addToFrequency(Character c) {
         if (letterFrequency.get(c) == null) {
-            letterFrequency.put(c, 0);
+            letterFrequency.put(c, 1);
         } else {
             letterFrequency.put(c, letterFrequency.get(c) + 1);
         }
@@ -331,7 +330,7 @@ public class wordleController implements Initializable {
             int mostCommon = 0;
             char mostCommonLetter = '*';
             for (char c : letterFrequency.keySet()) {
-                if(letterFrequency.get(c) > mostCommon){
+                if(letterFrequency.get(c) > mostCommon && !mostCommonLetters.contains(c)){
                     mostCommon = letterFrequency.get(c);
                     mostCommonLetter = c;
                 }
@@ -340,4 +339,5 @@ public class wordleController implements Initializable {
         }
         return mostCommonLetters;
     }
+
 }

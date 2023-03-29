@@ -94,5 +94,9 @@
             </Label>
           </children>
       </HBox>
+      <Label fx:id="commonLetterLabel" text="Common Letters: " textFill="GREY">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font></Label>
    </children>
 </VBox>
