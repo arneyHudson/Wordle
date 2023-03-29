@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="mainDisplay" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="450.0" spacing="10.0" style="-fx-background-color: #1b1b1b;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Group1.wordleController">
+<VBox fx:id="mainDisplay" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="450.0" spacing="10.0" style="-fx-background-color: #1b1b1b;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Group1.wordleController">
    <children>
       <Label text="Wordle" textFill="WHITE">
          <font>
@@ -94,5 +94,14 @@
             </Label>
           </children>
       </HBox>
+      <Label fx:id="commonLetterLabel" text="Common Letters: " textFill="GREY">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font></Label>
+      <Label fx:id="commonGuessLabel" text="Common Guesses: " textFill="GREY">
+         <font>
+            <Font name="Arial Bold" size="13.0" />
+         </font>
+      </Label>
    </children>
 </VBox>
