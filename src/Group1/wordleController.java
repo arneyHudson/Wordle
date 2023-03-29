@@ -49,6 +49,8 @@ public class wordleController implements Initializable {
     private Label hintLabel;
     @FXML
     private Label commonLetterLabel;
+    @FXML
+    private Label commonGuessLabel;
     private List<Integer> numGuessesList = new ArrayList<>();
     private int gamesPlayed = 0;
     private int numGuesses = 0;
@@ -56,6 +58,7 @@ public class wordleController implements Initializable {
     boolean correctGuess = false;
     private Color[] colorBuffer;
     private Map<Character, Integer> letterFrequency = new HashMap<>();
+    private Map<String, Integer> wordFrequency = new HashMap<>();
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -177,6 +180,7 @@ public class wordleController implements Initializable {
             setGuessColor(Arrays.asList(colorBuffer));
             setGuessedLetterColors(wordle.checkLetters(guess));
             commonLetters(wordle.checkLetters(guess));
+            commonGuesses(guess);
             if (wordle.getRemainingGuesses() != 1 && !wordle.getSecretWord().equals(guess.toLowerCase())) {
                 wordle.setRemainingGuesses(remain - 1);
                 remain = wordle.getRemainingGuesses();
@@ -304,7 +308,8 @@ public class wordleController implements Initializable {
 
     private void commonLetters(Map<Character, Paint> lettersGuessed) {
         for (char c : lettersGuessed.keySet()) {
-            if (lettersGuessed.get(c).equals(Color.web("#6ca965"))) {
+            if (lettersGuessed.get(c).equals(Color.web("#6ca965")) ||
+                    lettersGuessed.get(c).equals(Color.web("#c8b653"))) {
                 addToFrequency(c);
             }
         }
@@ -315,13 +320,18 @@ public class wordleController implements Initializable {
         }
         commonLetterLabel.setText(commonText);
     }
-
-    private void addToFrequency(Character c) {
-        if (letterFrequency.get(c) == null) {
-            letterFrequency.put(c, 1);
-        } else {
-            letterFrequency.put(c, letterFrequency.get(c) + 1);
+    private void commonGuesses(String word){
+        wordFrequency.merge(word, 1, Integer::sum);
+        sortGuesses(wordFrequency);
+        String commonText = "Common Guesses: ";
+        ArrayList<String> topFiveGuesses = sortGuesses(wordFrequency);
+        for (int i = 0; i < 5; i++) {
+            commonText += topFiveGuesses.get(i) + " ";
         }
+        commonGuessLabel.setText(commonText);
+    }
+    private void addToFrequency(Character c) {
+        letterFrequency.merge(c, 1, Integer::sum);
     }
 
     private ArrayList<Character> sortLetters(Map<Character, Integer> letterFrequency){
@@ -338,6 +348,21 @@ public class wordleController implements Initializable {
             mostCommonLetters.add(mostCommonLetter);
         }
         return mostCommonLetters;
+    }
+    private ArrayList<String> sortGuesses(Map<String, Integer> wordFrequency){
+        ArrayList<String> mostCommonGuesses = new ArrayList<>();
+        for(int i = 0; i<5; i++) {
+            int mostCommon = 0;
+            String mostCommonWord = "*";
+            for (String s : wordFrequency.keySet()) {
+                if(wordFrequency.get(s) > mostCommon && !mostCommonGuesses.contains(s)){
+                    mostCommon = wordFrequency.get(s);
+                    mostCommonWord = s;
+                }
+            }
+            mostCommonGuesses.add(mostCommonWord);
+        }
+        return mostCommonGuesses;
     }
 
 }
