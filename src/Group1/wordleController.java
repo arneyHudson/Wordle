@@ -179,8 +179,8 @@ public class wordleController implements Initializable {
             colorBuffer = Wordle.perWordLetterCheck(guess.toLowerCase(), wordle.getSecretWord());
             setGuessColor(Arrays.asList(colorBuffer));
             setGuessedLetterColors(wordle.checkLetters(guess));
-            commonLetters(wordle.checkLetters(guess));
-            commonGuesses(guess);
+            commonLetterLabel.setText(commonLetters(wordle.checkLetters(guess)));
+            commonGuessLabel.setText(commonGuesses(guess));
             if (wordle.getRemainingGuesses() != 1 && !wordle.getSecretWord().equals(guess.toLowerCase())) {
                 wordle.setRemainingGuesses(remain - 1);
                 remain = wordle.getRemainingGuesses();
@@ -306,7 +306,7 @@ public class wordleController implements Initializable {
         }
     }
 
-    private void commonLetters(Map<Character, Paint> lettersGuessed) {
+    public String commonLetters(Map<Character, Paint> lettersGuessed) {
         for (char c : lettersGuessed.keySet()) {
             if (lettersGuessed.get(c).equals(Color.web("#6ca965")) ||
                     lettersGuessed.get(c).equals(Color.web("#c8b653"))) {
@@ -318,9 +318,9 @@ public class wordleController implements Initializable {
         for (int i = 0; i < 5; i++) {
             commonText += topFiveLetters.get(i) + " ";
         }
-        commonLetterLabel.setText(commonText);
+        return commonText;
     }
-    private void commonGuesses(String word){
+    public String commonGuesses(String word){
         wordFrequency.merge(word, 1, Integer::sum);
         sortGuesses(wordFrequency);
         String commonText = "Common Guesses: ";
@@ -328,7 +328,7 @@ public class wordleController implements Initializable {
         for (int i = 0; i < 5; i++) {
             commonText += topFiveGuesses.get(i) + " ";
         }
-        commonGuessLabel.setText(commonText);
+        return commonText;
     }
     private void addToFrequency(Character c) {
         letterFrequency.merge(c, 1, Integer::sum);
