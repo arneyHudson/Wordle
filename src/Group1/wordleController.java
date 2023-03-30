@@ -247,7 +247,7 @@ public class wordleController implements Initializable {
         wordleDisplay.getChildren().clear();
         setUpKeyboard();
         setUpWordleDisplay(6, 5);
-        mainDisplay.getChildren().add(1, wordleDisplay);
+        mainDisplay.getChildren().set(1, wordleDisplay);
         wordle = new Wordle(); // reset the wordle
 
         numGuesses = 0; // reset the number of guesses
