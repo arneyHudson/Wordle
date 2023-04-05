@@ -204,16 +204,16 @@ public class Wordle {
         }
         final int hintPosition = possiblePositions.get((int)(Math.random()*possiblePositions.size()));
         final char hintChar = theTruth.charAt(hintPosition);
-        final char hiddenChar = '*';
-        String ret = "";
+        final String hiddenChar = "_";
+        StringBuilder ret = new StringBuilder();
         for(int i = 0; i < theTruth.length(); ++i){
             if(i == hintPosition){
-                ret = ret + hintChar;
+                ret.append(hintChar);
             } else {
-                ret = ret + hiddenChar;
+                ret.append(hiddenChar);
             }
         }
-        return ret;
+        return ret.toString();
     }
 
     /**

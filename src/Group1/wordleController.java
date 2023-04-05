@@ -1,21 +1,20 @@
 package Group1;
+import javafx.animation.*;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
@@ -51,7 +50,16 @@ public class wordleController implements Initializable {
     private Label commonLetterLabel;
     @FXML
     private Label commonGuessLabel;
+    @FXML
+    private VBox invalidWordVBox;
+    @FXML
+    private Pane congratsPane;
+    @FXML
+    private Pane failedPane;
+    @FXML
+    private Line line;
     private List<Integer> numGuessesList = new ArrayList<>();
+    private Stack<Label> warningLabels = new Stack<>();
     private int gamesPlayed = 0;
     private int numGuesses = 0;
     private int totalNumGuesses = 0;
@@ -69,6 +77,9 @@ public class wordleController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setUpWordleDisplay(6, 5);
         setUpKeyboard();
+        line = new Line(0, 50, mainDisplay.getWidth(), 50);
+        line.setStroke(Color.GRAY);
+        mainDisplay.getChildren().add(1, line);
         mainDisplay.getChildren().add(1, wordleDisplay);
         wordle = new Wordle();
         playAgainButton.setDisable(true);
@@ -94,11 +105,11 @@ public class wordleController implements Initializable {
             for (int j = 0; j < secretWordLength; j++) {
                 TextField textField = new TextField();
                 textField.setEditable(i == 0);
-                textField.setPrefSize(64, 64);
-                textField.setMinSize(48, 48);
+                textField.setMaxSize(45,45);
+                textField.setMinSize(45, 45);
                 textField.setAlignment(Pos.CENTER);
                 textField.setStyle("-fx-control-inner-background: #1b1b1b; -fx-text-fill: white; -fx-font-family: Arial;" +
-                        " -fx-font-weight: bold; -fx-font-size: 25px");
+                        " -fx-font-weight: bold; -fx-font-size: 20px; -fx-background-radius: 0px;");
                 textField.setOnKeyTyped(keyEvent -> {
                     String input = textField.getText();
                     if (input.length() >= 1) {
@@ -139,7 +150,7 @@ public class wordleController implements Initializable {
      * @author Collin Schmocker
      */
     private void setUpKeyboard() {
-        String[] keyboard = {"QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"};
+        String[] keyboard = {"QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM⌫"};
         List<Node> keyboardDisplay = userKeys.getChildren();
         for(int i = 0; i < keyboardDisplay.size(); i++) {
             for(char letter: keyboard[i].toCharArray()) {
@@ -196,15 +207,38 @@ public class wordleController implements Initializable {
                 correctGuess = true;
             }
         } else {
-            Alert invalidWord = new Alert(Alert.AlertType.WARNING, "Not in word list. Please enter a valid 5-letter word.", ButtonType.CLOSE);
-            invalidWord.showAndWait();
-            children.get(col * (row - remain)).requestFocus();
+            // Shake animation for textfields
+            for (int i = 0; i < col; i++) {
+                TextField textField = (TextField) children.get(i + col * (row - remain));
+                Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.millis(0), new KeyValue(textField.translateXProperty(), 0)),
+                        new KeyFrame(Duration.millis(35), new KeyValue(textField.translateXProperty(), -4)),
+                        new KeyFrame(Duration.millis(70), new KeyValue(textField.translateXProperty(), 4)),
+                        new KeyFrame(Duration.millis(105), new KeyValue(textField.translateXProperty(), -4)),
+                        new KeyFrame(Duration.millis(140), new KeyValue(textField.translateXProperty(), 4)),
+                        new KeyFrame(Duration.millis(175), new KeyValue(textField.translateXProperty(), 0))
+                );
+                timeline.play();
+            }
+
+            // Method call to show an invalid word was typed
+            showWarningPane(wordleDisplay);
+
+            // remove: + (row - 2) to get the start of the word
+            children.get(col * (row - remain) + (row - 2)).requestFocus();
         }
         //numGuessesList.add(numGuesses++);
         int numCurrentGuesses = numGuessesList.size();
         numGuessesLabel.setText("Current Guesses: " + numCurrentGuesses);
 
         if (numCurrentGuesses == 6 || correctGuess) {
+            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+            if(correctGuess) {
+                delay.setOnFinished(event -> displayCongrats(wordleDisplay));
+            } else {
+                delay.setOnFinished(event -> displayBetterLuckNextTime(wordleDisplay, wordle.getSecretWord()));
+            }
+            delay.play();
             gamesPlayed++;
             totalNumGuesses += numGuessesList.size();
             numGuessesList.clear();
@@ -213,10 +247,108 @@ public class wordleController implements Initializable {
             playAgainButton.requestFocus();
             hintButton.setDisable(true);
 
-            playAgainButton.setOnAction(event -> {
-                restartGame();
-            });
+            playAgainButton.setOnAction(event -> restartGame());
         }
+    }
+
+    private void displayCongrats(Pane parent) {
+        Label label = new Label("Great");
+        label.setStyle("-fx-font-family: Arial; -fx-background-color: white; -fx-font-weight: bold; " +
+                "-fx-font-size: 14px; -fx-text-fill: black; -fx-padding: 10px;");
+        label.setAlignment(Pos.CENTER);
+
+        congratsPane = new Pane();
+        congratsPane.setStyle("-fx-background-color: white; -fx-padding: 10px;");
+        congratsPane.setPrefSize(58, 50);
+        congratsPane.getChildren().add(label);
+
+        // Position the pane absolutely
+        congratsPane.setManaged(false);
+        // Set layout relative to parent
+        congratsPane.setLayoutX((parent.getWidth() - congratsPane.getPrefWidth()) / 2);
+        congratsPane.setLayoutY(-10);
+
+        // Add warningPane to the parent
+        parent.getChildren().add(congratsPane);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), label);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setOnFinished(event -> parent.getChildren().remove(congratsPane));
+        fadeTransition.play();
+    }
+
+    private void displayBetterLuckNextTime(Pane parent, String correctWord) {
+        Label label = new Label("Better Luck Next Time\nThe correct word was: " + correctWord.toUpperCase());
+        label.setStyle("-fx-font-family: Arial; -fx-background-color: white; -fx-font-weight: bold; " +
+                "-fx-font-size: 14px; -fx-text-fill: black; -fx-padding: 10px; -fx-alignment: center;");
+        label.setAlignment(Pos.CENTER);
+
+        failedPane = new Pane();
+        failedPane.setStyle("-fx-background-color: white; -fx-padding: 10px;");
+        failedPane.setPrefSize(225, 50);
+        failedPane.getChildren().add(label);
+
+        // Position the pane absolutely
+        failedPane.setManaged(false);
+        // Set layout relative to parent
+        failedPane.setLayoutX((parent.getWidth() - failedPane.getPrefWidth()) / 2);
+        failedPane.setLayoutY(-10);
+
+        // Add warningPane to the parent
+        parent.getChildren().add(failedPane);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(6), label);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setOnFinished(event -> parent.getChildren().remove(failedPane));
+        fadeTransition.play();
+    }
+
+    private void showWarningPane(Pane parent) {
+        Label label = new Label("Not in word list");
+        label.setStyle("-fx-font-family: Arial; -fx-background-color: white; -fx-font-weight: bold; " +
+                "-fx-font-size: 12px; -fx-text-fill: black; -fx-padding: 10px;");
+        label.setAlignment(Pos.CENTER);
+        label.setMinWidth(115);
+
+        if (invalidWordVBox == null) {
+            invalidWordVBox = new VBox();
+            invalidWordVBox.setStyle("-fx-background-color: white;");
+            invalidWordVBox.setPrefSize(125, 50);
+            invalidWordVBox.setSpacing(10);
+
+            // Position the pane absolutely
+            invalidWordVBox.setManaged(false);
+            // Set layout relative to parent
+            invalidWordVBox.setLayoutX((parent.getWidth() - invalidWordVBox.getPrefWidth()) / 2);
+            invalidWordVBox.setLayoutY(-10);
+
+            // Add warningPane to the parent
+            parent.getChildren().add(invalidWordVBox);
+        }
+
+        // Add the label to the warningPane
+        invalidWordVBox.getChildren().add(0, label);
+
+        // Add the label to the list of labels to be removed later
+        warningLabels.add(label);
+
+        // Fade out the label when its animation finishes
+        FadeTransition fade = new FadeTransition(Duration.seconds(2), label);
+        fade.setFromValue(1.0);
+        fade.setToValue(0.0);
+        fade.setOnFinished(event -> {
+            invalidWordVBox.getChildren().remove(label);
+            warningLabels.remove(label);
+            if (invalidWordVBox.getChildren().isEmpty()) {
+                parent.getChildren().remove(invalidWordVBox);
+                invalidWordVBox = null;
+            }
+        });
+
+        // Play the fade-out animation
+        fade.play();
     }
 
     @FXML
@@ -247,7 +379,7 @@ public class wordleController implements Initializable {
         wordleDisplay.getChildren().clear();
         setUpKeyboard();
         setUpWordleDisplay(6, 5);
-        mainDisplay.getChildren().add(1, wordleDisplay);
+        mainDisplay.getChildren().set(1, wordleDisplay);
         wordle = new Wordle(); // reset the wordle
 
         numGuesses = 0; // reset the number of guesses
@@ -276,12 +408,32 @@ public class wordleController implements Initializable {
      * @author Collin Schmocker
      */
     private void setGuessColor(List<Paint> colors) {
-        for (int i = 0; i < wordleDisplay.getColumnCount(); i++) {
+        int col = wordleDisplay.getColumnCount();
+        int row = (wordleDisplay.getRowCount() - wordle.getRemainingGuesses());
+        SequentialTransition sequentialTransition = new SequentialTransition();
+        for (int i = 0; i < col; i++) {
+            TextField textField = (TextField) wordleDisplay.getChildren().get(i + col * row);
+
             String style = "-fx-control-inner-background: #" + colors.get(i).toString().substring(2);
-            wordleDisplay.getChildren().get(i + wordleDisplay.getColumnCount() * (wordleDisplay.getRowCount() -
-                    wordle.getRemainingGuesses())).setStyle(style + "; -fx-text-fill: white; " +
-                    "-fx-font-family: Arial; -fx-opacity: 1.0; -fx-font-weight: bold; -fx-font-size: 25px");
+            // Create a ScaleTransition to flip the TextField vertically
+            RotateTransition flipTransition = new RotateTransition(Duration.seconds(0.2), textField);
+            flipTransition.setAxis(Rotate.X_AXIS);
+            flipTransition.setFromAngle(0);
+            flipTransition.setToAngle(90);
+            RotateTransition flipTransition2 = new RotateTransition(Duration.seconds(0.2), textField);
+            flipTransition.setOnFinished(event -> {
+                        flipTransition2.setAxis(Rotate.X_AXIS);
+                        flipTransition2.setFromAngle(90);
+                        flipTransition2.setToAngle(0);
+                        textField.setStyle(style + "; -fx-text-fill: white; " +
+                                "-fx-font-family: Arial; -fx-opacity: 1.0; -fx-font-weight: bold; " +
+                                "-fx-font-size: 20px; -fx-background-radius: 0px;");
+                    });
+            // Add the flipTransition to the sequentialTransition
+            sequentialTransition.getChildren().addAll(flipTransition, flipTransition2);
         }
+
+        sequentialTransition.play(); // Play the sequential transition to animate textfields one at a time
     }
 
     /**
@@ -296,7 +448,8 @@ public class wordleController implements Initializable {
             for (Node node : keyboardRow) {
                 TextField textField = (TextField) node;
                 if (lettersGuessed.containsKey(textField.getText().toCharArray()[0])) {
-                    String style = "-fx-control-inner-background: #" + lettersGuessed.get(textField.getText().toCharArray()[0]).toString().substring(2);
+                    String style = "-fx-control-inner-background: #" + lettersGuessed.get(textField.getText()
+                            .toCharArray()[0]).toString().substring(2);
                     textField.setStyle(style + "; -fx-text-fill: white; " +
                     "-fx-font-family: Arial; -fx-opacity: 1.0; -fx-font-weight: bold;");
                     textField.setDisable(false);
@@ -305,6 +458,7 @@ public class wordleController implements Initializable {
             }
         }
     }
+
 
     public String commonLetters(Map<Character, Paint> lettersGuessed) {
         for (char c : lettersGuessed.keySet()) {

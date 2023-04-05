@@ -9,7 +9,7 @@
    <children>
       <Label text="Wordle" textFill="WHITE">
          <font>
-            <Font name="Rockwell Condensed Bold" size="62.0" />
+            <Font name="Rockwell Condensed Bold" size="32.0" />
          </font>
          <padding>
             <Insets top="15.0" />
