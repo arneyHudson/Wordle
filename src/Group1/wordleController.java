@@ -58,15 +58,15 @@ public class wordleController implements Initializable {
     private Pane failedPane;
     @FXML
     private Line line;
-    private List<Integer> numGuessesList = new ArrayList<>();
-    private Stack<Label> warningLabels = new Stack<>();
+    private final List<Integer> numGuessesList = new ArrayList<>();
+    private final ArrayList<Label> warningLabels = new ArrayList<>();
     private int gamesPlayed = 0;
     private int numGuesses = 0;
     private int totalNumGuesses = 0;
     boolean correctGuess = false;
     private Color[] colorBuffer;
-    private Map<Character, Integer> letterFrequency = new HashMap<>();
-    private Map<String, Integer> wordFrequency = new HashMap<>();
+    private final Map<Character, Integer> letterFrequency = new HashMap<>();
+    private final Map<String, Integer> wordFrequency = new HashMap<>();
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -135,6 +135,12 @@ public class wordleController implements Initializable {
                         } else {
                             textField.setText("");
                         }
+                    } else {
+                        List<Node> children = wordleDisplay.getChildren();
+                        int index = children.indexOf(textField);
+                        if (index > 0 && textField.getText().equals("")) {
+                            children.get(index - 1).requestFocus();
+                        }
                     }
                 });
                 wordleDisplay.add(textField, j, i);
@@ -157,7 +163,7 @@ public class wordleController implements Initializable {
                 TextField textField = new TextField();
                 textField.setDisable(true);
                 textField.setPrefSize(32, 32);
-                textField.setText(letter + "");
+                textField.setText(String.valueOf(letter));
                 textField.setAlignment(Pos.CENTER);
                 textField.setStyle("-fx-control-inner-background: gray; -fx-text-fill: white; -fx-opacity: 1.0;  " +
                         "-fx-font-family: Arial; -fx-font-weight: bold;");
@@ -173,26 +179,26 @@ public class wordleController implements Initializable {
      */
     @FXML
     public void guess() {
-        String guess = "";
+        StringBuilder guess = new StringBuilder();
         List<Node> children = wordleDisplay.getChildren();
         int col = wordleDisplay.getColumnCount();
         int row = wordleDisplay.getRowCount();
         int remain = wordle.getRemainingGuesses();
 
         for (int i = 0; i < col; i++) {
-            guess = guess + ((TextField) children.get(i + col * (row - remain))).getText();
+            guess.append(((TextField) children.get(i + col * (row - remain))).getText());
         }
-        if (wordle.checkRealWord(guess.toLowerCase())) {
+        if (wordle.checkRealWord(guess.toString().toLowerCase())) {
             for (int i = 0; i < col; i++) {
                 children.get(i + col * (row - remain)).setDisable(true);
                 ((TextField) children.get(i + col * (row - remain))).setEditable(false);
             }
-            colorBuffer = Wordle.perWordLetterCheck(guess.toLowerCase(), wordle.getSecretWord());
+            colorBuffer = Wordle.perWordLetterCheck(guess.toString().toLowerCase(), wordle.getSecretWord());
             setGuessColor(Arrays.asList(colorBuffer));
-            setGuessedLetterColors(wordle.checkLetters(guess));
-            commonLetterLabel.setText(commonLetters(wordle.checkLetters(guess)));
-            commonGuessLabel.setText(commonGuesses(guess));
-            if (wordle.getRemainingGuesses() != 1 && !wordle.getSecretWord().equals(guess.toLowerCase())) {
+            setGuessedLetterColors(wordle.checkLetters(guess.toString()));
+            commonLetterLabel.setText(commonLetters(wordle.checkLetters(guess.toString())));
+            commonGuessLabel.setText(commonGuesses(guess.toString()));
+            if (wordle.getRemainingGuesses() != 1 && !wordle.getSecretWord().equals(guess.toString().toLowerCase())) {
                 wordle.setRemainingGuesses(remain - 1);
                 remain = wordle.getRemainingGuesses();
                 for (int i = 0; i < col; i++) {
@@ -203,7 +209,7 @@ public class wordleController implements Initializable {
             }
             guessButton.setDisable(true);
             numGuessesList.add(numGuesses++);
-            if (guess.equalsIgnoreCase(wordle.getSecretWord())) {
+            if (guess.toString().equalsIgnoreCase(wordle.getSecretWord())) {
                 correctGuess = true;
             }
         } else {
@@ -467,22 +473,22 @@ public class wordleController implements Initializable {
                 addToFrequency(c);
             }
         }
-        String commonText = "Common Letters: ";
+        StringBuilder commonText = new StringBuilder("Common Letters: ");
         ArrayList<Character> topFiveLetters = sortLetters(letterFrequency);
         for (int i = 0; i < 5; i++) {
-            commonText += topFiveLetters.get(i) + " ";
+            commonText.append(topFiveLetters.get(i)).append(" ");
         }
-        return commonText;
+        return commonText.toString();
     }
     public String commonGuesses(String word){
         wordFrequency.merge(word, 1, Integer::sum);
         sortGuesses(wordFrequency);
-        String commonText = "Common Guesses: ";
+        StringBuilder commonText = new StringBuilder("Common Guesses: ");
         ArrayList<String> topFiveGuesses = sortGuesses(wordFrequency);
         for (int i = 0; i < 5; i++) {
-            commonText += topFiveGuesses.get(i) + " ";
+            commonText.append(topFiveGuesses.get(i)).append(" ");
         }
-        return commonText;
+        return commonText.toString();
     }
     private void addToFrequency(Character c) {
         letterFrequency.merge(c, 1, Integer::sum);
