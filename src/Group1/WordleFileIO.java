@@ -2,8 +2,8 @@
 package Group1;
 
 import java.nio.file.Path;
-import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
  * Holds all the file input/output methods used by the wordle application.
