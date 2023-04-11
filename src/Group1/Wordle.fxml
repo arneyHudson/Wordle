@@ -34,34 +34,34 @@
             <Insets bottom="10.0" />
          </padding>
       </VBox>
-      <HBox prefHeight="29.0" prefWidth="450.0">
+      <HBox alignment="CENTER" prefHeight="29.0" prefWidth="450.0">
          <children>
             <Button fx:id="hintButton" mnemonicParsing="false" onAction="#createHint" style="-fx-background-color: GRAY;" text="HINT" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
                <HBox.margin>
-                  <Insets left="70.0" />
+                  <Insets />
                </HBox.margin>
             </Button>
-            <Label fx:id="hintLabel" text="Hint: " textFill="WHITE">
+            <Label fx:id="hintLabel" style="-fx-border-color: white; -fx-border-radius: 3px; -fx-label-padding: 3px;" text="Hint: " textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="13.0" />
                </font>
                <HBox.margin>
-                  <Insets left="144.0" />
+                  <Insets left="100.0" />
                </HBox.margin>
             </Label>
          </children>
       </HBox>
-      <HBox prefHeight="28.0" prefWidth="450.0">
+      <HBox alignment="CENTER" prefHeight="28.0" prefWidth="450.0">
          <children>
             <Button fx:id="guessButton" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#guess" style="-fx-background-color: GRAY;" text="ENTER" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
                <HBox.margin>
-                  <Insets left="70.0" />
+                  <Insets />
                </HBox.margin>
             </Button>
             <Button fx:id="playAgainButton" alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: GRAY;" text="Play Again!" textFill="WHITE">
@@ -69,16 +69,16 @@
                   <Font name="Arial Bold" size="12.0" />
                </font>
                <HBox.margin>
-                  <Insets left="130.0" />
+                  <Insets left="120.0" />
                </HBox.margin>
             </Button>
          </children>
       </HBox>
-      <HBox fx:id="labelBox" prefHeight="16.0" prefWidth="450.0">
+      <HBox fx:id="labelBox" alignment="CENTER" prefHeight="16.0" prefWidth="450.0">
          <children>
             <Label fx:id="numGuessesLabel" alignment="CENTER" text="Current Guesses: 0 " textFill="GREY">
                <HBox.margin>
-                  <Insets left="70.0" />
+                  <Insets />
                </HBox.margin>
                <font>
                   <Font name="Arial Bold" size="13.0" />
