@@ -13,7 +13,7 @@
             <Font name="Rockwell Condensed Bold" size="32.0" />
          </font>
          <padding>
-            <Insets top="15.0" />
+            <Insets top="10.0" />
          </padding>
       </Label>
       <VBox fx:id="userKeys" prefHeight="187.0" prefWidth="450.0">
@@ -50,6 +50,9 @@
                <HBox.margin>
                   <Insets left="100.0" />
                </HBox.margin>
+               <padding>
+                  <Insets top="6.0" />
+               </padding>
             </Label>
          </children>
       </HBox>
@@ -101,6 +104,9 @@
          <font>
             <Font name="Arial Bold" size="13.0" />
          </font>
+         <padding>
+            <Insets bottom="5.0" />
+         </padding>
       </Label>
    </children>
 </VBox>
