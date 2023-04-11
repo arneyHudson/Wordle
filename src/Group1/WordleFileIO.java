@@ -17,7 +17,26 @@ public class WordleFileIO {
      * @return A HashMap dictionary of characters and frequency
      */
     public HashMap<Character, Integer> loadCharacterFrequency(Path characterHistoryPath){
+
         return null;
+    }
+
+    /*
+     * Character file should be in this format
+     * BEGIN_DICT
+     * A <number>
+     * B <number>
+     * ...
+     * Z <number>
+     */
+
+    /**
+     * Saves a dictionary of each character and its frequency to the file
+     * @param characterHistoryPath The path to save the text file to
+     * @param freqDict A HashMap dictionary of characters and frequency to save to file
+     */
+    public void saveCharacterFrequency(Path characterHistoryPath, HashMap<Character, Integer> freqDict){
+
     }
 
 }
