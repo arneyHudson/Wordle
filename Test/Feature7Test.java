@@ -1,5 +1,5 @@
 import Group1.Wordle;
-import Group1.wordleController;
+import Group1.WordleController;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.junit.jupiter.api.Assertions;
@@ -11,14 +11,14 @@ import java.util.Map;
 
 public class Feature7Test {
     private Wordle wordle;
-    private wordleController controller;
+    private WordleController controller;
     private final Color DIRECT_COLOR = Color.web("#6ca965");
     private final Color INDIRECT_COLOR = Color.web("#c8b653");
     private final Color NONE_COLOR = Color.web("#363636");
     @BeforeEach
     public void setup(){
         wordle = new Wordle();
-        controller = new wordleController();
+        controller = new WordleController();
     }
     @Test
     public void letterTest(){
