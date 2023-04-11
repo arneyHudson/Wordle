@@ -3,9 +3,12 @@ import javafx.animation.*;
 import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -14,8 +17,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -26,7 +32,7 @@ import java.util.*;
  * Author:     Collin Schmocker
  * Date:       date started
  */
-public class wordleController implements Initializable {
+public class WordleController implements Initializable {
 
     @FXML
     private VBox mainDisplay;
@@ -67,6 +73,7 @@ public class wordleController implements Initializable {
     private Color[] colorBuffer;
     private final Map<Character, Integer> letterFrequency = new HashMap<>();
     private final Map<String, Integer> wordFrequency = new HashMap<>();
+    private Boolean adminPanelOpen;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -86,6 +93,7 @@ public class wordleController implements Initializable {
         mainDisplay.getChildren().add(2, wordleDisplay);
         wordle = new Wordle();
         playAgainButton.setDisable(true);
+        adminPanelOpen = false;
     }
 
     /**
@@ -215,6 +223,8 @@ public class wordleController implements Initializable {
             if (guess.toString().equalsIgnoreCase(wordle.getSecretWord())) {
                 correctGuess = true;
             }
+        } else if(guess.toString().toLowerCase().equals("xxxxx")) {
+            startAdminPanel();
         } else {
             // Shake animation for textfields
             for (int i = 0; i < col; i++) {
@@ -512,6 +522,7 @@ public class wordleController implements Initializable {
         }
         return mostCommonLetters;
     }
+
     private ArrayList<String> sortGuesses(Map<String, Integer> wordFrequency){
         ArrayList<String> mostCommonGuesses = new ArrayList<>();
         for(int i = 0; i<5; i++) {
@@ -526,6 +537,34 @@ public class wordleController implements Initializable {
             mostCommonGuesses.add(mostCommonWord);
         }
         return mostCommonGuesses;
+    }
+
+    public void closeAdmin(Stage stage) {
+        stage.close();
+        adminPanelOpen = false;
+    }
+
+    private void startAdminPanel() {
+        if(!adminPanelOpen) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/Group1/AdminPanel.fxml"));
+                Parent root = loader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Wordle");
+                stage.show();
+                stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> closeAdmin(stage));
+                AdminController controller = loader.getController();
+                controller.setStage(stage);
+                controller.setLetterFrequency(letterFrequency);
+                controller.setWordFrequency(wordFrequency);
+                controller.setWordleController(this);
+                adminPanelOpen = true;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }
