@@ -20,44 +20,18 @@ import java.util.List;
 public class Wordle {
     private static final int MAX_GUESSES = 6;
     private int remainingGuesses;
-    private Map<String, Integer> previousGuesses;
-    private Map<Character, Paint> lettersGuessed;
-    private List<String> words = new ArrayList<String>();
-    private String secretWord;
+    private final Map<Character, Paint> lettersGuessed;
+    private final List<String> words = new ArrayList<>();
+    private final String secretWord;
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
-        this.previousGuesses = new HashMap<String, Integer>();
         this.secretWord = generateSecretWord();
         lettersGuessed = new HashMap<>();
     }
 
     public String getSecretWord(){
         return secretWord;
-    }
-    /**
-     * Contains the basics for playing the game of wordle
-     */
-    public void play() {
-        System.out.println("Welcome to Wordle!");
-        System.out.println("You have " + MAX_GUESSES + " guesses to find the secret word.");
-        System.out.println("The secret word is a 5-letter word. Good luck!");
-        String secretWord = generateSecretWord();
-
-        Map<Character, Color> lettersGuessed = new HashMap<>();
-
-        while (remainingGuesses > 0) {
-            System.out.println("Guesses remaining: " + remainingGuesses);
-            String guess = getValidGuess();
-
-            if (guess.equals(secretWord)) {
-                System.out.println("Congratulations, you found the secret word!");
-                return;
-            }
-            previousGuesses.put(guess, 1);
-            remainingGuesses--;
-        }
-        System.out.println("Sorry, you ran out of guesses. The secret word was " + secretWord + ".");
     }
 
     /**
@@ -87,32 +61,9 @@ public class Wordle {
         return "EMPTY";
     }
 
-    /**
-     Makes sure the user is inputting a 5-letter word. If so the guess will be counted.
-     Lets the user know if their guess is correct.
-     @return the valid guess
-     */
-    private String getValidGuess() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.print("Enter your guess: ");
-            String guess = scanner.next().toLowerCase();
-            if (guess.length() != 5) {
-                System.out.println("Invalid guess. Please enter a 5-letter word.");
-            } else if(!checkRealWord(guess)){
-                System.out.println("Not in word list.");
-            } else if (previousGuesses.containsKey(guess)) {
-                System.out.println("You already guessed that word. Please enter a new word.");
-            } else {
-                return guess;
-            }
-        }
-    }
-
     public boolean checkRealWord(String guess){
         return words.contains(guess);
     }
-
 
     /**
      * Returns a 1xn array of colors to use in the GUI representation of the letters.
@@ -177,7 +128,6 @@ public class Wordle {
     /**
      * For User Story 8, returns a String with a single correct letter in its correct place
      * All other strings as asterisks
-     *
      * NOTE: The color array MUST be the same length as the word.
      * @param theTruth The correct word, used to create a hint from.
      * @param colors Optionally passed in, in order to avoid making hints for 'green' spaces
@@ -204,16 +154,16 @@ public class Wordle {
         }
         final int hintPosition = possiblePositions.get((int)(Math.random()*possiblePositions.size()));
         final char hintChar = theTruth.charAt(hintPosition);
-        final char hiddenChar = '*';
-        String ret = "";
+        final String hiddenChar = "[_]";
+        StringBuilder ret = new StringBuilder();
         for(int i = 0; i < theTruth.length(); ++i){
             if(i == hintPosition){
-                ret = ret + hintChar;
+                ret.append(hintChar);
             } else {
-                ret = ret + hiddenChar;
+                ret.append(hiddenChar);
             }
         }
-        return ret;
+        return ret.toString();
     }
 
     /**
