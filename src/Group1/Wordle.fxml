@@ -3,6 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
 <VBox fx:id="mainDisplay" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="450.0" spacing="10.0" style="-fx-background-color: #1b1b1b;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Group1.wordleController">
@@ -30,10 +31,8 @@
                   <Insets bottom="5.0" top="3.0" />
                </VBox.margin></HBox>
          </children>
-         <padding>
-            <Insets bottom="10.0" />
-         </padding>
       </VBox>
+      <Line endX="225.0" startX="-225.0" stroke="GREY" strokeWidth="1.5" />
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="450.0">
          <children>
             <Button fx:id="hintButton" mnemonicParsing="false" onAction="#createHint" style="-fx-background-color: GRAY;" text="HINT" textFill="WHITE">

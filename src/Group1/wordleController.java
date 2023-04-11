@@ -77,10 +77,13 @@ public class wordleController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setUpWordleDisplay(6, 5);
         setUpKeyboard();
-        line = new Line(0, 50, mainDisplay.getWidth(), 50);
+        line = new Line();
         line.setStroke(Color.GRAY);
+        line.setStartX(0);
+        line.setEndX(450);
+        line.setStrokeWidth(1.5);
         mainDisplay.getChildren().add(1, line);
-        mainDisplay.getChildren().add(1, wordleDisplay);
+        mainDisplay.getChildren().add(2, wordleDisplay);
         wordle = new Wordle();
         playAgainButton.setDisable(true);
     }
