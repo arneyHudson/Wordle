@@ -70,7 +70,6 @@ public class WordleController implements Initializable {
     private int numGuesses = 0;
     private int totalNumGuesses = 0;
     boolean correctGuess = false;
-    private Color[] colorBuffer;
     private final Map<Character, Integer> letterFrequency = new HashMap<>();
     private final Map<String, Integer> wordFrequency = new HashMap<>();
     private Boolean adminPanelOpen;
@@ -85,7 +84,7 @@ public class WordleController implements Initializable {
         setUpWordleDisplay(6, 5);
         setUpKeyboard();
         line = new Line();
-        line.setStroke(Color.GRAY);
+        line.setStroke(Wordle.NONE_COLOR);
         line.setStartX(0);
         line.setEndX(450);
         line.setStrokeWidth(1.5);
@@ -204,8 +203,8 @@ public class WordleController implements Initializable {
                 children.get(i + col * (row - remain)).setDisable(true);
                 ((TextField) children.get(i + col * (row - remain))).setEditable(false);
             }
-            colorBuffer = Wordle.perWordLetterCheck(guess.toString().toLowerCase(), wordle.getSecretWord());
-            setGuessColor(Arrays.asList(colorBuffer));
+            setGuessColor(Arrays.asList(wordle.perWordLetterCheck(guess.toString().toLowerCase(),
+                    wordle.getSecretWord(), true)));
             setGuessedLetterColors(wordle.checkLetters(guess.toString()));
             commonLetterLabel.setText(commonLetters(wordle.checkLetters(guess.toString())));
             commonGuessLabel.setText(commonGuesses(guess.toString()));
@@ -370,13 +369,13 @@ public class WordleController implements Initializable {
         fade.play();
     }
 
+
+    /**
+     * Creates a hint and displays it on the GUI
+     */
     @FXML
     public void createHint(){
-        if (colorBuffer == null){
-            hintLabel.setText("Hint: " + Wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
-        } else {
-            hintLabel.setText("Hint: " + Wordle.getLetterHint(wordle.getSecretWord(), colorBuffer).toUpperCase());
-        }
+            hintLabel.setText("Hint: " + wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
     }
@@ -406,7 +405,7 @@ public class WordleController implements Initializable {
         correctGuess = false; // reset correct guess flag
         guessButton.setDisable(false); // enable guess button
         hintButton.setDisable(false); // enable the hint button
-        colorBuffer = null; // reset color buffer to a null value
+        wordle.setColorBuffer(null); // reset the color buffer to null
         hintLabel.setText(""); // remove the hint label
         playAgainButton.setDisable(true); // disable play again button
     }
@@ -481,8 +480,8 @@ public class WordleController implements Initializable {
 
     public String commonLetters(Map<Character, Paint> lettersGuessed) {
         for (char c : lettersGuessed.keySet()) {
-            if (lettersGuessed.get(c).equals(Color.web("#6ca965")) ||
-                    lettersGuessed.get(c).equals(Color.web("#c8b653"))) {
+            if (lettersGuessed.get(c).equals(Wordle.DIRECT_COLOR) ||
+                    lettersGuessed.get(c).equals(Wordle.INDIRECT_COLOR)) {
                 addToFrequency(c);
             }
         }

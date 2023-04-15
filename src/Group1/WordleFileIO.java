@@ -3,7 +3,6 @@ package Group1;
 
 import javafx.scene.control.Alert;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -46,16 +45,6 @@ public class WordleFileIO {
         }
         return ret;
     }
-
-    /*
-     * Character file should be in this format
-     * BEGIN_CHAR_DICT
-     * A <number>
-     * B <number>
-     * ...
-     * Z <number>
-     * END
-     */
 
     /**
      * Saves a dictionary of each character and its frequency to the file
