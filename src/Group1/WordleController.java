@@ -32,7 +32,7 @@ import java.util.*;
  * Author:     Collin Schmocker
  * Date:       date started
  */
-public class WordleController implements Initializable {
+public class WordleController<T> implements Initializable {
 
     @FXML
     private VBox mainDisplay;
@@ -482,52 +482,40 @@ public class WordleController implements Initializable {
         for (char c : lettersGuessed.keySet()) {
             if (lettersGuessed.get(c).equals(Wordle.DIRECT_COLOR) ||
                     lettersGuessed.get(c).equals(Wordle.INDIRECT_COLOR)) {
-                addToFrequency(c);
+                letterFrequency.merge(c, 1, Integer::sum);
             }
         }
         StringBuilder commonText = new StringBuilder("Common Letters: ");
-        ArrayList<Character> topFiveLetters = sortLetters(letterFrequency);
+        ArrayList<T> topFiveLetters = sort((Map<T, Integer>) letterFrequency);
         for (int i = 0; i < 5; i++) {
-            commonText.append(topFiveLetters.get(i)).append(" ");
+            if (topFiveLetters.get(i) != null) {
+                commonText.append(topFiveLetters.get(i)).append(" ");
+            } else {
+                commonText.append("*").append(" ");
+            }
         }
         return commonText.toString();
     }
     public String commonGuesses(String word){
         wordFrequency.merge(word, 1, Integer::sum);
-        sortGuesses(wordFrequency);
         StringBuilder commonText = new StringBuilder("Common Guesses: ");
-        ArrayList<String> topFiveGuesses = sortGuesses(wordFrequency);
+        ArrayList<T> topFiveGuesses = sort((Map<T, Integer>) wordFrequency);
         for (int i = 0; i < 5; i++) {
-            commonText.append(topFiveGuesses.get(i)).append(" ");
+            if (topFiveGuesses.get(i) != null) {
+                commonText.append(topFiveGuesses.get(i)).append(" ");
+            } else {
+                commonText.append("*").append(" ");
+            }
         }
         return commonText.toString();
     }
-    private void addToFrequency(Character c) {
-        letterFrequency.merge(c, 1, Integer::sum);
-    }
 
-    private ArrayList<Character> sortLetters(Map<Character, Integer> letterFrequency){
-        ArrayList<Character> mostCommonLetters = new ArrayList<>();
+    private ArrayList<T> sort(Map<T, Integer> wordFrequency){
+        ArrayList<T> mostCommonGuesses = new ArrayList<>();
         for(int i = 0; i<5; i++) {
             int mostCommon = 0;
-            char mostCommonLetter = '*';
-            for (char c : letterFrequency.keySet()) {
-                if(letterFrequency.get(c) > mostCommon && !mostCommonLetters.contains(c)){
-                    mostCommon = letterFrequency.get(c);
-                    mostCommonLetter = c;
-                }
-            }
-            mostCommonLetters.add(mostCommonLetter);
-        }
-        return mostCommonLetters;
-    }
-
-    private ArrayList<String> sortGuesses(Map<String, Integer> wordFrequency){
-        ArrayList<String> mostCommonGuesses = new ArrayList<>();
-        for(int i = 0; i<5; i++) {
-            int mostCommon = 0;
-            String mostCommonWord = "*";
-            for (String s : wordFrequency.keySet()) {
+            T mostCommonWord = null;
+            for (T s : wordFrequency.keySet()) {
                 if(wordFrequency.get(s) > mostCommon && !mostCommonGuesses.contains(s)){
                     mostCommon = wordFrequency.get(s);
                     mostCommonWord = s;
