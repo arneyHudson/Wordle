@@ -478,6 +478,12 @@ public class WordleController<T> implements Initializable {
     }
 
 
+    /**
+     *
+     * @param lettersGuessed A frequency set of the letters guessed, based on the color as of the current guess.
+     * @return A string containing the top 5 correctly guessed letters, separated with spaces
+     * @author NZawarus
+     */
     public String commonLetters(Map<Character, Paint> lettersGuessed) {
         for (char c : lettersGuessed.keySet()) {
             if (lettersGuessed.get(c).equals(Wordle.DIRECT_COLOR) ||
@@ -486,7 +492,8 @@ public class WordleController<T> implements Initializable {
             }
         }
         StringBuilder commonText = new StringBuilder("Common Letters: ");
-        ArrayList<T> topFiveLetters = sort((Map<T, Integer>) letterFrequency);
+        @SuppressWarnings("unchecked") // letterFrequency will always contain a valid key type
+        ArrayList<T> topFiveLetters = sort((Map<T, Integer>)letterFrequency);
         for (int i = 0; i < 5; i++) {
             if (topFiveLetters.get(i) != null) {
                 commonText.append(topFiveLetters.get(i)).append(" ");
@@ -496,9 +503,18 @@ public class WordleController<T> implements Initializable {
         }
         return commonText.toString();
     }
+
+    /**
+     *
+     * @param word The word guessed
+     * @return A string containing the top 5 most frequently guessed words, regardless of
+     *         if the guessed word was correct.
+     * @author NZawarus
+     */
     public String commonGuesses(String word){
         wordFrequency.merge(word, 1, Integer::sum);
         StringBuilder commonText = new StringBuilder("Common Guesses: ");
+        @SuppressWarnings("unchecked") // wordFrequency will always contain a valid key type
         ArrayList<T> topFiveGuesses = sort((Map<T, Integer>) wordFrequency);
         for (int i = 0; i < 5; i++) {
             if (topFiveGuesses.get(i) != null) {
@@ -510,14 +526,21 @@ public class WordleController<T> implements Initializable {
         return commonText.toString();
     }
 
-    private ArrayList<T> sort(Map<T, Integer> wordFrequency){
+    /**
+     *
+     * @param wordFrequency A set with a generic type for keys, and an integer for the values
+     * @return An array list of the most common objects (either string or char depending on
+     *         the provided frequency set)
+     * @author NZawarus
+     */
+    private ArrayList<T> sort(Map<T, Integer> frequency){
         ArrayList<T> mostCommonGuesses = new ArrayList<>();
         for(int i = 0; i<5; i++) {
             int mostCommon = 0;
             T mostCommonWord = null;
-            for (T s : wordFrequency.keySet()) {
-                if(wordFrequency.get(s) > mostCommon && !mostCommonGuesses.contains(s)){
-                    mostCommon = wordFrequency.get(s);
+            for (T s : frequency.keySet()) {
+                if(frequency.get(s) > mostCommon && !mostCommonGuesses.contains(s)){
+                    mostCommon = frequency.get(s);
                     mostCommonWord = s;
                 }
             }

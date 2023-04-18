@@ -67,6 +67,12 @@ public class Wordle {
         return "EMPTY";
     }
 
+    /**
+     * Checks the word list for the existence of the guess.
+     * @param guess The guessed word
+     * @return True if the guess appears within the word list, false otherwise.
+     * @author NZawarus
+     */
     public boolean checkRealWord(String guess){
         return words.contains(guess);
     }
