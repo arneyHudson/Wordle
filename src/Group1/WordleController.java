@@ -531,7 +531,7 @@ public class WordleController<T> implements Initializable {
 
     /**
      * Sorts the frequency list from most common to least common.
-     * @param wordFrequency A set with a generic type for keys, and an integer for the values
+     * @param frequency A set with a generic type for keys, and an integer for the values
      * @return An array list of the most common objects (either string or char depending on
      *         the provided frequency set)
      * @author NZawarus
