@@ -479,7 +479,9 @@ public class WordleController<T> implements Initializable {
 
 
     /**
-     *
+     * Updates a frequency set of all guessed characters, adding based on the letters at least appearing within
+     * the secret word. Sorts the frequency list from most to least frequent, and returns the top 5 most common
+     * letters.
      * @param lettersGuessed A frequency set of the letters guessed, based on the color as of the current guess.
      * @return A string containing the top 5 correctly guessed letters, separated with spaces
      * @author NZawarus
@@ -505,7 +507,8 @@ public class WordleController<T> implements Initializable {
     }
 
     /**
-     *
+     * Updates a frequency set of all guessed words, regardless of correctness. Frequencies are
+     * then sorted from most to least common, and the top 5 most common guesses are returned.s
      * @param word The word guessed
      * @return A string containing the top 5 most frequently guessed words, regardless of
      *         if the guessed word was correct.
@@ -527,7 +530,7 @@ public class WordleController<T> implements Initializable {
     }
 
     /**
-     *
+     * Sorts the frequency list from most common to least common.
      * @param wordFrequency A set with a generic type for keys, and an integer for the values
      * @return An array list of the most common objects (either string or char depending on
      *         the provided frequency set)
