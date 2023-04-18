@@ -32,7 +32,7 @@ import java.util.*;
  * Author:     Collin Schmocker
  * Date:       date started
  */
-public class WordleController implements Initializable {
+public class WordleController<T> implements Initializable {
 
     @FXML
     private VBox mainDisplay;
@@ -478,58 +478,72 @@ public class WordleController implements Initializable {
     }
 
 
+    /**
+     * Updates a frequency set of all guessed characters, adding based on the letters at least appearing within
+     * the secret word. Sorts the frequency list from most to least frequent, and returns the top 5 most common
+     * letters.
+     * @param lettersGuessed A frequency set of the letters guessed, based on the color as of the current guess.
+     * @return A string containing the top 5 correctly guessed letters, separated with spaces
+     * @author NZawarus
+     */
     public String commonLetters(Map<Character, Paint> lettersGuessed) {
         for (char c : lettersGuessed.keySet()) {
             if (lettersGuessed.get(c).equals(Wordle.DIRECT_COLOR) ||
                     lettersGuessed.get(c).equals(Wordle.INDIRECT_COLOR)) {
-                addToFrequency(c);
+                letterFrequency.merge(c, 1, Integer::sum);
             }
         }
         StringBuilder commonText = new StringBuilder("Common Letters: ");
-        ArrayList<Character> topFiveLetters = sortLetters(letterFrequency);
+        @SuppressWarnings("unchecked") // letterFrequency will always contain a valid key type
+        ArrayList<T> topFiveLetters = sort((Map<T, Integer>)letterFrequency);
         for (int i = 0; i < 5; i++) {
-            commonText.append(topFiveLetters.get(i)).append(" ");
+            if (topFiveLetters.get(i) != null) {
+                commonText.append(topFiveLetters.get(i)).append(" ");
+            } else {
+                commonText.append("*").append(" ");
+            }
         }
         return commonText.toString();
     }
+
+    /**
+     * Updates a frequency set of all guessed words, regardless of correctness. Frequencies are
+     * then sorted from most to least common, and the top 5 most common guesses are returned.s
+     * @param word The word guessed
+     * @return A string containing the top 5 most frequently guessed words, regardless of
+     *         if the guessed word was correct.
+     * @author NZawarus
+     */
     public String commonGuesses(String word){
         wordFrequency.merge(word, 1, Integer::sum);
-        sortGuesses(wordFrequency);
         StringBuilder commonText = new StringBuilder("Common Guesses: ");
-        ArrayList<String> topFiveGuesses = sortGuesses(wordFrequency);
+        @SuppressWarnings("unchecked") // wordFrequency will always contain a valid key type
+        ArrayList<T> topFiveGuesses = sort((Map<T, Integer>) wordFrequency);
         for (int i = 0; i < 5; i++) {
-            commonText.append(topFiveGuesses.get(i)).append(" ");
+            if (topFiveGuesses.get(i) != null) {
+                commonText.append(topFiveGuesses.get(i)).append(" ");
+            } else {
+                commonText.append("*").append(" ");
+            }
         }
         return commonText.toString();
     }
-    private void addToFrequency(Character c) {
-        letterFrequency.merge(c, 1, Integer::sum);
-    }
 
-    private ArrayList<Character> sortLetters(Map<Character, Integer> letterFrequency){
-        ArrayList<Character> mostCommonLetters = new ArrayList<>();
+    /**
+     * Sorts the frequency list from most common to least common.
+     * @param frequency A set with a generic type for keys, and an integer for the values
+     * @return An array list of the most common objects (either string or char depending on
+     *         the provided frequency set)
+     * @author NZawarus
+     */
+    private ArrayList<T> sort(Map<T, Integer> frequency){
+        ArrayList<T> mostCommonGuesses = new ArrayList<>();
         for(int i = 0; i<5; i++) {
             int mostCommon = 0;
-            char mostCommonLetter = '*';
-            for (char c : letterFrequency.keySet()) {
-                if(letterFrequency.get(c) > mostCommon && !mostCommonLetters.contains(c)){
-                    mostCommon = letterFrequency.get(c);
-                    mostCommonLetter = c;
-                }
-            }
-            mostCommonLetters.add(mostCommonLetter);
-        }
-        return mostCommonLetters;
-    }
-
-    private ArrayList<String> sortGuesses(Map<String, Integer> wordFrequency){
-        ArrayList<String> mostCommonGuesses = new ArrayList<>();
-        for(int i = 0; i<5; i++) {
-            int mostCommon = 0;
-            String mostCommonWord = "*";
-            for (String s : wordFrequency.keySet()) {
-                if(wordFrequency.get(s) > mostCommon && !mostCommonGuesses.contains(s)){
-                    mostCommon = wordFrequency.get(s);
+            T mostCommonWord = null;
+            for (T s : frequency.keySet()) {
+                if(frequency.get(s) > mostCommon && !mostCommonGuesses.contains(s)){
+                    mostCommon = frequency.get(s);
                     mostCommonWord = s;
                 }
             }
