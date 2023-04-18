@@ -18,14 +18,15 @@ public class WordleFileIO {
     private static final String END_LINE = "END";
 
     public static HashMap<Character, Integer> CHARACTER_FREQUENCY = new HashMap<>();
-    public static Path CHAR_FREQ_PATH = Path.of("ADMIN_FILES/character_frequency_log.txt");
+    public static Path CHAR_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/character_frequency_log.txt");
 
     /**
      * Returns a dictionary of each character and its frequency of being guessed in the application
      * @param characterHistoryPath A text file holding the history of the chars and their frequency
      * @return A HashMap dictionary of characters and frequency
      */
-    public static HashMap<Character, Integer> loadCharacterFrequency(Path characterHistoryPath){
+    public static HashMap<Character, Integer> loadCharacterFrequency(Path characterHistoryPath)
+            throws IOException{
         HashMap<Character, Integer> ret = new HashMap<>();
         try(Scanner in = new Scanner(characterHistoryPath)){
             if(!in.next().equals(CHAR_DICT_LINE)){
@@ -39,14 +40,17 @@ public class WordleFileIO {
                 ret.put(current.charAt(0), Integer.parseInt(in.next()));
                 current = in.next();
             }
-        } catch (IOException e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("IOException");
-            alert.setContentText(e.getMessage());
-            alert.show();
         }
         return ret;
     }
+
+    // Reuse code below where the exception is caught
+    //catch (IOException e){
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setHeaderText("IOException");
+//            alert.setContentText(e.getMessage());
+//            alert.show();
+    // }
 
     /**
      * Saves a dictionary of each character and its frequency to the file
@@ -54,19 +58,23 @@ public class WordleFileIO {
      * @param frequencyDict A HashMap dictionary of characters and frequency to save to file
      */
     public static void saveCharacterFrequency(Path characterHistoryPath,
-                                              HashMap<Character, Integer> frequencyDict){
+                                              HashMap<Character, Integer> frequencyDict)
+            throws IOException{
         try(FileWriter out = new FileWriter(characterHistoryPath.toFile())){
             out.write(CHAR_DICT_LINE + '\n');
             for(Character c: frequencyDict.keySet()){
                 out.write(c + ' ' + frequencyDict.get(c) + '\n');
             }
             out.write(END_LINE);
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("IOException");
-            alert.setContentText("An exception occurred while saving the character frequency dictionary");
-            alert.show();
         }
+
     }
+
+    //catch (IOException e) {
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setHeaderText("IOException");
+//            alert.setContentText("An exception occurred while saving the character frequency dictionary");
+//            alert.show();
+//        }
 
 }
