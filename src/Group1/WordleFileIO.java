@@ -78,4 +78,38 @@ public class WordleFileIO {
         }
     }
 
+    public static HashMap<String, Integer> loadGuessFreq(Path guessFreqPath){
+        HashMap<String, Integer> guessFreq = new HashMap<>();
+        try(Scanner in = new Scanner(guessFreqPath)){
+            String cur = in.nextLine();
+            while(!cur.equals("END")){
+                String[] info = cur.split(" ");
+                if(info[0].length() != 5){ // Change to variable for User Story 13
+                    throw new IOException("Frequency list used does not match word length.");
+                }
+                guessFreq.put(info[0], Integer.parseInt(info[1]));
+                cur = in.nextLine();
+            }
+        } catch(IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
+        return guessFreq;
+    }
+
+    public static void saveGuessFreq(Path guessFreqPath, HashMap<String, Integer> guessFreq){
+        try(FileWriter out = new FileWriter(guessFreqPath.toFile())){
+            for(String word: guessFreq.keySet()){
+                out.write(word + " " + guessFreq.get(word) + "\n");
+            }
+            out.write("END");
+        } catch(IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText("An error occurred while saving the guessed word frequency.");
+            alert.show();
+        }
+    }
 }
