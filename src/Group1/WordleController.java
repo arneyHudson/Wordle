@@ -199,6 +199,10 @@ public class WordleController implements Initializable {
             guess.append(((TextField) children.get(i + col * (row - remain))).getText());
         }
         if (wordle.checkRealWord(guess.toString().toLowerCase())) {
+            // Adds the characters to the main frequency dictionary
+            WordleFileIO.addLettersToCharacterFrequency
+                    (guess.toString(), WordleFileIO.CHARACTER_FREQUENCY);
+            WordleFileIO.saveMainCharacterFrequency();
             for (int i = 0; i < col; i++) {
                 children.get(i + col * (row - remain)).setDisable(true);
                 ((TextField) children.get(i + col * (row - remain))).setEditable(false);
