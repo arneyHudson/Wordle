@@ -1,5 +1,5 @@
 import Group1.Wordle;
-import Group1.wordleController;
+import Group1.WordleController;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.junit.jupiter.api.Assertions;
@@ -10,15 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Feature7Test {
-    private Wordle wordle;
-    private wordleController controller;
-    private final Color DIRECT_COLOR = Color.web("#6ca965");
-    private final Color INDIRECT_COLOR = Color.web("#c8b653");
-    private final Color NONE_COLOR = Color.web("#363636");
+    private WordleController controller;
     @BeforeEach
-    public void setup(){
-        wordle = new Wordle();
-        controller = new wordleController();
+    public void setup(){;
+        controller = new WordleController();
     }
     @Test
     public void letterTest(){
@@ -26,19 +21,19 @@ public class Feature7Test {
         String commonText;
         commonText = controller.commonLetters(lettersGuessed);
         Assertions.assertEquals(commonText,"Common Letters: * * * * * ");
-        lettersGuessed.put('M',DIRECT_COLOR);
-        lettersGuessed.put('O',DIRECT_COLOR);
-        lettersGuessed.put('U',DIRECT_COLOR);
-        lettersGuessed.put('S',DIRECT_COLOR);
-        lettersGuessed.put('E',DIRECT_COLOR);
+        lettersGuessed.put('M',Wordle.DIRECT_COLOR);
+        lettersGuessed.put('O',Wordle.DIRECT_COLOR);
+        lettersGuessed.put('U',Wordle.DIRECT_COLOR);
+        lettersGuessed.put('S',Wordle.DIRECT_COLOR);
+        lettersGuessed.put('E',Wordle.DIRECT_COLOR);
         commonText = controller.commonLetters(lettersGuessed);
         Assertions.assertEquals(commonText,"Common Letters: S E U M O ");
         lettersGuessed.clear();
-        lettersGuessed.put('A',NONE_COLOR);
-        lettersGuessed.put('P',NONE_COLOR);
-        lettersGuessed.put('P',NONE_COLOR);
-        lettersGuessed.put('L',NONE_COLOR);
-        lettersGuessed.put('E',DIRECT_COLOR);
+        lettersGuessed.put('A',Wordle.NONE_COLOR);
+        lettersGuessed.put('P',Wordle.NONE_COLOR);
+        lettersGuessed.put('P',Wordle.NONE_COLOR);
+        lettersGuessed.put('L',Wordle.NONE_COLOR);
+        lettersGuessed.put('E',Wordle.DIRECT_COLOR);
         commonText = controller.commonLetters(lettersGuessed);
         Assertions.assertEquals(commonText, "Common Letters: E S U M O ");
 

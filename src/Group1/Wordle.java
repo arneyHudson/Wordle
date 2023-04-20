@@ -18,11 +18,17 @@ import java.util.List;
  random word Rand let the user guess up to 6 guesses.
  */
 public class Wordle {
+
+    public static final Color DIRECT_COLOR = Color.web("#6ca965");
+    public static final Color INDIRECT_COLOR = Color.web("#c8b653");
+    public static final Color NONE_COLOR = Color.web("#363636");
+
     private static final int MAX_GUESSES = 6;
     private int remainingGuesses;
     private final Map<Character, Paint> lettersGuessed;
     private final List<String> words = new ArrayList<>();
     private final String secretWord;
+    private Color[] colorBuffer;
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
@@ -61,8 +67,23 @@ public class Wordle {
         return "EMPTY";
     }
 
+    /**
+     * Checks the word list for the existence of the guess.
+     * @param guess The guessed word
+     * @return True if the guess appears within the word list, false otherwise.
+     * @author NZawarus
+     */
     public boolean checkRealWord(String guess){
         return words.contains(guess);
+    }
+
+
+    public Color[] perWordLetterCheck(String theGuess, String theTruth, boolean saveBuffer){
+        Color[] ret = perWordLetterCheck(theGuess, theTruth);
+        if(saveBuffer){
+            colorBuffer = ret;
+        }
+        return ret;
     }
 
     /**
@@ -73,12 +94,7 @@ public class Wordle {
      * @return A 1xn Array where each color is respective to the letter of the guess word
      */
     public static Color[] perWordLetterCheck(String theGuess, String theTruth){
-        if(theGuess.length() != theTruth.length()){
-          throw new IllegalArgumentException("String lengths are not equal");
-        }
-        Color DIRECT_COLOR = Color.web("#6ca965");
-        Color INDIRECT_COLOR = Color.web("#c8b653");
-        Color NONE_COLOR = Color.web("#363636");
+
         Color[] ret = new Color[theGuess.length()];
         List<Character> guessNonDirectLetters = new ArrayList<>();
         List<Character> truthNonDirectLetters = new ArrayList<>();
@@ -113,16 +129,8 @@ public class Wordle {
         return ret;
     }
 
-    /**
-     * Overloaded method for getLetterHint(String, int, Color[])
-     * Color is default all gray
-     * @param theTruth The reference word to make a hint for
-     * @return A hint based off the reference word
-     */
-    public static String getLetterHint(String theTruth){
-        Color[] colorArray = new Color[theTruth.length()];
-        Arrays.fill(colorArray, Color.GRAY);
-        return getLetterHint(theTruth, colorArray);
+    public String getLetterHint(String theTruth){
+        return getLetterHint(theTruth, colorBuffer);
     }
 
     /**
@@ -135,20 +143,17 @@ public class Wordle {
      * length of the 'true' string.
      * @return A string containing the hint.
      */
-    public static String getLetterHint(String theTruth, Color[] colors){
-        // if all green, disable the button
-        /*
-         * Figure out which positions /can/ be hints
-         * Use math.random to pick one of those positions
-         * Use the code succeeding to come up with the hint.
-         */
-        if(colors.length != theTruth.length()){
-            throw new IllegalArgumentException("Color Array and String length are not equal!");
+    public String getLetterHint(String theTruth, Color[] colors){
+
+        if (colors == null){
+            colors = new Color[theTruth.length()];
+            Arrays.fill(colors, NONE_COLOR); // Colors technically does not matter
         }
+
 
         List<Integer> possiblePositions = new ArrayList<>();
         for(int i = 0; i < colors.length; ++i){
-            if(colors[i] != Color.GREEN){
+            if(colors[i] != DIRECT_COLOR){
                 possiblePositions.add(i);
             }
         }
@@ -184,6 +189,9 @@ public class Wordle {
         return lettersGuessed;
     }
 
+    public void setColorBuffer(Color[] colorBuffer) {
+        this.colorBuffer = colorBuffer;
+    }
     public void setRemainingGuesses(int numGuesses){
         this.remainingGuesses = numGuesses;
     }
