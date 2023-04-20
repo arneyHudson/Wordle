@@ -63,7 +63,7 @@ public class WordleFileIO {
         try(FileWriter out = new FileWriter(characterHistoryPath.toFile())){
             out.write(CHAR_DICT_LINE + '\n');
             for(Character c: frequencyDict.keySet()){
-                out.write(c + ' ' + frequencyDict.get(c) + '\n');
+                out.write(""+ c + ' ' + frequencyDict.get(c) + '\n');
             }
             out.write(END_LINE);
         }
@@ -76,5 +76,44 @@ public class WordleFileIO {
 //            alert.setContentText("An exception occurred while saving the character frequency dictionary");
 //            alert.show();
 //        }
+
+    public static void loadMainCharacterFrequency(){
+        try {
+            CHARACTER_FREQUENCY = loadCharacterFrequency(CHAR_FREQ_PATH);
+        } catch (IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
+    }
+
+    /**
+     * Saves the static character frequency dictionary.
+     */
+    public static void saveMainCharacterFrequency(){
+        try {
+            saveCharacterFrequency(CHAR_FREQ_PATH, CHARACTER_FREQUENCY);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText("An exception occurred while saving the character frequency dictionary");
+            alert.show();
+        }
+    }
+
+    /**
+     * Adds all of the letters of a string to th
+     * @param theGuess The Hashmap to put in, likely just WordleFileIO.CHARACTER_FREQUENCY
+     */
+    public static void addLettersToCharacterFrequency(String theGuess, HashMap<Character, Integer> dict){
+        for(int i = 0; i < theGuess.length(); ++i){
+            dict.put(
+                    Character.toUpperCase(theGuess.charAt(i))
+                    ,
+                    dict.get(Character.toUpperCase(theGuess.charAt(i))) + 1
+            );
+        }
+    }
 
 }
