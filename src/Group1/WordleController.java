@@ -73,6 +73,7 @@ public class WordleController<T> implements Initializable {
     private final Map<Character, Integer> letterFrequency = new HashMap<>();
     private final Map<String, Integer> wordFrequency = new HashMap<>();
     private Boolean adminPanelOpen;
+    private KeyboardDisplay keyboardDisplay;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -81,8 +82,9 @@ public class WordleController<T> implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        wordle = new Wordle();
         setUpWordleDisplay(6, 5);
-        setUpKeyboard();
+        keyboardDisplay = new KeyboardDisplay(userKeys);
         line = new Line();
         line.setStroke(Wordle.NONE_COLOR);
         line.setStartX(0);
@@ -90,7 +92,6 @@ public class WordleController<T> implements Initializable {
         line.setStrokeWidth(1.5);
         mainDisplay.getChildren().add(1, line);
         mainDisplay.getChildren().add(2, wordleDisplay);
-        wordle = new Wordle();
         playAgainButton.setDisable(true);
         adminPanelOpen = false;
     }
@@ -160,28 +161,6 @@ public class WordleController<T> implements Initializable {
             }
         }
     }
-
-    /**
-     * The setUpKeyboard method the section the user sees their previous input
-     * @author Collin Schmocker
-     */
-    private void setUpKeyboard() {
-        String[] keyboard = {"QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM⌫"};
-        List<Node> keyboardDisplay = userKeys.getChildren();
-        for(int i = 0; i < keyboardDisplay.size(); i++) {
-            for(char letter: keyboard[i].toCharArray()) {
-                TextField textField = new TextField();
-                textField.setDisable(true);
-                textField.setPrefSize(32, 32);
-                textField.setText(String.valueOf(letter));
-                textField.setAlignment(Pos.CENTER);
-                textField.setStyle("-fx-control-inner-background: gray; -fx-text-fill: white; -fx-opacity: 1.0;  " +
-                        "-fx-font-family: Arial; -fx-font-weight: bold;");
-                ((HBox)keyboardDisplay.get(i)).getChildren().add(textField);
-            }
-        }
-    }
-
 
     /**
      * The guess method runs when the user inputs a valid guess and the guess button is pressed
@@ -394,11 +373,11 @@ public class WordleController<T> implements Initializable {
             }
         }
 
+        wordle = new Wordle(); // reset the wordle
         wordleDisplay.getChildren().clear();
-        setUpKeyboard();
+        keyboardDisplay = new KeyboardDisplay(userKeys);
         setUpWordleDisplay(6, 5);
         mainDisplay.getChildren().set(1, wordleDisplay);
-        wordle = new Wordle(); // reset the wordle
 
         numGuesses = 0; // reset the number of guesses
         numGuessesLabel.setText("Current Guesses: 0");
