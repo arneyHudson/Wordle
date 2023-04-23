@@ -66,14 +66,15 @@ public class WordleController implements Initializable {
     private Line line;
     private final List<Integer> numGuessesList = new ArrayList<>();
     private final ArrayList<Label> warningLabels = new ArrayList<>();
-    private int gamesPlayed = 0;
-    private int numGuesses = 0;
-    private int totalNumGuesses = 0;
-    boolean correctGuess = false;
+    private int gamesPlayed;
+    private int numGuesses;
+    private int totalNumGuesses;
+    private boolean correctGuess;
     private Color[] colorBuffer;
     private final Map<Character, Integer> letterFrequency = new HashMap<>();
     private final Map<String, Integer> wordFrequency = new HashMap<>();
     private Boolean adminPanelOpen;
+    private Guess guess;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -82,7 +83,12 @@ public class WordleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setUpWordleDisplay(6, 5);
+        wordleDisplay = new GridPane();
+        gamesPlayed = 0;
+        numGuesses = 0;
+        totalNumGuesses = 0;
+        correctGuess = false;
+        setUpWordleDisplay(6, 5, wordleDisplay);
         setUpKeyboard();
         line = new Line();
         line.setStroke(Color.GRAY);
@@ -94,6 +100,10 @@ public class WordleController implements Initializable {
         wordle = new Wordle();
         playAgainButton.setDisable(true);
         adminPanelOpen = false;
+        guess = new Guess(mainDisplay, userKeys, wordleDisplay, wordle, guessButton,
+                numGuessesList, numGuessesLabel, playAgainButton, hintButton,
+                commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, colorBuffer,
+                hintLabel, numGuesses, correctGuess, gamesPlayed, totalNumGuesses, this, line);
     }
 
     /**
@@ -102,8 +112,8 @@ public class WordleController implements Initializable {
      * @param secretWordLength the length of the secret word
      * @author Collin Schmocker
      */
-    private void setUpWordleDisplay(int maxGuesses, int secretWordLength) {
-        wordleDisplay = new GridPane();
+    void setUpWordleDisplay(int maxGuesses, int secretWordLength, GridPane wordleDisplay) {
+        //wordleDisplay = new GridPane();
         wordleDisplay.setHgap(5);
         wordleDisplay.setVgap(5);
         wordleDisplay.setAlignment(Pos.CENTER);
@@ -166,7 +176,7 @@ public class WordleController implements Initializable {
      * The setUpKeyboard method the section the user sees their previous input
      * @author Collin Schmocker
      */
-    private void setUpKeyboard() {
+    void setUpKeyboard() {
         String[] keyboard = {"QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM⌫"};
         List<Node> keyboardDisplay = userKeys.getChildren();
         for(int i = 0; i < keyboardDisplay.size(); i++) {
@@ -183,13 +193,16 @@ public class WordleController implements Initializable {
         }
     }
 
-
     /**
      * The guess method runs when the user inputs a valid guess and the guess button is pressed
      * @author Collin Schmocker
      */
     @FXML
     public void guess() {
+        guess.makeGuess();
+
+
+        /*
         StringBuilder guess = new StringBuilder();
         List<Node> children = wordleDisplay.getChildren();
         int col = wordleDisplay.getColumnCount();
@@ -267,9 +280,10 @@ public class WordleController implements Initializable {
             hintButton.setDisable(true);
 
             playAgainButton.setOnAction(event -> restartGame());
-        }
+        } */
     }
 
+    /*
     private void displayCongrats(Pane parent) {
         Label label = new Label("Great");
         label.setStyle("-fx-font-family: Arial; -fx-background-color: white; -fx-font-weight: bold; " +
@@ -368,7 +382,7 @@ public class WordleController implements Initializable {
 
         // Play the fade-out animation
         fade.play();
-    }
+    } */
 
     @FXML
     public void createHint(){
@@ -381,9 +395,9 @@ public class WordleController implements Initializable {
         hintButton.setDisable(true);
     }
 
-    /**
+    /*
      * Restarts the game when the Play Again button is pressed.
-     */
+
     @FXML
     private void restartGame() {
         // reset keyboard and wordle display
@@ -410,6 +424,7 @@ public class WordleController implements Initializable {
         hintLabel.setText(""); // remove the hint label
         playAgainButton.setDisable(true); // disable play again button
     }
+    */
 
     /**
      * Will print the average number of guesses after a round is finsihed.
@@ -426,7 +441,7 @@ public class WordleController implements Initializable {
      * @param colors a list of JavaFX Paint objects the same size as the length of the secretWords
      * @author Collin Schmocker
      */
-    private void setGuessColor(List<Paint> colors) {
+    void setGuessColor(List<Paint> colors) {
         int col = wordleDisplay.getColumnCount();
         int row = (wordleDisplay.getRowCount() - wordle.getRemainingGuesses());
         SequentialTransition sequentialTransition = new SequentialTransition();
@@ -460,7 +475,7 @@ public class WordleController implements Initializable {
      * @param lettersGuessed letters that have been guessed mapped to the accuracy of them by color
      * @author Collin Schmocker
      */
-    private void setGuessedLetterColors(Map<Character, Paint> lettersGuessed) {
+    void setGuessedLetterColors(Map<Character, Paint> lettersGuessed) {
         List<Node> keyboardDisplay = userKeys.getChildren();
         for (Node value : keyboardDisplay) {
             List<Node> keyboardRow = ((HBox) value).getChildren();
@@ -507,7 +522,7 @@ public class WordleController implements Initializable {
         letterFrequency.merge(c, 1, Integer::sum);
     }
 
-    private ArrayList<Character> sortLetters(Map<Character, Integer> letterFrequency){
+    private static ArrayList<Character> sortLetters(Map<Character, Integer> letterFrequency){
         ArrayList<Character> mostCommonLetters = new ArrayList<>();
         for(int i = 0; i<5; i++) {
             int mostCommon = 0;
@@ -523,7 +538,7 @@ public class WordleController implements Initializable {
         return mostCommonLetters;
     }
 
-    private ArrayList<String> sortGuesses(Map<String, Integer> wordFrequency){
+    private static ArrayList<String> sortGuesses(Map<String, Integer> wordFrequency){
         ArrayList<String> mostCommonGuesses = new ArrayList<>();
         for(int i = 0; i<5; i++) {
             int mostCommon = 0;
@@ -544,11 +559,11 @@ public class WordleController implements Initializable {
         adminPanelOpen = false;
     }
 
-    private void startAdminPanel() {
+    void startAdminPanel(WordleController wordleController) {
         if(!adminPanelOpen) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/Group1/AdminPanel.fxml"));
+                loader.setLocation(WordleController.class.getResource("/Group1/AdminPanel.fxml"));
                 Parent root = loader.load();
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
@@ -559,7 +574,7 @@ public class WordleController implements Initializable {
                 controller.setStage(stage);
                 controller.setLetterFrequency(letterFrequency);
                 controller.setWordFrequency(wordFrequency);
-                controller.setWordleController(this);
+                controller.setWordleController(wordleController);
                 adminPanelOpen = true;
             } catch (IOException e) {
                 throw new RuntimeException(e);
