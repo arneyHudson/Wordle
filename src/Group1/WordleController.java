@@ -202,86 +202,6 @@ public class WordleController implements Initializable {
         guess.makeGuess();
     }
 
-        /*
-        StringBuilder guess = new StringBuilder();
-        List<Node> children = wordleDisplay.getChildren();
-        int col = wordleDisplay.getColumnCount();
-        int row = wordleDisplay.getRowCount();
-        int remain = wordle.getRemainingGuesses();
-
-        for (int i = 0; i < col; i++) {
-            guess.append(((TextField) children.get(i + col * (row - remain))).getText());
-        }
-        if (wordle.checkRealWord(guess.toString().toLowerCase())) {
-            for (int i = 0; i < col; i++) {
-                children.get(i + col * (row - remain)).setDisable(true);
-                ((TextField) children.get(i + col * (row - remain))).setEditable(false);
-            }
-            colorBuffer = Wordle.perWordLetterCheck(guess.toString().toLowerCase(), wordle.getSecretWord());
-            setGuessColor(Arrays.asList(colorBuffer));
-            setGuessedLetterColors(wordle.checkLetters(guess.toString()));
-            commonLetterLabel.setText(commonLetters(wordle.checkLetters(guess.toString())));
-            commonGuessLabel.setText(commonGuesses(guess.toString()));
-            if (wordle.getRemainingGuesses() != 1 && !wordle.getSecretWord().equals(guess.toString().toLowerCase())) {
-                wordle.setRemainingGuesses(remain - 1);
-                remain = wordle.getRemainingGuesses();
-                for (int i = 0; i < col; i++) {
-                    children.get(i + col * (row - remain)).setDisable(false);
-                    ((TextField) children.get(i + col * (row - remain))).setEditable(true);
-                }
-                children.get(col * (row - remain)).requestFocus();
-            }
-            guessButton.setDisable(true);
-            numGuessesList.add(numGuesses++);
-            if (guess.toString().equalsIgnoreCase(wordle.getSecretWord())) {
-                correctGuess = true;
-            }
-        } else if(guess.toString().toLowerCase().equals("xxxxx")) {
-            startAdminPanel();
-        } else {
-            // Shake animation for textfields
-            for (int i = 0; i < col; i++) {
-                TextField textField = (TextField) children.get(i + col * (row - remain));
-                Timeline timeline = new Timeline(
-                        new KeyFrame(Duration.millis(0), new KeyValue(textField.translateXProperty(), 0)),
-                        new KeyFrame(Duration.millis(35), new KeyValue(textField.translateXProperty(), -4)),
-                        new KeyFrame(Duration.millis(70), new KeyValue(textField.translateXProperty(), 4)),
-                        new KeyFrame(Duration.millis(105), new KeyValue(textField.translateXProperty(), -4)),
-                        new KeyFrame(Duration.millis(140), new KeyValue(textField.translateXProperty(), 4)),
-                        new KeyFrame(Duration.millis(175), new KeyValue(textField.translateXProperty(), 0))
-                );
-                timeline.play();
-            }
-
-            // Method call to show an invalid word was typed
-            showWarningPane(wordleDisplay);
-
-            // remove: + (row - 2) to get the start of the word
-            children.get(col * (row - remain) + (row - 2)).requestFocus();
-        }
-        //numGuessesList.add(numGuesses++);
-        int numCurrentGuesses = numGuessesList.size();
-        numGuessesLabel.setText("Current Guesses: " + numCurrentGuesses);
-
-        if (numCurrentGuesses == 6 || correctGuess) {
-            PauseTransition delay = new PauseTransition(Duration.seconds(2));
-            if(correctGuess) {
-                delay.setOnFinished(event -> displayCongrats(wordleDisplay));
-            } else {
-                delay.setOnFinished(event -> displayBetterLuckNextTime(wordleDisplay, wordle.getSecretWord()));
-            }
-            delay.play();
-            gamesPlayed++;
-            totalNumGuesses += numGuessesList.size();
-            numGuessesList.clear();
-            averageNumGuessesLabel.setText("Average Guesses: " + getAverageNumGuesses());
-            playAgainButton.setDisable(false);
-            playAgainButton.requestFocus();
-            hintButton.setDisable(true);
-
-            playAgainButton.setOnAction(event -> restartGame());
-        } */
-
 
     @FXML
     public void createHint(){
@@ -293,15 +213,6 @@ public class WordleController implements Initializable {
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
     }
-
-    /*
-     * Restarts the game when the Play Again button is pressed.
-
-    @FXML
-    private void restartGame() {
-        guess.restartGame();
-    } */
-
 
     /**
      * The setGuessColor sets the current row that was guess to a list of colors
