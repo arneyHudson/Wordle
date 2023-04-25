@@ -7,8 +7,7 @@ import javafx.scene.control.TextArea;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Holds all the file input/output methods used by the wordle application.
@@ -139,5 +138,23 @@ public class WordleFileIO {
         textArea.setText(builder.toString());
     }
 
+    /**
+     * Takes a collection of strings, and returns a collection of strings of a certain length
+     * @param nonValidCollection The collection of strings to validate.
+     * @param length The length to constrain all strings to.
+     * @return A collection of strings all of length length.
+     */
+    public static Collection<String> validateLength(Collection<String> nonValidCollection, int length){
+        Collection<String> ret = new HashSet<>();
+        Iterator<String> iterator = nonValidCollection.iterator();
+        String next;
+        while(iterator.hasNext()){
+            next = iterator.next();
+            if(next.length() == length){
+                ret.add(next);
+            }
+        }
+        return ret;
+    }
 
 }
