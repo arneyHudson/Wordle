@@ -121,7 +121,7 @@ public class Guess {
             if (guess.toString().equalsIgnoreCase(wordle.getSecretWord())) {
                 correctGuess = true;
             }
-        } else if(guess.toString().equalsIgnoreCase("xxxxx")) {
+        } else if(isAdminString(guess.toString())) {
             wordleController.startAdminPanel(wordleController);
         } else {
             // Shake animation for textfields
@@ -205,5 +205,19 @@ public class Guess {
     private double getAverageNumGuesses(int totalNumGuesses, int gamesPlayed) {
         double average = (double) totalNumGuesses / gamesPlayed;
         return Math.round(average * 100.0) / 100.0;
+    }
+
+    /**
+     * Verifies that the string passed in is a code used to access the admin panel (all x)
+     * @param theGuess The string to check
+     * @return Whether it is a valid code to enter the administration panel
+     */
+    private static boolean isAdminString(String theGuess){
+        for(int i = 0; i < theGuess.length(); ++i){
+            if(Character.toLowerCase(theGuess.charAt(i)) != 'x'){
+                return false;
+            }
+        }
+        return true;
     }
 }
