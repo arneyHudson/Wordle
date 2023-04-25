@@ -80,6 +80,10 @@ public class Guess {
         this.line = line;
     }
 
+    public int guessCount() {
+        return wordle.getRemainingGuesses();
+    }
+
     @FXML
     public void makeGuess() {
         StringBuilder guess = new StringBuilder();
@@ -164,7 +168,7 @@ public class Guess {
     }
 
     @FXML
-    private void restartGame() {
+    public void restartGame() {
         // reset keyboard and wordle display
         ObservableList<Node> children = userKeys.getChildren();
         for (Node node : children) {
@@ -187,8 +191,9 @@ public class Guess {
         guessButton.setDisable(false); // enable guess button
         hintButton.setDisable(false); // enable the hint button
         colorBuffer = null; // reset color buffer to a null value
-        hintLabel.setText(""); // remove the hint label
+        hintLabel.setText("[_]".repeat(wordle.getSecretWord().length())); // remove the hint label
         playAgainButton.setDisable(true); // disable play again button
+
     }
 
     /**
