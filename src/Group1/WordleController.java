@@ -1,5 +1,6 @@
 package Group1;
 import javafx.animation.*;
+import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +32,7 @@ import java.util.*;
  * Author:     Collin Schmocker
  * Date:       date started
  */
-public class WordleController implements Initializable {
+public class WordleController<T> implements Initializable {
 
     @FXML
     private VBox mainDisplay;
@@ -39,7 +40,6 @@ public class WordleController implements Initializable {
     private VBox userKeys;
     @FXML
     private Button guessButton;
-    private GridPane wordleDisplay;
     private Wordle wordle;
     @FXML
     private Label numGuessesLabel;
@@ -65,14 +65,14 @@ public class WordleController implements Initializable {
     private Line line;
     private final List<Integer> numGuessesList = new ArrayList<>();
     private final ArrayList<Label> warningLabels = new ArrayList<>();
-    private int gamesPlayed;
-    private int numGuesses;
-    private int totalNumGuesses;
-    private boolean correctGuess;
-    private Color[] colorBuffer;
+    private int gamesPlayed = 0;
+    private int numGuesses = 0;
+    private int totalNumGuesses = 0;
+    boolean correctGuess = false;
     private final Map<Character, Integer> letterFrequency = new HashMap<>();
     private final Map<String, Integer> wordFrequency = new HashMap<>();
     private Boolean adminPanelOpen;
+    private WordleDisplay wordleDisplay;
     private Guess guess;
 
     /**
@@ -82,21 +82,16 @@ public class WordleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        wordleDisplay = new GridPane();
-        gamesPlayed = 0;
-        numGuesses = 0;
-        totalNumGuesses = 0;
-        correctGuess = false;
-        setUpWordleDisplay(6, 5, wordleDisplay);
-        setUpKeyboard();
+        wordle = new Wordle();
+        keyboardDisplay = new KeyboardDisplay(userKeys);
+        wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
         line = new Line();
-        line.setStroke(Color.GRAY);
+        line.setStroke(Wordle.NONE_COLOR);
         line.setStartX(0);
         line.setEndX(450);
         line.setStrokeWidth(1.5);
         mainDisplay.getChildren().add(1, line);
-        mainDisplay.getChildren().add(2, wordleDisplay);
-        wordle = new Wordle();
+        mainDisplay.getChildren().add(2, wordleDisplay.getWordleGrid());
         playAgainButton.setDisable(true);
         adminPanelOpen = false;
         hintLabel.setText("[_]".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
@@ -104,93 +99,6 @@ public class WordleController implements Initializable {
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, colorBuffer,
                 hintLabel, numGuesses, correctGuess, gamesPlayed, totalNumGuesses, this, line);
-    }
-
-    /**
-     * The setUpWordleDisplay sets up the section where the user guesses the word
-     * @param maxGuesses the maximum number of guesses
-     * @param secretWordLength the length of the secret word
-     * @author Collin Schmocker
-     */
-    void setUpWordleDisplay(int maxGuesses, int secretWordLength, GridPane wordleDisplay) {
-        wordleDisplay.setHgap(5);
-        wordleDisplay.setVgap(5);
-        wordleDisplay.setAlignment(Pos.CENTER);
-
-        for (int i = 0; i < secretWordLength; i++) {
-            wordleDisplay.addColumn(0);
-        }
-
-        for (int i = 0; i < maxGuesses; i++) {
-            for (int j = 0; j < secretWordLength; j++) {
-                TextField textField = new TextField();
-                textField.setEditable(i == 0);
-                textField.setMaxSize(45,45);
-                textField.setMinSize(45, 45);
-                textField.setAlignment(Pos.CENTER);
-                textField.setStyle("-fx-control-inner-background: #1b1b1b; -fx-text-fill: white; -fx-font-family: Arial;" +
-                        " -fx-font-weight: bold; -fx-font-size: 20px; -fx-background-radius: 0px;");
-                textField.setOnKeyTyped(keyEvent -> {
-                    String input = textField.getText();
-                    if (input.length() >= 1) {
-                        if (Character.isLetter(input.charAt(0))) {
-                            List<Node> children = wordleDisplay.getChildren();
-                            int col = wordleDisplay.getColumnCount();
-                            int row = wordleDisplay.getRowCount();
-                            int remain = wordle.getRemainingGuesses();
-                            textField.setText(input.substring(0, 1).toUpperCase());
-                            int index = children.indexOf(textField);
-                            boolean full = true;
-                            for (int k = 0; k < col; k++) {
-                                if (full && ((TextField) children.get(k + col * (row - remain))).getText().equals("")) {
-                                    full = false;
-                                }
-                            }
-                            //guessButton.setDisable(!full);
-                            guessButton.setDisable(false);
-                            if (((index != 0) && ((index + 1) % secretWordLength == 0))) {
-                                guessButton.requestFocus();
-                            } else {
-                                children.get(index + 1).requestFocus();
-                            }
-                        } else {
-                            textField.setText("");
-                        }
-                    } else {
-                        List<Node> children = wordleDisplay.getChildren();
-                        int index = children.indexOf(textField);
-                        if (index > 0 && textField.getText().equals("")) {
-                            children.get(index - 1).requestFocus();
-                        }
-                    }
-                });
-                wordleDisplay.add(textField, j, i);
-            }
-            if (i != 0) {
-                wordleDisplay.addRow(i);
-            }
-        }
-    }
-
-    /**
-     * The setUpKeyboard method the section the user sees their previous input
-     * @author Collin Schmocker
-     */
-    void setUpKeyboard() {
-        String[] keyboard = {"QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM⌫"};
-        List<Node> keyboardDisplay = userKeys.getChildren();
-        for(int i = 0; i < keyboardDisplay.size(); i++) {
-            for(char letter: keyboard[i].toCharArray()) {
-                TextField textField = new TextField();
-                textField.setDisable(true);
-                textField.setPrefSize(32, 32);
-                textField.setText(String.valueOf(letter));
-                textField.setAlignment(Pos.CENTER);
-                textField.setStyle("-fx-control-inner-background: gray; -fx-text-fill: white; -fx-opacity: 1.0;  " +
-                        "-fx-font-family: Arial; -fx-font-weight: bold;");
-                ((HBox)keyboardDisplay.get(i)).getChildren().add(textField);
-            }
-        }
     }
 
     /**
@@ -205,11 +113,7 @@ public class WordleController implements Initializable {
 
     @FXML
     public void createHint(){
-        if (colorBuffer == null){
-            hintLabel.setText("Hint: " + Wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
-        } else {
-            hintLabel.setText("Hint: " + Wordle.getLetterHint(wordle.getSecretWord(), colorBuffer).toUpperCase());
-        }
+            hintLabel.setText("Hint: " + wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
     }
@@ -220,13 +124,12 @@ public class WordleController implements Initializable {
      * @param colors a list of JavaFX Paint objects the same size as the length of the secretWords
      * @author Collin Schmocker
      */
-    void setGuessColor(List<Paint> colors) {
-        int col = wordleDisplay.getColumnCount();
-        //int row = (wordleDisplay.getRowCount() - wordle.getRemainingGuesses());
-        int row = (wordleDisplay.getRowCount() - guess.guessCount());
+    private void setGuessColor(List<Paint> colors) {
+        int col = wordleDisplay.getWordleGrid().getColumnCount();
+        int row = (wordleDisplay.getWordleGrid().getRowCount() - wordle.getRemainingGuesses());
         SequentialTransition sequentialTransition = new SequentialTransition();
         for (int i = 0; i < col; i++) {
-            TextField textField = (TextField) wordleDisplay.getChildren().get(i + col * row);
+            TextField textField = (TextField) wordleDisplay.getWordleGrid().getChildren().get(i + col * row);
 
             String style = "-fx-control-inner-background: #" + colors.get(i).toString().substring(2);
             // Create a ScaleTransition to flip the TextField vertically
@@ -255,7 +158,7 @@ public class WordleController implements Initializable {
      * @param lettersGuessed letters that have been guessed mapped to the accuracy of them by color
      * @author Collin Schmocker
      */
-    void setGuessedLetterColors(Map<Character, Paint> lettersGuessed) {
+    private void setGuessedLetterColors(Map<Character, Paint> lettersGuessed) {
         List<Node> keyboardDisplay = userKeys.getChildren();
         for (Node value : keyboardDisplay) {
             List<Node> keyboardRow = ((HBox) value).getChildren();
@@ -274,58 +177,72 @@ public class WordleController implements Initializable {
     }
 
 
+    /**
+     * Updates a frequency set of all guessed characters, adding based on the letters at least appearing within
+     * the secret word. Sorts the frequency list from most to least frequent, and returns the top 5 most common
+     * letters.
+     * @param lettersGuessed A frequency set of the letters guessed, based on the color as of the current guess.
+     * @return A string containing the top 5 correctly guessed letters, separated with spaces
+     * @author NZawarus
+     */
     public String commonLetters(Map<Character, Paint> lettersGuessed) {
         for (char c : lettersGuessed.keySet()) {
-            if (lettersGuessed.get(c).equals(Color.web("#6ca965")) ||
-                    lettersGuessed.get(c).equals(Color.web("#c8b653"))) {
-                addToFrequency(c);
+            if (lettersGuessed.get(c).equals(Wordle.DIRECT_COLOR) ||
+                    lettersGuessed.get(c).equals(Wordle.INDIRECT_COLOR)) {
+                letterFrequency.merge(c, 1, Integer::sum);
             }
         }
         StringBuilder commonText = new StringBuilder("Common Letters: ");
-        ArrayList<Character> topFiveLetters = sortLetters(letterFrequency);
+        @SuppressWarnings("unchecked") // letterFrequency will always contain a valid key type
+        ArrayList<T> topFiveLetters = sort((Map<T, Integer>)letterFrequency);
         for (int i = 0; i < 5; i++) {
-            commonText.append(topFiveLetters.get(i)).append(" ");
+            if (topFiveLetters.get(i) != null) {
+                commonText.append(topFiveLetters.get(i)).append(" ");
+            } else {
+                commonText.append("*").append(" ");
+            }
         }
         return commonText.toString();
     }
+
+    /**
+     * Updates a frequency set of all guessed words, regardless of correctness. Frequencies are
+     * then sorted from most to least common, and the top 5 most common guesses are returned.s
+     * @param word The word guessed
+     * @return A string containing the top 5 most frequently guessed words, regardless of
+     *         if the guessed word was correct.
+     * @author NZawarus
+     */
     public String commonGuesses(String word){
         wordFrequency.merge(word, 1, Integer::sum);
-        sortGuesses(wordFrequency);
         StringBuilder commonText = new StringBuilder("Common Guesses: ");
-        ArrayList<String> topFiveGuesses = sortGuesses(wordFrequency);
+        @SuppressWarnings("unchecked") // wordFrequency will always contain a valid key type
+        ArrayList<T> topFiveGuesses = sort((Map<T, Integer>) wordFrequency);
         for (int i = 0; i < 5; i++) {
-            commonText.append(topFiveGuesses.get(i)).append(" ");
+            if (topFiveGuesses.get(i) != null) {
+                commonText.append(topFiveGuesses.get(i)).append(" ");
+            } else {
+                commonText.append("*").append(" ");
+            }
         }
         return commonText.toString();
     }
-    private void addToFrequency(Character c) {
-        letterFrequency.merge(c, 1, Integer::sum);
-    }
 
-    private static ArrayList<Character> sortLetters(Map<Character, Integer> letterFrequency){
-        ArrayList<Character> mostCommonLetters = new ArrayList<>();
+    /**
+     * Sorts the frequency list from most common to least common.
+     * @param frequency A set with a generic type for keys, and an integer for the values
+     * @return An array list of the most common objects (either string or char depending on
+     *         the provided frequency set)
+     * @author NZawarus
+     */
+    private ArrayList<T> sort(Map<T, Integer> frequency){
+        ArrayList<T> mostCommonGuesses = new ArrayList<>();
         for(int i = 0; i<5; i++) {
             int mostCommon = 0;
-            char mostCommonLetter = '*';
-            for (char c : letterFrequency.keySet()) {
-                if(letterFrequency.get(c) > mostCommon && !mostCommonLetters.contains(c)){
-                    mostCommon = letterFrequency.get(c);
-                    mostCommonLetter = c;
-                }
-            }
-            mostCommonLetters.add(mostCommonLetter);
-        }
-        return mostCommonLetters;
-    }
-
-    private static ArrayList<String> sortGuesses(Map<String, Integer> wordFrequency){
-        ArrayList<String> mostCommonGuesses = new ArrayList<>();
-        for(int i = 0; i<5; i++) {
-            int mostCommon = 0;
-            String mostCommonWord = "*";
-            for (String s : wordFrequency.keySet()) {
-                if(wordFrequency.get(s) > mostCommon && !mostCommonGuesses.contains(s)){
-                    mostCommon = wordFrequency.get(s);
+            T mostCommonWord = null;
+            for (T s : frequency.keySet()) {
+                if(frequency.get(s) > mostCommon && !mostCommonGuesses.contains(s)){
+                    mostCommon = frequency.get(s);
                     mostCommonWord = s;
                 }
             }
