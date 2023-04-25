@@ -144,8 +144,8 @@ public class WordleFileIO {
      * @param length The length to constrain all strings to.
      * @return A collection of strings all of length length.
      */
-    public static Collection<String> validateLength(Collection<String> nonValidCollection, int length){
-        Collection<String> ret = new HashSet<>();
+    public static ArrayList<String> validateLength(Collection<String> nonValidCollection, int length){
+        ArrayList<String> ret = new ArrayList<>();
         Iterator<String> iterator = nonValidCollection.iterator();
         String next;
         while(iterator.hasNext()){
