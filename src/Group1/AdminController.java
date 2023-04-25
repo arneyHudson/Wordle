@@ -2,6 +2,7 @@ package Group1;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -16,9 +17,19 @@ public class AdminController {
     private WordleController wordleController;
 
     @FXML
+    private TextArea charFreqArea;
+
+    @FXML
+    private TextArea wordFreqArea;
+
+    @FXML
     public void close() {
         wordleController.closeAdmin(stage);
         stage.close();
+    }
+
+    public void fillTextArea(){
+        WordleFileIO.fillCharacterTextArea(charFreqArea, WordleFileIO.CHARACTER_FREQUENCY);
     }
 
     public void setStage(Stage stage) {

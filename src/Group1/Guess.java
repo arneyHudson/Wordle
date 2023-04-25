@@ -97,6 +97,9 @@ public class Guess {
             guess.append(((TextField) children.get(i + col * (row - remain))).getText());
         }
         if (wordle.checkRealWord(guess.toString().toLowerCase())) {
+            WordleFileIO.addLettersToCharacterFrequency
+                    (guess.toString(), WordleFileIO.CHARACTER_FREQUENCY);
+            WordleFileIO.saveMainCharacterFrequency();
             for (int i = 0; i < col; i++) {
                 children.get(i + col * (row - remain)).setDisable(true);
                 ((TextField) children.get(i + col * (row - remain))).setEditable(false);
