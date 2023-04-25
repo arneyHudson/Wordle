@@ -91,7 +91,7 @@ public class WordleController<T> implements Initializable {
         line.setEndX(450);
         line.setStrokeWidth(1.5);
         mainDisplay.getChildren().add(1, line);
-        mainDisplay.getChildren().add(2, wordleDisplay);
+        mainDisplay.getChildren().add(2, wordleDisplay.getWordleGrid());
         playAgainButton.setDisable(true);
         adminPanelOpen = false;
     }
