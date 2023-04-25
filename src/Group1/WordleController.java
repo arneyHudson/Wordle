@@ -205,6 +205,7 @@ public class WordleController<T> implements Initializable {
                 controller.setLetterFrequency(letterFrequency);
                 controller.setWordFrequency(wordFrequency);
                 controller.setWordleController(wordleController);
+                controller.fillTextArea();
                 adminPanelOpen = true;
             } catch (IOException e) {
                 throw new RuntimeException(e);
