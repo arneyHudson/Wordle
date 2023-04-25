@@ -5,21 +5,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -56,24 +50,18 @@ public class WordleController<T> implements Initializable {
     @FXML
     private Label commonGuessLabel;
     @FXML
-    private VBox invalidWordVBox;
-    @FXML
-    private Pane congratsPane;
-    @FXML
-    private Pane failedPane;
-    @FXML
     private Line line;
     private final List<Integer> numGuessesList = new ArrayList<>();
-    private final ArrayList<Label> warningLabels = new ArrayList<>();
-    private int gamesPlayed = 0;
-    private int numGuesses = 0;
-    private int totalNumGuesses = 0;
+    private int gamesPlayed;
+    private int numGuesses;
+    private int totalNumGuesses;
     boolean correctGuess = false;
     private final Map<Character, Integer> letterFrequency = new HashMap<>();
     private final Map<String, Integer> wordFrequency = new HashMap<>();
     private Boolean adminPanelOpen;
     private WordleDisplay wordleDisplay;
     private Guess guess;
+    private KeyboardDisplay keyboardDisplay;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -82,6 +70,9 @@ public class WordleController<T> implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        gamesPlayed = 0;
+        numGuesses = 0;
+        totalNumGuesses = 0;
         wordle = new Wordle();
         keyboardDisplay = new KeyboardDisplay(userKeys);
         wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
@@ -97,8 +88,8 @@ public class WordleController<T> implements Initializable {
         hintLabel.setText("[_]".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
         guess = new Guess(mainDisplay, userKeys, wordleDisplay, wordle, guessButton,
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
-                commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, colorBuffer,
-                hintLabel, numGuesses, correctGuess, gamesPlayed, totalNumGuesses, this, line);
+                commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
+                correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay);
     }
 
     /**
@@ -116,64 +107,6 @@ public class WordleController<T> implements Initializable {
             hintLabel.setText("Hint: " + wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
-    }
-
-    /**
-     * The setGuessColor sets the current row that was guess to a list of colors
-     *
-     * @param colors a list of JavaFX Paint objects the same size as the length of the secretWords
-     * @author Collin Schmocker
-     */
-    private void setGuessColor(List<Paint> colors) {
-        int col = wordleDisplay.getWordleGrid().getColumnCount();
-        int row = (wordleDisplay.getWordleGrid().getRowCount() - wordle.getRemainingGuesses());
-        SequentialTransition sequentialTransition = new SequentialTransition();
-        for (int i = 0; i < col; i++) {
-            TextField textField = (TextField) wordleDisplay.getWordleGrid().getChildren().get(i + col * row);
-
-            String style = "-fx-control-inner-background: #" + colors.get(i).toString().substring(2);
-            // Create a ScaleTransition to flip the TextField vertically
-            RotateTransition flipTransition = new RotateTransition(Duration.seconds(0.2), textField);
-            flipTransition.setAxis(Rotate.X_AXIS);
-            flipTransition.setFromAngle(0);
-            flipTransition.setToAngle(90);
-            RotateTransition flipTransition2 = new RotateTransition(Duration.seconds(0.2), textField);
-            flipTransition.setOnFinished(event -> {
-                        flipTransition2.setAxis(Rotate.X_AXIS);
-                        flipTransition2.setFromAngle(90);
-                        flipTransition2.setToAngle(0);
-                        textField.setStyle(style + "; -fx-text-fill: white; " +
-                                "-fx-font-family: Arial; -fx-opacity: 1.0; -fx-font-weight: bold; " +
-                                "-fx-font-size: 20px; -fx-background-radius: 0px;");
-                    });
-            // Add the flipTransition to the sequentialTransition
-            sequentialTransition.getChildren().addAll(flipTransition, flipTransition2);
-        }
-
-        sequentialTransition.play(); // Play the sequential transition to animate textfields one at a time
-    }
-
-    /**
-     * The setGuessedLetterColors sets the color of the keyboard display with the HashMap
-     * @param lettersGuessed letters that have been guessed mapped to the accuracy of them by color
-     * @author Collin Schmocker
-     */
-    private void setGuessedLetterColors(Map<Character, Paint> lettersGuessed) {
-        List<Node> keyboardDisplay = userKeys.getChildren();
-        for (Node value : keyboardDisplay) {
-            List<Node> keyboardRow = ((HBox) value).getChildren();
-            for (Node node : keyboardRow) {
-                TextField textField = (TextField) node;
-                if (lettersGuessed.containsKey(textField.getText().toCharArray()[0])) {
-                    String style = "-fx-control-inner-background: #" + lettersGuessed.get(textField.getText()
-                            .toCharArray()[0]).toString().substring(2);
-                    textField.setStyle(style + "; -fx-text-fill: white; " +
-                    "-fx-font-family: Arial; -fx-opacity: 1.0; -fx-font-weight: bold;");
-                    textField.setDisable(false);
-                    textField.setEditable(false);
-                }
-            }
-        }
     }
 
 

@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
+import java.security.Key;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class Guess {
     @FXML
     private VBox userKeys;
     @FXML
-    private GridPane wordleDisplay;
+    private WordleDisplay wordleDisplay;
     @FXML
     private Wordle wordle;
     @FXML
@@ -44,6 +45,8 @@ public class Guess {
     private Label averageNumGuessesLabel;
     @FXML
     private Label commonGuessLabel;
+    @FXML
+    private KeyboardDisplay keyboardDisplay;
     private Color[] colorBuffer;
     private boolean correctGuess;
     private int numGuesses;
@@ -52,12 +55,13 @@ public class Guess {
     private final Label hintLabel;
     private WordleController wordleController;
     private final Line line;
+    private SetColor setColor;
 
-    public Guess(VBox mainDisplay, VBox userKeys, GridPane wordleDisplay, Wordle wordle, Button guessButton,
+    public Guess(VBox mainDisplay, VBox userKeys, WordleDisplay wordleDisplay, Wordle wordle, Button guessButton,
                  List<Integer> numGuessesList, Label numGuessesLabel, Button playAgainButton, Button hintButton,
-                 Label commonLetterLabel, Label averageNumGuessesLabel, Label commonGuessLabel, Color[] colorBuffer,
+                 Label commonLetterLabel, Label averageNumGuessesLabel, Label commonGuessLabel,
                  Label hintLabel, int numGuesses, boolean correctGuess, int gamesPlayed, int totalNumGuesses,
-                 WordleController wordleController, Line line) {
+                 WordleController wordleController, Line line, KeyboardDisplay keyboardDisplay) {
         this.mainDisplay = mainDisplay;
         this.userKeys = userKeys;
         this.wordleDisplay = wordleDisplay;
@@ -70,7 +74,6 @@ public class Guess {
         this.commonLetterLabel = commonLetterLabel;
         this.averageNumGuessesLabel = averageNumGuessesLabel;
         this.commonGuessLabel = commonGuessLabel;
-        this.colorBuffer = colorBuffer;
         this.hintLabel = hintLabel;
         this.numGuesses = numGuesses;
         this.correctGuess = correctGuess;
@@ -78,18 +81,16 @@ public class Guess {
         this.totalNumGuesses = totalNumGuesses;
         this.wordleController = wordleController;
         this.line = line;
-    }
-
-    public int guessCount() {
-        return wordle.getRemainingGuesses();
+        this.keyboardDisplay = keyboardDisplay;
+        setColor = new SetColor(this.wordleDisplay, this.wordle, this.userKeys);
     }
 
     @FXML
     public void makeGuess() {
         StringBuilder guess = new StringBuilder();
-        List<Node> children = wordleDisplay.getChildren();
-        int col = wordleDisplay.getColumnCount();
-        int row = wordleDisplay.getRowCount();
+        List<Node> children = wordleDisplay.getWordleGrid().getChildren();
+        int col = wordleDisplay.getWordleGrid().getColumnCount();
+        int row = wordleDisplay.getWordleGrid().getRowCount();
         int remain = wordle.getRemainingGuesses();
 
         for (int i = 0; i < col; i++) {
@@ -101,8 +102,8 @@ public class Guess {
                 ((TextField) children.get(i + col * (row - remain))).setEditable(false);
             }
             colorBuffer = Wordle.perWordLetterCheck(guess.toString().toLowerCase(), wordle.getSecretWord());
-            wordleController.setGuessColor(Arrays.asList(colorBuffer));
-            wordleController.setGuessedLetterColors(wordle.checkLetters(guess.toString()));
+            setColor.setGuessColor(Arrays.asList(colorBuffer));
+            setColor.setGuessedLetterColors(wordle.checkLetters(guess.toString()));
             commonLetterLabel.setText(wordleController.commonLetters(wordle.checkLetters(guess.toString())));
             commonGuessLabel.setText(wordleController.commonGuesses(guess.toString()));
             if (wordle.getRemainingGuesses() != 1 && !wordle.getSecretWord().equals(guess.toString().toLowerCase())) {
@@ -137,7 +138,7 @@ public class Guess {
             }
 
             // Method call to show an invalid word was typed
-            Animations.showWarningPane(wordleDisplay);
+            Animations.showWarningPane(wordleDisplay.getWordleGrid());
 
             // remove: + (row - 2) to get the start of the word
             children.get(col * (row - remain) + (row - 2)).requestFocus();
@@ -150,9 +151,9 @@ public class Guess {
         if (numCurrentGuesses == 6 || correctGuess) {
             PauseTransition delay = new PauseTransition(Duration.seconds(2.5));
             if(correctGuess) {
-                delay.setOnFinished(event -> Animations.displayCongrats(wordleDisplay));
+                delay.setOnFinished(event -> Animations.displayCongrats(wordleDisplay.getWordleGrid()));
             } else {
-                delay.setOnFinished(event -> Animations.displayBetterLuckNextTime(wordleDisplay, wordle.getSecretWord()));
+                delay.setOnFinished(event -> Animations.displayBetterLuckNextTime(wordleDisplay.getWordleGrid(), wordle.getSecretWord()));
             }
             delay.play();
             gamesPlayed++;
@@ -178,12 +179,12 @@ public class Guess {
             }
         }
 
-        wordleDisplay.getChildren().clear();
-        wordleController.setUpKeyboard();
-        wordleController.setUpWordleDisplay(6, 5, wordleDisplay);
-        mainDisplay.getChildren().set(1, line);
-        mainDisplay.getChildren().set(2, wordleDisplay);
+        wordleDisplay.getWordleGrid().getChildren().clear();
+        keyboardDisplay = new KeyboardDisplay(userKeys);
         wordle = new Wordle(); // reset the wordle
+        wordleDisplay = new WordleDisplay(6, wordle.getSecretWord().length(), guessButton, wordle);
+        mainDisplay.getChildren().set(1, line);
+        mainDisplay.getChildren().set(2, wordleDisplay.getWordleGrid());
 
         numGuesses = 0; // reset the number of guesses
         numGuessesLabel.setText("Current Guesses: 0");
@@ -193,7 +194,7 @@ public class Guess {
         colorBuffer = null; // reset color buffer to a null value
         hintLabel.setText("[_]".repeat(wordle.getSecretWord().length())); // remove the hint label
         playAgainButton.setDisable(true); // disable play again button
-
+        setColor = new SetColor(wordleDisplay, wordle, userKeys);
     }
 
     /**
