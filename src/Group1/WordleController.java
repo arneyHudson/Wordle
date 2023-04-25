@@ -40,7 +40,6 @@ public class WordleController<T> implements Initializable {
     private VBox userKeys;
     @FXML
     private Button guessButton;
-    private GridPane wordleDisplay;
     private Wordle wordle;
     @FXML
     private Label numGuessesLabel;
@@ -74,6 +73,7 @@ public class WordleController<T> implements Initializable {
     private final Map<String, Integer> wordFrequency = new HashMap<>();
     private Boolean adminPanelOpen;
     private KeyboardDisplay keyboardDisplay;
+    private WordleDisplay wordleDisplay;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -83,8 +83,8 @@ public class WordleController<T> implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         wordle = new Wordle();
-        setUpWordleDisplay(6, 5);
         keyboardDisplay = new KeyboardDisplay(userKeys);
+        wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
         line = new Line();
         line.setStroke(Wordle.NONE_COLOR);
         line.setStartX(0);
@@ -97,81 +97,15 @@ public class WordleController<T> implements Initializable {
     }
 
     /**
-     * The setUpWordleDisplay sets up the section where the user guesses the word
-     * @param maxGuesses the maximum number of guesses
-     * @param secretWordLength the length of the secret word
-     * @author Collin Schmocker
-     */
-    private void setUpWordleDisplay(int maxGuesses, int secretWordLength) {
-        wordleDisplay = new GridPane();
-        wordleDisplay.setHgap(5);
-        wordleDisplay.setVgap(5);
-        wordleDisplay.setAlignment(Pos.CENTER);
-
-        for (int i = 0; i < secretWordLength; i++) {
-            wordleDisplay.addColumn(0);
-        }
-
-        for (int i = 0; i < maxGuesses; i++) {
-            for (int j = 0; j < secretWordLength; j++) {
-                TextField textField = new TextField();
-                textField.setEditable(i == 0);
-                textField.setMaxSize(45,45);
-                textField.setMinSize(45, 45);
-                textField.setAlignment(Pos.CENTER);
-                textField.setStyle("-fx-control-inner-background: #1b1b1b; -fx-text-fill: white; -fx-font-family: Arial;" +
-                        " -fx-font-weight: bold; -fx-font-size: 20px; -fx-background-radius: 0px;");
-                textField.setOnKeyTyped(keyEvent -> {
-                    String input = textField.getText();
-                    if (input.length() >= 1) {
-                        if (Character.isLetter(input.charAt(0))) {
-                            List<Node> children = wordleDisplay.getChildren();
-                            int col = wordleDisplay.getColumnCount();
-                            int row = wordleDisplay.getRowCount();
-                            int remain = wordle.getRemainingGuesses();
-                            textField.setText(input.substring(0, 1).toUpperCase());
-                            int index = children.indexOf(textField);
-                            boolean full = true;
-                            for (int k = 0; k < col; k++) {
-                                if (full && ((TextField) children.get(k + col * (row - remain))).getText().equals("")) {
-                                    full = false;
-                                }
-                            }
-                            guessButton.setDisable(!full);
-                            if (((index != 0) && ((index + 1) % secretWordLength == 0))) {
-                                guessButton.requestFocus();
-                            } else {
-                                children.get(index + 1).requestFocus();
-                            }
-                        } else {
-                            textField.setText("");
-                        }
-                    } else {
-                        List<Node> children = wordleDisplay.getChildren();
-                        int index = children.indexOf(textField);
-                        if (index > 0 && textField.getText().equals("")) {
-                            children.get(index - 1).requestFocus();
-                        }
-                    }
-                });
-                wordleDisplay.add(textField, j, i);
-            }
-            if (i != 0) {
-                wordleDisplay.addRow(i);
-            }
-        }
-    }
-
-    /**
      * The guess method runs when the user inputs a valid guess and the guess button is pressed
      * @author Collin Schmocker
      */
     @FXML
     public void guess() {
         StringBuilder guess = new StringBuilder();
-        List<Node> children = wordleDisplay.getChildren();
-        int col = wordleDisplay.getColumnCount();
-        int row = wordleDisplay.getRowCount();
+        List<Node> children = wordleDisplay.getWordleGrid().getChildren();
+        int col = wordleDisplay.getWordleGrid().getColumnCount();
+        int row = wordleDisplay.getWordleGrid().getRowCount();
         int remain = wordle.getRemainingGuesses();
 
         for (int i = 0; i < col; i++) {
@@ -219,7 +153,7 @@ public class WordleController<T> implements Initializable {
             }
 
             // Method call to show an invalid word was typed
-            showWarningPane(wordleDisplay);
+            showWarningPane(wordleDisplay.getWordleGrid());
 
             // remove: + (row - 2) to get the start of the word
             children.get(col * (row - remain) + (row - 2)).requestFocus();
@@ -231,9 +165,9 @@ public class WordleController<T> implements Initializable {
         if (numCurrentGuesses == 6 || correctGuess) {
             PauseTransition delay = new PauseTransition(Duration.seconds(2));
             if(correctGuess) {
-                delay.setOnFinished(event -> displayCongrats(wordleDisplay));
+                delay.setOnFinished(event -> displayCongrats(wordleDisplay.getWordleGrid()));
             } else {
-                delay.setOnFinished(event -> displayBetterLuckNextTime(wordleDisplay, wordle.getSecretWord()));
+                delay.setOnFinished(event -> displayBetterLuckNextTime(wordleDisplay.getWordleGrid(), wordle.getSecretWord()));
             }
             delay.play();
             gamesPlayed++;
@@ -372,12 +306,10 @@ public class WordleController<T> implements Initializable {
                 hboxChildren.removeIf(child -> child instanceof TextField);
             }
         }
-
         wordle = new Wordle(); // reset the wordle
-        wordleDisplay.getChildren().clear();
+        wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
+        mainDisplay.getChildren().set(2, wordleDisplay.getWordleGrid());
         keyboardDisplay = new KeyboardDisplay(userKeys);
-        setUpWordleDisplay(6, 5);
-        mainDisplay.getChildren().set(1, wordleDisplay);
 
         numGuesses = 0; // reset the number of guesses
         numGuessesLabel.setText("Current Guesses: 0");
@@ -405,11 +337,11 @@ public class WordleController<T> implements Initializable {
      * @author Collin Schmocker
      */
     private void setGuessColor(List<Paint> colors) {
-        int col = wordleDisplay.getColumnCount();
-        int row = (wordleDisplay.getRowCount() - wordle.getRemainingGuesses());
+        int col = wordleDisplay.getWordleGrid().getColumnCount();
+        int row = (wordleDisplay.getWordleGrid().getRowCount() - wordle.getRemainingGuesses());
         SequentialTransition sequentialTransition = new SequentialTransition();
         for (int i = 0; i < col; i++) {
-            TextField textField = (TextField) wordleDisplay.getChildren().get(i + col * row);
+            TextField textField = (TextField) wordleDisplay.getWordleGrid().getChildren().get(i + col * row);
 
             String style = "-fx-control-inner-background: #" + colors.get(i).toString().substring(2);
             // Create a ScaleTransition to flip the TextField vertically
