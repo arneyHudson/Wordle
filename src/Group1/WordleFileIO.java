@@ -19,8 +19,9 @@ public class WordleFileIO {
     private static final String END_LINE = "END";
 
     public static HashMap<Character, Integer> CHARACTER_FREQUENCY = new HashMap<>();
+    public static HashMap<String, Integer> WORD_FREQUENCY = new HashMap<>();
     public static Path CHAR_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/character_frequency_log.txt");
-
+    public static Path WORD_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/word_frequency_log.txt");
     /**
      * Returns a dictionary of each character and its frequency of being guessed in the application
      * @param characterHistoryPath A text file holding the history of the chars and their frequency
@@ -140,7 +141,7 @@ public class WordleFileIO {
     }
 
 
-    public static HashMap<String, Integer> loadGuessFreq(Path guessFreqPath){
+    public static HashMap<String, Integer> loadGuessFreq(Path guessFreqPath) throws IOException{
         HashMap<String, Integer> guessFreq = new HashMap<>();
         try(Scanner in = new Scanner(guessFreqPath)){
             String cur = in.nextLine();
@@ -161,7 +162,7 @@ public class WordleFileIO {
         return guessFreq;
     }
 
-    public static void saveGuessFreq(Path guessFreqPath, HashMap<String, Integer> guessFreq){
+    public static void saveGuessFreq(Path guessFreqPath, HashMap<String, Integer> guessFreq) throws IOException{
         try(FileWriter out = new FileWriter(guessFreqPath.toFile())){
             for(String word: guessFreq.keySet()){
                 out.write(word + " " + guessFreq.get(word) + "\n");
@@ -173,5 +174,41 @@ public class WordleFileIO {
             alert.setContentText("An error occurred while saving the guessed word frequency.");
             alert.show();
         }
+    }
+
+    public static void addToWordFreq(String word, HashMap<String, Integer>wordFreq){
+        wordFreq.put(word, wordFreq.get(word)+1);
+    }
+    public static void loadWordFreq(){
+        try{
+            WORD_FREQUENCY = loadGuessFreq(WORD_FREQ_PATH);
+        } catch(IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText("An error occurred while saving the guessed word frequency.");
+            alert.show();
+        }
+    }
+
+    public static void saveWordFreq(){
+        try{
+            saveGuessFreq(WORD_FREQ_PATH, WORD_FREQUENCY);
+        }catch(IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText("An error occurred while saving the guessed word frequency.");
+            alert.show();
+        }
+    }
+    public static void fillWordArea(TextArea textArea){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Guess Frequency:\n");
+        for(String word: WordleFileIO.WORD_FREQUENCY.keySet()){
+            sb.append(word);
+            sb.append(": ");
+            sb.append(WordleFileIO.WORD_FREQUENCY.get(word));
+            sb.append("\n");
+        }
+        textArea.setText(sb.toString());
     }
 }
