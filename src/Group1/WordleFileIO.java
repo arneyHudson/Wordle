@@ -2,6 +2,7 @@
 package Group1;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -115,5 +116,28 @@ public class WordleFileIO {
             );
         }
     }
+
+    public static void fillCharacterTextArea(TextArea textArea, HashMap<Character, Integer> dict){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Guessed Character Frequency: \n");
+        HashMap<Character, Integer> dict2 = (HashMap<Character, Integer>)dict.clone();
+        for(int i = 0; i < dict.size(); ++i){
+            int biggestFreq = -1;
+            char biggestChar = '0';
+            for(Character c: dict2.keySet()){
+                if( dict2.get(c) > biggestFreq){
+                    biggestFreq = dict2.get(c);
+                    biggestChar = c;
+                }
+            }
+            builder.append(biggestChar);
+            builder.append(": ");
+            builder.append(biggestFreq);
+            builder.append('\n');
+            dict2.remove(biggestChar);
+        }
+        textArea.setText(builder.toString());
+    }
+
 
 }
