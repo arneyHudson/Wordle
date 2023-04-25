@@ -10,14 +10,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
-import java.security.Key;
 import java.util.Arrays;
 import java.util.List;
 
@@ -195,7 +193,7 @@ public class Guess {
         guessButton.setDisable(false); // enable guess button
         hintButton.setDisable(false); // enable the hint button
         colorBuffer = null; // reset color buffer to a null value
-        hintLabel.setText("[_]".repeat(wordle.getSecretWord().length())); // remove the hint label
+        hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // remove the hint label
         playAgainButton.setDisable(true); // disable play again button
         setColor = new SetColor(wordleDisplay, wordle, userKeys);
     }

@@ -159,11 +159,11 @@ public class Wordle {
         }
         final int hintPosition = possiblePositions.get((int)(Math.random()*possiblePositions.size()));
         final char hintChar = theTruth.charAt(hintPosition);
-        final String hiddenChar = "[_]";
+        final String hiddenChar = "[_] ";
         StringBuilder ret = new StringBuilder();
         for(int i = 0; i < theTruth.length(); ++i){
             if(i == hintPosition){
-                ret.append(hintChar);
+                ret.append("[").append(hintChar).append("] ");
             } else {
                 ret.append(hiddenChar);
             }
