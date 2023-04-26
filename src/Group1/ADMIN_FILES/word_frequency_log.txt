@@ -448,7 +448,7 @@ grown 0
 smash 0
 meant 0
 aider 0
-chain 0
+chain 1
 fecal 0
 grout 0
 torso 0
@@ -958,7 +958,7 @@ rodeo 0
 rouge 0
 speed 0
 allot 0
-apple 0
+apple 1
 admit 0
 berth 0
 hymen 0
@@ -1580,7 +1580,7 @@ slice 0
 frost 0
 grime 0
 larva 0
-stuck 0
+stuck 1
 broad 0
 greed 0
 catch 0
@@ -2259,7 +2259,7 @@ maxim 0
 suave 0
 brace 0
 brisk 0
-shuck 0
+shuck 1
 hilly 0
 putty 0
 filet 0

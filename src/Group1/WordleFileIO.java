@@ -7,8 +7,7 @@ import javafx.scene.control.TextArea;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Holds all the file input/output methods used by the wordle application.
@@ -177,7 +176,7 @@ public class WordleFileIO {
     }
 
     public static void addToWordFreq(String word, HashMap<String, Integer>wordFreq){
-        wordFreq.put(word, wordFreq.get(word)+1);
+        wordFreq.put(word.toLowerCase(), wordFreq.get(word.toLowerCase())+1);
     }
     public static void loadWordFreq(){
         try{
@@ -203,7 +202,9 @@ public class WordleFileIO {
     public static void fillWordArea(TextArea textArea){
         StringBuilder sb = new StringBuilder();
         sb.append("Guess Frequency:\n");
-        for(String word: WordleFileIO.WORD_FREQUENCY.keySet()){
+        ArrayList<String> words = new java.util.ArrayList<>(WordleFileIO.WORD_FREQUENCY.keySet().stream().toList());
+        Collections.sort(words);
+        for(String word: words){
             sb.append(word);
             sb.append(": ");
             sb.append(WordleFileIO.WORD_FREQUENCY.get(word));
