@@ -139,6 +139,24 @@ public class WordleFileIO {
         textArea.setText(builder.toString());
     }
 
+    /**
+     * Takes a collection of strings, and returns a collection of strings of a certain length
+     * @param nonValidCollection The collection of strings to validate.
+     * @param length The length to constrain all strings to.
+     * @return A collection of strings all of length length.
+     */
+    public static ArrayList<String> validateLength(Collection<String> nonValidCollection, int length){
+        ArrayList<String> ret = new ArrayList<>();
+        Iterator<String> iterator = nonValidCollection.iterator();
+        String next;
+        while(iterator.hasNext()){
+            next = iterator.next();
+            if(next.length() == length){
+                ret.add(next);
+            }
+        }
+        return ret;
+    }
 
     public static HashMap<String, Integer> loadGuessFreq(Path guessFreqPath) throws IOException{
         HashMap<String, Integer> guessFreq = new HashMap<>();
