@@ -203,5 +203,8 @@ public class Wordle {
     public int getRemainingGuesses() {
         return remainingGuesses;
     }
+    public List<String> getWords(){
+        return words;
+    }
 
 }

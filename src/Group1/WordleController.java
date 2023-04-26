@@ -78,6 +78,7 @@ public class WordleController<T> implements Initializable {
         numGuesses = 0;
         totalNumGuesses = 0;
         wordle = new Wordle();
+        initializeWordFreq();
         keyboardDisplay = new KeyboardDisplay(userKeys);
         wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
         line = new Line();
@@ -216,6 +217,7 @@ public class WordleController<T> implements Initializable {
                 controller.setWordFrequency(wordFrequency);
                 controller.setWordleController(wordleController);
                 controller.fillTextArea();
+                controller.fillWordArea();
                 adminPanelOpen = true;
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -98,6 +98,8 @@ public class Guess {
             WordleFileIO.addLettersToCharacterFrequency
                     (guess.toString(), WordleFileIO.CHARACTER_FREQUENCY);
             WordleFileIO.saveMainCharacterFrequency();
+            WordleFileIO.addToWordFreq(guess.toString(), WordleFileIO.WORD_FREQUENCY);
+            WordleFileIO.saveWordFreq();
             for (int i = 0; i < col; i++) {
                 children.get(i + col * (row - remain)).setDisable(true);
                 ((TextField) children.get(i + col * (row - remain))).setEditable(false);

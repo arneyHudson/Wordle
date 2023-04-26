@@ -43,6 +43,10 @@ public class AdminController {
         WordleFileIO.fillCharacterTextArea(charFreqArea, WordleFileIO.CHARACTER_FREQUENCY);
     }
 
+    public void fillWordArea(){
+        WordleFileIO.fillWordArea(wordFreqArea);
+    }
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
