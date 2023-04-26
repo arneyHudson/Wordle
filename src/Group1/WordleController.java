@@ -91,6 +91,7 @@ public class WordleController<T> implements Initializable {
         playAgainButton.setDisable(true);
         adminPanelOpen = false;
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
+        hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         guess = new Guess(mainDisplay, userKeys, wordleDisplay, wordle, guessButton,
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
@@ -106,10 +107,15 @@ public class WordleController<T> implements Initializable {
         guess.makeGuess();
     }
 
+    public Guess getGuess() {
+        return guess;
+    }
+
 
     @FXML
     public void createHint(){
         hintLabel.setText(wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
+        hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
     }
@@ -198,7 +204,7 @@ public class WordleController<T> implements Initializable {
         if(!adminPanelOpen) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(WordleController.class.getResource("/Group1/AdminPanel.fxml"));
+                loader.setLocation(getClass().getResource("/Group1/AdminPanel.fxml"));
                 Parent root = loader.load();
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
@@ -219,38 +225,4 @@ public class WordleController<T> implements Initializable {
         }
     }
 
-    public void openTextFile(ActionEvent event) {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Select Text File");
-            fileChooser.setInitialDirectory(new File("txt_files"));
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-            File selectedFile = fileChooser.showOpenDialog(new Stage());
-            if (selectedFile != null) {
-                // Read the contents of the selected file
-                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-                String line;
-                StringBuilder stringBuilder = new StringBuilder();
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
-                    stringBuilder.append(System.getProperty("line.separator"));
-                }
-                reader.close();
-                String fileContent = stringBuilder.toString();
-                // Do something with the file content
-                System.out.println("File content: " + fileContent);
-            }
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Error reading file");
-            alert.showAndWait();
-        }
-    }
-
-    private void initializeWordFreq(){
-        for(String word: wordle.getWords()){
-            wordFrequency.put(word,0);
-        }
-    }
 }

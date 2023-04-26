@@ -32,7 +32,7 @@ public class Wordle {
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
-        this.secretWord = generateSecretWord();
+        this.secretWord = generateSecretWord(AdminController.getFile());
         lettersGuessed = new HashMap<>();
     }
 
@@ -44,15 +44,20 @@ public class Wordle {
      Generates a secret word from the given text file of words
      @return the secret word
      */
-    private String generateSecretWord() {
+    private String generateSecretWord(File wordListFile) {
         try {
-            FileInputStream fileInputStream = new FileInputStream("src/Group1/wordle-official.txt");
+            FileInputStream fileInputStream;
+            if (wordListFile != null) {
+                fileInputStream = new FileInputStream(wordListFile);
+            } else {
+                // Defaults to the word list at the start
+                fileInputStream = new FileInputStream("src/Group1/wordle-official.txt");
+            }
+
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
             String word;
             while ((word = bufferedReader.readLine()) != null) {
-                if (word.length() == 5) {
-                    words.add(word.toLowerCase());
-                }
+                words.add(word.toLowerCase());
             }
             bufferedReader.close();
 
