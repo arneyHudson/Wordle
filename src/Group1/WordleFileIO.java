@@ -158,6 +158,14 @@ public class WordleFileIO {
         return ret;
     }
 
+
+    /**
+     * Reads the word frequency log file and saves it to a frequency set
+     * @param guessFreqPath The file path of the word frequency log
+     * @return A set containing each word in the word list as a key, and the
+     *         number of occurrences as the value
+     * @author zawarusn
+     */
     public static HashMap<String, Integer> loadGuessFreq(Path guessFreqPath) throws IOException{
         HashMap<String, Integer> guessFreq = new HashMap<>();
         try(Scanner in = new Scanner(guessFreqPath)){
@@ -179,6 +187,12 @@ public class WordleFileIO {
         return guessFreq;
     }
 
+    /**
+     * Writes the contents of the word frequency set to a log file for use between play sessions
+     * @param guessFreqPath The file path of the word frequency log file
+     * @param guessFreq The word frequency set
+     * @author zawarusn
+     */
     public static void saveGuessFreq(Path guessFreqPath, HashMap<String, Integer> guessFreq) throws IOException{
         try(FileWriter out = new FileWriter(guessFreqPath.toFile())){
             for(String word: guessFreq.keySet()){
@@ -193,9 +207,20 @@ public class WordleFileIO {
         }
     }
 
+    /**
+     * Increments the frequency of the given word within the wordFreq set
+     * @param word The word to be added
+     * @param wordFreq The Word Frequency set
+     * @author zawarusn
+     */
     public static void addToWordFreq(String word, HashMap<String, Integer>wordFreq){
         wordFreq.put(word.toLowerCase(), wordFreq.get(word.toLowerCase())+1);
     }
+
+    /**
+     * Calls the loadGuessFreq method with exception handling
+     * @author zawarusn
+     */
     public static void loadWordFreq(){
         try{
             WORD_FREQUENCY = loadGuessFreq(WORD_FREQ_PATH);
@@ -207,6 +232,10 @@ public class WordleFileIO {
         }
     }
 
+    /**
+     * Calls the saveGuessFreq method with exception handling
+     * @author zawarusn
+     */
     public static void saveWordFreq(){
         try{
             saveGuessFreq(WORD_FREQ_PATH, WORD_FREQUENCY);
@@ -217,6 +246,13 @@ public class WordleFileIO {
             alert.show();
         }
     }
+
+    /**
+     * Writes the word frequency set to the text area in the admin panel,
+     * sorted alphabetically
+     * @param textArea The textArea in the admin panel
+     * @author zawarusn
+     */
     public static void fillWordArea(TextArea textArea){
         StringBuilder sb = new StringBuilder();
         sb.append("Guess Frequency:\n");
