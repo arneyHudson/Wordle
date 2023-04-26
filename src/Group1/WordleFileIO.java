@@ -248,7 +248,9 @@ public class WordleFileIO {
     }
 
     /**
-     * @param textArea
+     * Writes the word frequency set to the text area in the admin panel,
+     * sorted alphabetically
+     * @param textArea The textArea in the admin panel
      */
     public static void fillWordArea(TextArea textArea){
         StringBuilder sb = new StringBuilder();
