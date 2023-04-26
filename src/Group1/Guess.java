@@ -121,7 +121,7 @@ public class Guess {
             if (guess.toString().equalsIgnoreCase(wordle.getSecretWord())) {
                 correctGuess = true;
             }
-        } else if(guess.toString().equalsIgnoreCase("xxxxx")) {
+        } else if(guess.toString().matches("^[xX]+$")) {
             wordleController.startAdminPanel(wordleController);
         } else {
             // Shake animation for textfields
@@ -142,7 +142,8 @@ public class Guess {
             Animations.showWarningPane(wordleDisplay.getWordleGrid());
 
             // remove: + (row - 2) to get the start of the word
-            children.get(col * (row - remain) + (row - 2)).requestFocus();
+            //children.get(col * (row - remain) + (row - 2)).requestFocus();
+            children.get(col * (row - remain) + (wordle.getSecretWord().length() - 1)).requestFocus();
             //children.get(col * (row - remain) + (row - col)).requestFocus();
         }
         //numGuessesList.add(numGuesses++);
@@ -194,6 +195,7 @@ public class Guess {
         hintButton.setDisable(false); // enable the hint button
         colorBuffer = null; // reset color buffer to a null value
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // remove the hint label
+        hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         playAgainButton.setDisable(true); // disable play again button
         setColor = new SetColor(wordleDisplay, wordle, userKeys);
     }
