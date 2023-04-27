@@ -1,26 +1,20 @@
 package Group1;
-import javafx.animation.*;
-import javafx.collections.ObservableList;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -39,6 +33,7 @@ public class WordleController<T> implements Initializable {
     @FXML
     private Button guessButton;
     private Wordle wordle;
+    private int wordLength;
     @FXML
     private Label numGuessesLabel;
     @FXML
@@ -81,6 +76,7 @@ public class WordleController<T> implements Initializable {
         WordleFileIO.initializeWordFreq(wordle.getWords());
         keyboardDisplay = new KeyboardDisplay(userKeys);
         wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
+        wordLength = 5;
         line = new Line();
         line.setStroke(Wordle.NONE_COLOR);
         line.setStartX(0);
@@ -195,6 +191,10 @@ public class WordleController<T> implements Initializable {
         return mostCommonGuesses;
     }
 
+    public void setWordLength(int wordLength) {
+        this.wordLength = wordLength;
+    }
+
     public void closeAdmin(Stage stage) {
         stage.close();
         adminPanelOpen = false;
@@ -216,6 +216,7 @@ public class WordleController<T> implements Initializable {
                 controller.setLetterFrequency(WordleFileIO.CHARACTER_FREQUENCY);
                 controller.setWordFrequency(WordleFileIO.WORD_FREQUENCY);
                 controller.setWordleController(wordleController);
+                controller.setWordLength(wordLength);
                 controller.fillTextArea();
                 controller.fillWordArea();
                 controller.fillRecommendations();

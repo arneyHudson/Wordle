@@ -2,7 +2,6 @@ package Group1;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -13,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 
 public class AdminController {
@@ -22,6 +20,7 @@ public class AdminController {
     private Map<Character, Integer> letterFrequency;
     private Map<String, Integer> wordFrequency;
     private WordleController wordleController;
+    private int wordLength;
 
     @FXML
     private TextArea charFreqArea;
@@ -51,25 +50,39 @@ public class AdminController {
     }
 
     public void fillRecommendations() {
-        TreeMap<String, Integer> sorted = new TreeMap<>(wordFrequency);
-        Iterator<String> it = sorted.descendingKeySet().iterator();
+        Map<String, Integer> sorted = new TreeMap<>(WordleFileIO.WORD_FREQUENCY);
+        List<Map.Entry<String, Integer>> save = new ArrayList<>(sorted.entrySet());
+        save.sort(Map.Entry.comparingByValue(Comparator.naturalOrder()));
+
         StringBuilder builder = new StringBuilder();
-        int i = 5;
-        while(it.hasNext() && i > 0) {
-            builder.append(it.next());
-            builder.append('\n');
-            i--;
+        int i = 0;
+        int n = 0;
+        while(n < 5 && i < save.size()) {
+            if(save.get(i).getKey().length() == wordLength) {
+                builder.append(save.get(i).getKey());
+                builder.append('\n');
+            } else {
+                n--;
+            }
+            n++;
+            i++;
         }
         recommended.setText(builder.toString());
-        ListIterator<String> li = sorted.descendingKeySet().stream().toList().listIterator();
-        builder = new StringBuilder();
-        i = 5;
-        while(li.hasPrevious() && i > 0) {
-            builder.append(li.previous());
-            builder.append('\n');
+
+        StringBuilder builder1 = new StringBuilder();
+        i = save.size() - 1;
+        n = 5;
+        while(save.size() > save.size() - n && 0 <= i) {
+            if(save.get(i).getKey().length() == wordLength && save.get(i).getValue() != 0) {
+                builder1.append(save.get(i).getKey());
+                builder1.append('\n');
+            } else {
+                n++;
+            }
+            n--;
             i--;
         }
-        notRecommended.setText(builder.toString());
+        notRecommended.setText(builder1.toString());
     }
 
     public void setStage(Stage stage) {
@@ -86,6 +99,10 @@ public class AdminController {
 
     public void setWordleController(WordleController wordleController) {
         this.wordleController = wordleController;
+    }
+
+    public void setWordLength(int wordLength) {
+        this.wordLength = wordLength;
     }
 
     @FXML
@@ -112,9 +129,9 @@ public class AdminController {
                     }
                 }
                 reader.close(); // Close the input reader
-                close(); // Close the Admin Panel
                 wordleController.getGuess().restartGame(); // Restart the game in the Guess instance
                 String fileContent = stringBuilder.toString();
+                wordleController.closeAdmin(stage); // Close the Admin Panel
                 // System.out.println("File content: " + fileContent);
             }
         } catch (IOException e) {

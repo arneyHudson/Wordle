@@ -187,6 +187,7 @@ public class Guess {
         keyboardDisplay = new KeyboardDisplay(userKeys);
         wordle = new Wordle(); // reset the wordle
         wordleDisplay = new WordleDisplay(6, wordle.getSecretWord().length(), guessButton, wordle);
+        wordleController.setWordLength(wordle.getSecretWord().length());
         mainDisplay.getChildren().set(1, line);
         mainDisplay.getChildren().set(2, wordleDisplay.getWordleGrid());
 
