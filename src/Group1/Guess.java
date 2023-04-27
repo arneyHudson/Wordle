@@ -200,6 +200,9 @@ public class Guess {
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         playAgainButton.setDisable(true); // disable play again button
         setColor = new SetColor(wordleDisplay, wordle, userKeys);
+        WordleFileIO.initializeWordFreq(wordle.getWords());
+        WordleFileIO.saveWordFreq();
+        WordleFileIO.loadWordFreq();
     }
 
     /**

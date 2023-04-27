@@ -60,7 +60,6 @@ public class Wordle {
                 words.add(word.toLowerCase());
             }
             bufferedReader.close();
-
             int randomIndex = (int) (Math.random() * words.size());
             System.out.println("The secret word = " + words.get(randomIndex));
             return words.get(randomIndex);
