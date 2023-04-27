@@ -98,6 +98,8 @@ public class Guess {
             WordleFileIO.addLettersToCharacterFrequency
                     (guess.toString(), WordleFileIO.CHARACTER_FREQUENCY);
             WordleFileIO.saveMainCharacterFrequency();
+            WordleFileIO.addToWordFreq(guess.toString(), WordleFileIO.WORD_FREQUENCY);
+            WordleFileIO.saveWordFreq();
             for (int i = 0; i < col; i++) {
                 children.get(i + col * (row - remain)).setDisable(true);
                 ((TextField) children.get(i + col * (row - remain))).setEditable(false);
@@ -121,7 +123,7 @@ public class Guess {
             if (guess.toString().equalsIgnoreCase(wordle.getSecretWord())) {
                 correctGuess = true;
             }
-        } else if(isAdminString(guess.toString())) {
+        } else if(guess.toString().matches("^[xX]+$")) {
             wordleController.startAdminPanel(wordleController);
         } else {
             // Shake animation for textfields
@@ -142,7 +144,8 @@ public class Guess {
             Animations.showWarningPane(wordleDisplay.getWordleGrid());
 
             // remove: + (row - 2) to get the start of the word
-            children.get(col * (row - remain) + (row - 2)).requestFocus();
+            //children.get(col * (row - remain) + (row - 2)).requestFocus();
+            children.get(col * (row - remain) + (wordle.getSecretWord().length() - 1)).requestFocus();
             //children.get(col * (row - remain) + (row - col)).requestFocus();
         }
         //numGuessesList.add(numGuesses++);
@@ -184,6 +187,7 @@ public class Guess {
         keyboardDisplay = new KeyboardDisplay(userKeys);
         wordle = new Wordle(); // reset the wordle
         wordleDisplay = new WordleDisplay(6, wordle.getSecretWord().length(), guessButton, wordle);
+        wordleController.setWordLength(wordle.getSecretWord().length());
         mainDisplay.getChildren().set(1, line);
         mainDisplay.getChildren().set(2, wordleDisplay.getWordleGrid());
 
@@ -194,8 +198,12 @@ public class Guess {
         hintButton.setDisable(false); // enable the hint button
         colorBuffer = null; // reset color buffer to a null value
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // remove the hint label
+        hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         playAgainButton.setDisable(true); // disable play again button
         setColor = new SetColor(wordleDisplay, wordle, userKeys);
+        WordleFileIO.initializeWordFreq(wordle.getWords());
+        WordleFileIO.saveWordFreq();
+        WordleFileIO.loadWordFreq();
     }
 
     /**
@@ -205,19 +213,5 @@ public class Guess {
     private double getAverageNumGuesses(int totalNumGuesses, int gamesPlayed) {
         double average = (double) totalNumGuesses / gamesPlayed;
         return Math.round(average * 100.0) / 100.0;
-    }
-
-    /**
-     * Verifies that the string passed in is a code used to access the admin panel (all x)
-     * @param theGuess The string to check
-     * @return Whether it is a valid code to enter the administration panel
-     */
-    private static boolean isAdminString(String theGuess){
-        for(int i = 0; i < theGuess.length(); ++i){
-            if(Character.toLowerCase(theGuess.charAt(i)) != 'x'){
-                return false;
-            }
-        }
-        return true;
     }
 }

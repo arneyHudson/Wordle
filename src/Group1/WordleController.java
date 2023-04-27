@@ -1,26 +1,20 @@
 package Group1;
-import javafx.animation.*;
-import javafx.collections.ObservableList;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -39,6 +33,7 @@ public class WordleController<T> implements Initializable {
     @FXML
     private Button guessButton;
     private Wordle wordle;
+    private int wordLength;
     @FXML
     private Label numGuessesLabel;
     @FXML
@@ -78,8 +73,10 @@ public class WordleController<T> implements Initializable {
         numGuesses = 0;
         totalNumGuesses = 0;
         wordle = new Wordle();
+        WordleFileIO.initializeWordFreq(wordle.getWords());
         keyboardDisplay = new KeyboardDisplay(userKeys);
         wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
+        wordLength = 5;
         line = new Line();
         line.setStroke(Wordle.NONE_COLOR);
         line.setStartX(0);
@@ -90,6 +87,7 @@ public class WordleController<T> implements Initializable {
         playAgainButton.setDisable(true);
         adminPanelOpen = false;
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
+        hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         guess = new Guess(mainDisplay, userKeys, wordleDisplay, wordle, guessButton,
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
@@ -105,10 +103,15 @@ public class WordleController<T> implements Initializable {
         guess.makeGuess();
     }
 
+    public Guess getGuess() {
+        return guess;
+    }
+
 
     @FXML
     public void createHint(){
         hintLabel.setText(wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
+        hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
     }
@@ -188,6 +191,10 @@ public class WordleController<T> implements Initializable {
         return mostCommonGuesses;
     }
 
+    public void setWordLength(int wordLength) {
+        this.wordLength = wordLength;
+    }
+
     public void closeAdmin(Stage stage) {
         stage.close();
         adminPanelOpen = false;
@@ -197,7 +204,7 @@ public class WordleController<T> implements Initializable {
         if(!adminPanelOpen) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(WordleController.class.getResource("/Group1/AdminPanel.fxml"));
+                loader.setLocation(getClass().getResource("/Group1/AdminPanel.fxml"));
                 Parent root = loader.load();
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
@@ -206,45 +213,18 @@ public class WordleController<T> implements Initializable {
                 stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> closeAdmin(stage));
                 AdminController controller = loader.getController();
                 controller.setStage(stage);
-                controller.setLetterFrequency(letterFrequency);
-                controller.setWordFrequency(wordFrequency);
+                controller.setLetterFrequency(WordleFileIO.CHARACTER_FREQUENCY);
+                controller.setWordFrequency(WordleFileIO.WORD_FREQUENCY);
                 controller.setWordleController(wordleController);
+                controller.setWordLength(wordLength);
                 controller.fillTextArea();
+                controller.fillWordArea();
+                controller.fillRecommendations();
                 adminPanelOpen = true;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
     }
-
-    public void openTextFile(ActionEvent event) {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Select Text File");
-            fileChooser.setInitialDirectory(new File("txt_files"));
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-            File selectedFile = fileChooser.showOpenDialog(new Stage());
-            if (selectedFile != null) {
-                // Read the contents of the selected file
-                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-                String line;
-                StringBuilder stringBuilder = new StringBuilder();
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
-                    stringBuilder.append(System.getProperty("line.separator"));
-                }
-                reader.close();
-                String fileContent = stringBuilder.toString();
-                // Do something with the file content
-                System.out.println("File content: " + fileContent);
-            }
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Error reading file");
-            alert.showAndWait();
-        }
-    }
-
 
 }
