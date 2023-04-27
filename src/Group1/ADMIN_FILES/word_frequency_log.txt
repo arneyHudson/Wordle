@@ -2295,7 +2295,7 @@ ids 0
 vital 0
 qua 0
 spilt 0
-rough 0
+rough 1
 squat 0
 swept 0
 purge 0
@@ -2988,7 +2988,7 @@ drink 0
 bough 0
 pulpy 0
 ombre 0
-hello 0
+hello 3
 rearm 0
 begin 0
 sly 0

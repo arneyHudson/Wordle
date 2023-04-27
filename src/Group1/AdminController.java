@@ -49,15 +49,33 @@ public class AdminController {
         WordleFileIO.fillWordArea(wordFreqArea);
     }
 
+    /**
+     * This method will look through the frequencies and display to the
+     * user the best and worst words to use as secret words to guess
+     * @author Collin Schmocker
+     */
     public void fillRecommendations() {
-        Map<String, Integer> sorted = new TreeMap<>(WordleFileIO.WORD_FREQUENCY);
+        Map<String, Integer> updatedScore = new HashMap<>();
+
+        for(String word: WordleFileIO.WORD_FREQUENCY.keySet()) {
+            int score = WordleFileIO.WORD_FREQUENCY.get(word);
+            for(char letter: word.toCharArray()) {
+                letter =  Character.toUpperCase(letter);
+                if(WordleFileIO.CHARACTER_FREQUENCY.containsKey(letter)) {
+                    score += WordleFileIO.CHARACTER_FREQUENCY.get(letter);
+                }
+            }
+            updatedScore.put(word, score);
+        }
+
+        Map<String, Integer> sorted = new TreeMap<>(updatedScore);
         List<Map.Entry<String, Integer>> save = new ArrayList<>(sorted.entrySet());
         save.sort(Map.Entry.comparingByValue(Comparator.naturalOrder()));
 
         StringBuilder builder = new StringBuilder();
         int i = 0;
         int n = 0;
-        while(n < 5 && i < save.size()) {
+        while(n < 8 && i < save.size()) {
             if(save.get(i).getKey().length() == wordLength) {
                 builder.append(save.get(i).getKey());
                 builder.append('\n');
@@ -67,13 +85,13 @@ public class AdminController {
             n++;
             i++;
         }
-        recommended.setText(builder.toString());
+        recommended.setText(builder.substring(0, builder.toString().length() - 1));
 
         StringBuilder builder1 = new StringBuilder();
         i = save.size() - 1;
-        n = 5;
+        n = 8;
         while(save.size() > save.size() - n && 0 <= i) {
-            if(save.get(i).getKey().length() == wordLength && save.get(i).getValue() != 0) {
+            if(save.get(i).getKey().length() == wordLength) {
                 builder1.append(save.get(i).getKey());
                 builder1.append('\n');
             } else {
@@ -82,7 +100,7 @@ public class AdminController {
             n--;
             i--;
         }
-        notRecommended.setText(builder1.toString());
+        notRecommended.setText(builder1.substring(0, builder1.toString().length() - 1));
     }
 
     public void setStage(Stage stage) {
