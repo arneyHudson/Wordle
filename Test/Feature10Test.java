@@ -20,6 +20,10 @@ public class Feature10Test {
             Path.of("src/Group1/ADMIN_FILES/fib_char_frequency_log.txt");
     private static final Path saveToPath =
             Path.of("src/Group1/ADMIN_FILES/save_to_file.txt");
+    private static final Path nonCharFreqPath =
+            Path.of("txt_files/2-letter-words.txt");
+    private static final Path corruptFreqPath =
+            Path.of("src/Group1/ADMIN_FILES/corrupt_char_freq.txt");
 
     @BeforeEach
     public void initDict(){
@@ -72,5 +76,24 @@ public class Feature10Test {
             Assertions.assertEquals(preloadedDict.get(theChar), charFreqDict.get(theChar));
             ++theChar;
         }
+    }
+
+    @Test
+    public void singleLetterAddition() throws IOException{
+        charFreqDict = WordleFileIO.loadCharacterFrequency(defaultCharList);
+        WordleFileIO.addLettersToCharacterFrequency("ABCDEFGHIJKLMNOPQRSTUVWXYZ", charFreqDict);
+        char theChar = 'A';
+        for(int i = 0; i < 26; ++i){
+            Assertions.assertEquals(1, charFreqDict.get(theChar));
+            ++theChar;
+        }
+    }
+
+    @Test
+    public void throwingExceptions(){
+        Assertions.assertThrows
+                (IOException.class,() -> {WordleFileIO.loadCharacterFrequency(nonCharFreqPath);});
+        Assertions.assertThrows
+                (IOException.class,() -> {WordleFileIO.loadCharacterFrequency(corruptFreqPath);});
     }
 }
