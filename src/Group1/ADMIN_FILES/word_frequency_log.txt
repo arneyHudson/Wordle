@@ -156,7 +156,7 @@ lab 0
 cox 0
 lad 0
 crawl 0
-coz 0
+coz 1
 lac 0
 plead 0
 lag 0
@@ -691,7 +691,7 @@ slain 0
 beast 0
 speed 0
 allot 0
-apple 0
+apple 3
 admit 0
 berth 0
 ionic 0
@@ -1477,7 +1477,7 @@ bushy 0
 bayou 0
 pupal 0
 brand 0
-choke 0
+choke 1
 old 0
 ole 0
 adopt 0
@@ -2442,7 +2442,7 @@ snort 0
 hobby 0
 jerky 0
 swill 0
-aah 0
+aah 3
 aal 0
 slime 0
 aas 0
@@ -2663,7 +2663,7 @@ are 0
 taken 0
 grace 0
 where 0
-taker 0
+taker 1
 ark 0
 froze 0
 arm 0
