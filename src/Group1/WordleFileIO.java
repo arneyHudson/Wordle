@@ -172,9 +172,6 @@ public class WordleFileIO {
             String cur = in.nextLine();
             while(!cur.equals("END")){
                 String[] info = cur.split(" ");
-                if(info[0].length() != 5){ // Change to variable for User Story 13
-                    throw new IOException("Frequency list used does not match word length.");
-                }
                 guessFreq.put(info[0], Integer.parseInt(info[1]));
                 cur = in.nextLine();
             }
@@ -265,5 +262,10 @@ public class WordleFileIO {
             sb.append("\n");
         }
         textArea.setText(sb.toString());
+    }
+    public static void initializeWordFreq(List<String> wordList){
+        for (String word : wordList) {
+            WORD_FREQUENCY.put(word, 0);
+        }
     }
 }
