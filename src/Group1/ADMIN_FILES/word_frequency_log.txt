@@ -662,7 +662,7 @@ relay 0
 retro 0
 spank 0
 abode 0
-beret 0
+beret 1
 grand 0
 glyph 0
 print 0
@@ -671,7 +671,7 @@ beach 0
 tuber 0
 voila 0
 idiom 0
-grant 0
+grant 1
 ebony 0
 egret 0
 lunch 0
@@ -738,7 +738,7 @@ dwarf 0
 recut 0
 heave 0
 piggy 0
-stand 0
+stand 1
 creed 0
 could 0
 smack 0
@@ -1017,7 +1017,7 @@ stilt 0
 viper 0
 morph 0
 nymph 0
-valve 0
+valve 1
 swath 0
 bawdy 0
 flock 0
@@ -1575,7 +1575,7 @@ usage 0
 flair 0
 piano 0
 cacao 0
-crush 0
+crush 1
 slice 0
 frost 0
 grime 0
@@ -1812,7 +1812,7 @@ naive 0
 girly 0
 terra 0
 roomy 0
-haunt 0
+haunt 1
 ditch 0
 scarf 0
 scare 0
@@ -1921,7 +1921,7 @@ bough 0
 pulpy 0
 biome 0
 ombre 0
-hello 0
+hello 8
 rearm 0
 begin 0
 fetus 0
@@ -2051,7 +2051,7 @@ ledge 0
 paint 0
 stood 0
 wrest 0
-bushy 0
+bushy 1
 scene 0
 guild 0
 bayou 0
@@ -2179,7 +2179,7 @@ venom 0
 scant 0
 skiff 0
 sight 0
-wrath 0
+wrath 1
 ghoul 0
 teeth 0
 proof 0
@@ -2203,7 +2203,7 @@ force 0
 verve 0
 fussy 0
 mural 0
-south 0
+south 1
 north 0
 dusky 0
 range 0

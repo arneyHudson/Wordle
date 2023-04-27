@@ -78,7 +78,7 @@ public class WordleController<T> implements Initializable {
         numGuesses = 0;
         totalNumGuesses = 0;
         wordle = new Wordle();
-        initializeWordFreq();
+        //initializeWordFreq();
         keyboardDisplay = new KeyboardDisplay(userKeys);
         wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
         line = new Line();
@@ -213,11 +213,12 @@ public class WordleController<T> implements Initializable {
                 stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> closeAdmin(stage));
                 AdminController controller = loader.getController();
                 controller.setStage(stage);
-                controller.setLetterFrequency(letterFrequency);
-                controller.setWordFrequency(wordFrequency);
+                controller.setLetterFrequency(WordleFileIO.CHARACTER_FREQUENCY);
+                controller.setWordFrequency(WordleFileIO.WORD_FREQUENCY);
                 controller.setWordleController(wordleController);
                 controller.fillTextArea();
                 controller.fillWordArea();
+                controller.fillRecommendations();
                 adminPanelOpen = true;
             } catch (IOException e) {
                 throw new RuntimeException(e);

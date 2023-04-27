@@ -21,6 +21,7 @@ public class WordleFileIO {
     public static HashMap<String, Integer> WORD_FREQUENCY = new HashMap<>();
     public static Path CHAR_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/character_frequency_log.txt");
     public static Path WORD_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/word_frequency_log.txt");
+
     /**
      * Returns a dictionary of each character and its frequency of being guessed in the application
      * @param characterHistoryPath A text file holding the history of the chars and their frequency

@@ -14,8 +14,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AdminController {
 
@@ -32,6 +31,10 @@ public class AdminController {
     @FXML
     private Button wordListSelection;
     private static File selectedFile;
+    @FXML
+    private TextArea notRecommended;
+    @FXML
+    private TextArea recommended;
 
     @FXML
     public void close() {
@@ -45,6 +48,28 @@ public class AdminController {
 
     public void fillWordArea(){
         WordleFileIO.fillWordArea(wordFreqArea);
+    }
+
+    public void fillRecommendations() {
+        TreeMap<String, Integer> sorted = new TreeMap<>(wordFrequency);
+        Iterator<String> it = sorted.descendingKeySet().iterator();
+        StringBuilder builder = new StringBuilder();
+        int i = 5;
+        while(it.hasNext() && i > 0) {
+            builder.append(it.next());
+            builder.append('\n');
+            i--;
+        }
+        recommended.setText(builder.toString());
+        ListIterator<String> li = sorted.descendingKeySet().stream().toList().listIterator();
+        builder = new StringBuilder();
+        i = 5;
+        while(li.hasPrevious() && i > 0) {
+            builder.append(li.previous());
+            builder.append('\n');
+            i--;
+        }
+        notRecommended.setText(builder.toString());
     }
 
     public void setStage(Stage stage) {
