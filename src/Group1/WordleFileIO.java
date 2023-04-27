@@ -267,7 +267,9 @@ public class WordleFileIO {
     }
     public static void initializeWordFreq(List<String> wordList){
         for (String word : wordList) {
-            WORD_FREQUENCY.put(word, 0);
+            if(!WORD_FREQUENCY.containsKey(word)) {
+                WORD_FREQUENCY.put(word, 0);
+            }
         }
     }
 }
