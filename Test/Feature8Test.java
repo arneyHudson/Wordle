@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 
 public class Feature8Test {
 
+    Wordle wordle = new Wordle();
+
+    // TODO: Figure out how to incorpate switching of incorrect character from [_], *
 
     /**
      * @author Golvachi
@@ -18,15 +21,15 @@ public class Feature8Test {
         final int WORD_LENGTH = 5;
         final String THE_TRUTH = "funny";
         final int testNumber = 10_000;
-        final Color[] baseArray = {Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY};
+        final Color[] baseArray = {Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR};
         boolean greenFound;
         for(int i = 0; i < testNumber; ++i){
             greenFound = false;
             Color[] colorArray = Wordle.perWordLetterCheck(
-                    Wordle.getLetterHint(THE_TRUTH, baseArray) ,THE_TRUTH
+                    wordle.getLetterHint(THE_TRUTH, baseArray) ,THE_TRUTH
             );
             for(int j = 0; j < WORD_LENGTH; ++j){
-                if(colorArray[j] == Color.GREEN){
+                if(colorArray[j] == Wordle.DIRECT_COLOR){
                     greenFound = true;
                 }
             }
@@ -46,11 +49,11 @@ public class Feature8Test {
     public void grayInOne(){
         final int WORD_LENGTH = 5;
         final String THE_TRUTH = "funny";
-        final Color[] oneArray = {Color.GRAY,Color.GREEN,Color.GREEN,Color.GREEN,Color.GREEN};
-        final Color[] twoArray = {Color.GREEN,Color.GRAY,Color.GREEN,Color.GREEN,Color.GREEN};
-        final Color[] threeArray = {Color.GREEN,Color.GREEN,Color.GRAY,Color.GREEN,Color.GREEN};
-        final Color[] fourArray = {Color.GREEN,Color.GREEN,Color.GREEN,Color.GRAY,Color.GREEN};
-        final Color[] fiveArray = {Color.GREEN,Color.GREEN,Color.GREEN,Color.GREEN,Color.GRAY};
+        final Color[] oneArray = {Wordle.NONE_COLOR,Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR};
+        final Color[] twoArray = {Wordle.DIRECT_COLOR,Wordle.NONE_COLOR,Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR};
+        final Color[] threeArray = {Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR,Wordle.NONE_COLOR,Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR};
+        final Color[] fourArray = {Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR,Wordle.NONE_COLOR,Wordle.DIRECT_COLOR};
+        final Color[] fiveArray = {Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR,Wordle.DIRECT_COLOR,Wordle.NONE_COLOR};
         final Color[][] theHorror = {oneArray, twoArray, threeArray, fourArray, fiveArray};
         /*
          * Now this may look like the most disgusting set up of arrays you've ever seen, but it works.
@@ -61,8 +64,8 @@ public class Feature8Test {
         for (int i = 0; i < WORD_LENGTH; ++i){
             Assertions.assertEquals(
                     Wordle.perWordLetterCheck(
-                            Wordle.getLetterHint(THE_TRUTH, theHorror[i]), THE_TRUTH)[i],
-                    Color.GREEN);
+                            wordle.getLetterHint(THE_TRUTH, theHorror[i]), THE_TRUTH)[i],
+                    Wordle.DIRECT_COLOR);
         }
 
     }
@@ -75,11 +78,11 @@ public class Feature8Test {
     public void highIntensityOcclusion(){
         final String THE_TRUTH = "aeiou";
         final int testNumber = 10_000;
-        final Color[] oneArray = {Color.GREEN,Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY};
-        final Color[] twoArray = {Color.GRAY,Color.GREEN,Color.GRAY,Color.GRAY,Color.GRAY};
-        final Color[] threeArray = {Color.GRAY,Color.GRAY,Color.GREEN,Color.GRAY,Color.GRAY};
-        final Color[] fourArray = {Color.GRAY,Color.GRAY,Color.GRAY,Color.GREEN,Color.GRAY};
-        final Color[] fiveArray = {Color.GRAY,Color.GRAY,Color.GRAY,Color.GRAY,Color.GREEN};
+        final Color[] oneArray = {Wordle.DIRECT_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR};
+        final Color[] twoArray = {Wordle.NONE_COLOR,Wordle.DIRECT_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR};
+        final Color[] threeArray = {Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.DIRECT_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR};
+        final Color[] fourArray = {Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.DIRECT_COLOR,Wordle.NONE_COLOR};
+        final Color[] fiveArray = {Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.NONE_COLOR,Wordle.DIRECT_COLOR};
         final Color[][] theHorror = {oneArray, twoArray, threeArray, fourArray, fiveArray};
         /*
          * This is similar to the previous test, however, it tests the exact opposite
@@ -96,7 +99,7 @@ public class Feature8Test {
         for (int i = 0; i < THE_TRUTH.length(); ++i){
             for(int j = 0; j < testNumber; ++j){
                 Assertions.assertEquals(
-                        Wordle.getLetterHint(THE_TRUTH, theHorror[i]).charAt(i), '*');
+                        wordle.getLetterHint(THE_TRUTH, theHorror[i]).charAt(i), '*');
             }
         }
     }

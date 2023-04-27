@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 
 public class Feature2Test {
 
-    final Color DIRECT_COLOR = Color.web("#6ca965");
-    final Color INDIRECT_COLOR = Color.web("#c8b653");
-    final Color NONE_COLOR = Color.web("#363636");
+    final Color DIRECT_COLOR = Wordle.DIRECT_COLOR;
+    final Color INDIRECT_COLOR = Wordle.INDIRECT_COLOR;
+    final Color NONE_COLOR = Wordle.NONE_COLOR;
 
     /**
      * @author Golvachi

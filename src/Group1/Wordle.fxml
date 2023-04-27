@@ -8,7 +8,7 @@
 
 <VBox fx:id="mainDisplay" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="450.0" spacing="10.0" style="-fx-background-color: #1b1b1b;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Group1.WordleController">
    <children>
-      <Label text="Wordle" textFill="WHITE">
+      <Label alignment="CENTER" contentDisplay="CENTER" text="Wordle" textFill="WHITE">
          <font>
             <Font name="Rockwell Condensed Bold" size="32.0" />
          </font>
@@ -33,7 +33,7 @@
          </children>
       </VBox>
       <Line endX="225.0" startX="-225.0" stroke="GREY" strokeWidth="1.5" />
-      <HBox alignment="CENTER" prefHeight="29.0" prefWidth="450.0">
+      <HBox alignment="CENTER" prefHeight="86.0" prefWidth="450.0">
          <children>
             <Button fx:id="hintButton" mnemonicParsing="false" onAction="#createHint" style="-fx-background-color: GRAY;" text="HINT" textFill="WHITE">
                <font>
@@ -43,7 +43,7 @@
                   <Insets />
                </HBox.margin>
             </Button>
-            <Label fx:id="hintLabel" style="-fx-border-color: white; -fx-border-radius: 3px; -fx-label-padding: 3px;" text="Hint: " textFill="WHITE">
+            <Label fx:id="hintLabel" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="109.0" style="-fx-border-color: white; -fx-border-radius: 3px; -fx-label-padding: 3px;" text="Hint: " textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="13.0" />
                </font>
@@ -51,7 +51,7 @@
                   <Insets left="100.0" />
                </HBox.margin>
                <padding>
-                  <Insets top="6.0" />
+                  <Insets bottom="6.0" top="6.0" />
                </padding>
             </Label>
          </children>
