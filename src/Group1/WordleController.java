@@ -78,7 +78,7 @@ public class WordleController<T> implements Initializable {
         numGuesses = 0;
         totalNumGuesses = 0;
         wordle = new Wordle();
-        initializeWordFreq();
+        WordleFileIO.initializeWordFreq(wordle.getWords());
         keyboardDisplay = new KeyboardDisplay(userKeys);
         wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
         line = new Line();
@@ -225,9 +225,5 @@ public class WordleController<T> implements Initializable {
         }
     }
 
-    void initializeWordFreq(){
-        for(String word: wordle.getWords()){
-            wordFrequency.put(word, 0);
-        }
-    }
+
 }
