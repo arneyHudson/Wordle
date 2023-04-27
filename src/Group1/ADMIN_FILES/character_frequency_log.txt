@@ -2,12 +2,12 @@ BEGIN_CHAR_DICT
 A 72
 B 9
 C 17
-D 14
-E 60
+D 17
+E 61
 F 5
 G 10
 H 22
-I 18
+I 20
 J 0
 K 6
 L 31
@@ -20,7 +20,7 @@ R 23
 S 14
 T 22
 U 17
-V 12
+V 13
 W 5
 X 10
 Y 11

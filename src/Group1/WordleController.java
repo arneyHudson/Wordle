@@ -110,8 +110,8 @@ public class WordleController<T> implements Initializable {
 
     @FXML
     public void createHint(){
-        hintLabel.setText(wordle.getLetterHint(wordle.getSecretWord()).toUpperCase());
-        hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
+        hintLabel.setText(getGuess().getWordle().getLetterHint(getGuess().getWordle().getSecretWord()).toUpperCase());
+        hintLabel.setPrefWidth(28 * getGuess().getWordle().getSecretWord().length());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
     }

@@ -45,7 +45,6 @@ public class Guess {
     private Label commonGuessLabel;
     @FXML
     private KeyboardDisplay keyboardDisplay;
-    private Color[] colorBuffer;
     private boolean correctGuess;
     private int numGuesses;
     private int gamesPlayed;
@@ -104,8 +103,8 @@ public class Guess {
                 children.get(i + col * (row - remain)).setDisable(true);
                 ((TextField) children.get(i + col * (row - remain))).setEditable(false);
             }
-            colorBuffer = Wordle.perWordLetterCheck(guess.toString().toLowerCase(), wordle.getSecretWord());
-            setColor.setGuessColor(Arrays.asList(colorBuffer));
+            setColor.setGuessColor(Arrays.asList(wordle.perWordLetterCheck
+                    (guess.toString().toLowerCase(), wordle.getSecretWord(), true)));
             setColor.setGuessedLetterColors(wordle.checkLetters(guess.toString()));
             commonLetterLabel.setText(wordleController.commonLetters(wordle.checkLetters(guess.toString())));
             commonGuessLabel.setText(wordleController.commonGuesses(guess.toString()));
@@ -196,7 +195,7 @@ public class Guess {
         correctGuess = false; // reset correct guess flag
         guessButton.setDisable(false); // enable guess button
         hintButton.setDisable(false); // enable the hint button
-        colorBuffer = null; // reset color buffer to a null value
+        wordle.setColorBuffer(null);
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // remove the hint label
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         playAgainButton.setDisable(true); // disable play again button
@@ -213,5 +212,9 @@ public class Guess {
     private double getAverageNumGuesses(int totalNumGuesses, int gamesPlayed) {
         double average = (double) totalNumGuesses / gamesPlayed;
         return Math.round(average * 100.0) / 100.0;
+    }
+
+    public Wordle getWordle(){
+        return wordle;
     }
 }
