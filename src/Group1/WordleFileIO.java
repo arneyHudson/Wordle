@@ -212,7 +212,6 @@ public class WordleFileIO {
      * @author zawarusn
      */
     public static void addToWordFreq(String word, HashMap<String, Integer>wordFreq){
-        System.out.println("Added to freq: " + word);
         wordFreq.put(word.toLowerCase(), wordFreq.get(word.toLowerCase())+1);
     }
 
