@@ -225,4 +225,9 @@ public class WordleController<T> implements Initializable {
         }
     }
 
+    void initializeWordFreq(){
+        for(String word: wordle.getWords()){
+            wordFrequency.put(word, 0);
+        }
+    }
 }
