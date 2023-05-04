@@ -22,6 +22,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        WordleFileIO.initializeLogFile();
         WordleFileIO.loadMainCharacterFrequency();
         WordleFileIO.loadWordFreq();
         FXMLLoader loader = new FXMLLoader();

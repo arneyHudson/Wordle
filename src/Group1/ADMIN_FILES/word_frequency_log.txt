@@ -10119,7 +10119,7 @@ tragasol 0
 highness 0
 bread 0
 chipling 0
-break 0
+break 1
 mecodont 0
 imamates 0
 incorpse 0
@@ -10908,7 +10908,7 @@ versatec 0
 articled 0
 hylology 0
 turklike 0
-glyph 0
+glyph 1
 folacins 0
 vicianin 0
 codecree 0
@@ -11018,7 +11018,7 @@ lenzites 0
 geckotid 0
 discourt 0
 bawdiest 0
-rayon 0
+rayon 1
 thistled 0
 prancing 0
 eosinate 0
@@ -19890,7 +19890,7 @@ prevalue 0
 pivoting 0
 furthers 0
 uncalked 0
-crypt 0
+crypt 1
 schemery 0
 soapwort 0
 snibbled 0
@@ -21355,7 +21355,7 @@ bioethic 0
 outttorn 0
 linteled 0
 gallivat 0
-stair 0
+stair 1
 corallus 0
 graft 0
 baboodom 0
@@ -26909,7 +26909,7 @@ abbot 0
 nicetish 0
 octet 0
 isthmics 0
-space 0
+space 1
 tigernut 0
 chamber 0
 unarched 0
@@ -28965,7 +28965,7 @@ nosewort 0
 palfgeys 0
 stainers 0
 axion 0
-axiom 0
+axiom 1
 prorebel 0
 dingling 0
 yuquilla 0
@@ -29482,7 +29482,7 @@ semihigh 0
 unsister 0
 silicide 0
 unchafed 0
-gruel 0
+gruel 1
 daunt 0
 antenna 0
 nonshaft 0
@@ -30080,7 +30080,7 @@ poetizer 0
 globulin 0
 thyroria 0
 imbursed 0
-woozy 0
+woozy 1
 steepish 0
 topcoats 0
 jatropha 0
@@ -30958,12 +30958,12 @@ unbuilds 0
 pulpy 0
 browless 0
 sourdook 0
-hello 3
+hello 10
 wringers 0
 steepled 0
 pomiform 0
 gaffe 0
-world 0
+world 1
 redeploy 0
 seerlike 0
 embarked 0
@@ -31600,7 +31600,7 @@ imitatee 0
 imitated 0
 whiplash 0
 incur 0
-plump 0
+plump 1
 unmusked 0
 cryogens 0
 plume 0
@@ -35975,7 +35975,7 @@ maypoles 0
 ninnyish 0
 vivarium 0
 ninnyism 0
-rumor 0
+rumor 1
 berretta 0
 paupered 0
 bayadeer 0
@@ -41431,7 +41431,7 @@ parsonry 0
 bragging 0
 vitamers 0
 thiazins 0
-lemur 0
+lemur 1
 scabland 0
 geyseric 0
 anstosse 0
@@ -46847,7 +46847,7 @@ muckhole 0
 sittidae 0
 gauntree 0
 opilonea 0
-alone 0
+alone 1
 along 0
 uncogged 0
 apathist 0
@@ -54984,7 +54984,7 @@ cypriote 0
 unluffed 0
 fallouts 0
 chide 0
-reign 0
+reign 1
 mocha 0
 hornless 0
 raceways 0
