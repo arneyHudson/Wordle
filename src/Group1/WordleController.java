@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
@@ -92,6 +93,8 @@ public class WordleController<T> implements Initializable {
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
                 correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay);
+        WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,
+                WordleFileIO.LOG_ON_PRESS, mainDisplay);
     }
 
     /**
@@ -226,5 +229,6 @@ public class WordleController<T> implements Initializable {
             }
         }
     }
+
 
 }

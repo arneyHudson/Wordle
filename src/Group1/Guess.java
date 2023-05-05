@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -203,6 +204,8 @@ public class Guess {
         WordleFileIO.initializeWordFreq(wordle.getWords());
         WordleFileIO.saveWordFreq();
         WordleFileIO.loadWordFreq();
+        WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,
+                WordleFileIO.LOG_ON_PRESS, mainDisplay);
     }
 
     /**
