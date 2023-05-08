@@ -17,11 +17,13 @@ public class SetColor {
     private WordleDisplay wordleDisplay;
     private Wordle wordle;
     private VBox userKeys;
+    private boolean isHardMode;
 
-    public SetColor(WordleDisplay wordleDisplay, Wordle wordle, VBox userKeys) {
+    public SetColor(WordleDisplay wordleDisplay, Wordle wordle, VBox userKeys, boolean isHardMode) {
         this.wordleDisplay = wordleDisplay;
         this.wordle = wordle;
         this.userKeys = userKeys;
+        this.isHardMode = isHardMode;
     }
 
     /**
@@ -30,7 +32,7 @@ public class SetColor {
      * @param colors a list of JavaFX Paint objects the same size as the length of the secretWords
      * @author Collin Schmocker
      */
-    public void setGuessColor(List<Paint> colors) {
+    public void setGuessColor(List<Paint> colors, boolean isHardMode) {
         int col = wordleDisplay.getWordleGrid().getColumnCount();
         int row = (wordleDisplay.getWordleGrid().getRowCount() - wordle.getRemainingGuesses());
         SequentialTransition sequentialTransition = new SequentialTransition();
@@ -38,6 +40,9 @@ public class SetColor {
             TextField textField = (TextField) wordleDisplay.getWordleGrid().getChildren().get(i + col * row);
 
             String style = "-fx-control-inner-background: #" + colors.get(i).toString().substring(2);
+            if (isHardMode) {
+                textField.setText(""); // Empty the text field to hide the letter
+            }
             // Create a ScaleTransition to flip the TextField vertically
             RotateTransition flipTransition = new RotateTransition(Duration.seconds(0.2), textField);
             flipTransition.setAxis(Rotate.X_AXIS);

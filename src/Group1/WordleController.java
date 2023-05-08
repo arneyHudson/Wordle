@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
@@ -51,6 +52,8 @@ public class WordleController<T> implements Initializable {
     private Label commonGuessLabel;
     @FXML
     private Line line;
+    @FXML
+    private ToggleButton hardModeButton;
     private final List<Integer> numGuessesList = new ArrayList<>();
     private int gamesPlayed;
     private int numGuesses;
@@ -62,6 +65,7 @@ public class WordleController<T> implements Initializable {
     private WordleDisplay wordleDisplay;
     private Guess guess;
     private KeyboardDisplay keyboardDisplay;
+    boolean isHardMode;
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -89,10 +93,18 @@ public class WordleController<T> implements Initializable {
         adminPanelOpen = false;
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
+
+        hardModeButton.setOnAction(event -> {
+            toggleHardMode();
+            guess.setHardMode(isHardMode); // Update isHardMode in the Guess object
+        });
         guess = new Guess(mainDisplay, userKeys, wordleDisplay, wordle, guessButton,
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
-                correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay);
+                correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay, isHardMode,
+                hardModeButton);
+
+        guess.setHardMode(isHardMode); // Set the initial isHardMode value in the Guess object
         WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,
                 WordleFileIO.LOG_ON_PRESS, mainDisplay);
     }
@@ -108,6 +120,21 @@ public class WordleController<T> implements Initializable {
 
     public Guess getGuess() {
         return guess;
+    }
+
+    /**
+     * Used by the hard mode button that simply changes the background color of the button
+     * as well as the boolean value that controls hard mode
+     * @author Hudson Arney
+     */
+    @FXML
+    public void toggleHardMode() {
+        isHardMode = hardModeButton.isSelected();
+        if (isHardMode) {
+            hardModeButton.setStyle("-fx-background-color:red");
+        } else {
+            hardModeButton.setStyle("-fx-background-color:white");
+        }
     }
 
 
