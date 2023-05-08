@@ -93,6 +93,7 @@ public class WordleController<T> implements Initializable {
         adminPanelOpen = false;
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
+
         hardModeButton.setOnAction(event -> {
             toggleHardMode();
             guess.setHardMode(isHardMode); // Update isHardMode in the Guess object
@@ -104,7 +105,6 @@ public class WordleController<T> implements Initializable {
                 hardModeButton);
 
         guess.setHardMode(isHardMode); // Set the initial isHardMode value in the Guess object
-                correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay);
         WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,
                 WordleFileIO.LOG_ON_PRESS, mainDisplay);
     }
@@ -256,4 +256,6 @@ public class WordleController<T> implements Initializable {
             }
         }
     }
+
+
 }

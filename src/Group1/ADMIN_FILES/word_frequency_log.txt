@@ -10497,7 +10497,7 @@ platypod 0
 soothest 0
 larboard 0
 nucament 0
-crazy 20
+crazy 21
 reaphook 0
 razor 0
 wreather 0
@@ -41335,7 +41335,7 @@ teretish 0
 trigonia 0
 advocaat 0
 crateris 0
-missy 0
+missy 1
 simbling 0
 tithable 0
 saturnal 0
@@ -41634,7 +41634,7 @@ damassin 0
 distaffs 0
 apnea 0
 paludism 0
-miser 0
+miser 1
 scowling 0
 stridden 0
 punnical 0
