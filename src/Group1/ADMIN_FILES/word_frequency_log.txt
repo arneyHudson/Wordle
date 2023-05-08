@@ -4316,7 +4316,7 @@ supprime 0
 mendiant 0
 isochron 0
 realness 0
-guess 0
+guess 1
 nailsets 0
 asamblea 0
 whirring 0
@@ -6103,7 +6103,7 @@ misogyne 0
 genderer 0
 wieldier 0
 chewable 0
-movie 0
+movie 6
 amizilis 0
 dirtiest 0
 popcorn 0
@@ -10497,7 +10497,7 @@ platypod 0
 soothest 0
 larboard 0
 nucament 0
-crazy 0
+crazy 20
 reaphook 0
 razor 0
 wreather 0
@@ -15586,7 +15586,7 @@ athecata 0
 raphania 0
 athecate 0
 hetaeria 0
-anode 0
+anode 1
 pamunkey 0
 gascoyne 0
 hetaerio 0
@@ -23841,7 +23841,7 @@ front 0
 maximals 0
 plane 0
 whishted 0
-canoe 0
+canoe 1
 stripped 0
 ascribes 0
 canon 0
@@ -30958,7 +30958,7 @@ unbuilds 0
 pulpy 0
 browless 0
 sourdook 0
-hello 3
+hello 13
 wringers 0
 steepled 0
 pomiform 0
@@ -42030,7 +42030,7 @@ harding 0
 sescuple 0
 colnaria 0
 unnature 0
-shoot 0
+shoot 1
 rebeamer 0
 indrench 0
 cookware 0
@@ -42508,7 +42508,7 @@ overfell 0
 knock 0
 oophytic 0
 biggened 0
-apple 3
+apple 4
 longship 0
 pinweeds 0
 magnetos 0
@@ -50867,7 +50867,7 @@ babesias 0
 expellee 0
 heligmus 0
 cypreses 0
-never 0
+never 43
 penumbra 0
 orinasal 0
 cainitic 0
@@ -54199,7 +54199,7 @@ clanking 0
 gentilic 0
 sorrance 0
 untender 0
-amaze 0
+amaze 10
 heliport 0
 glouting 0
 hooligan 0

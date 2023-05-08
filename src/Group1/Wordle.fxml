@@ -76,6 +76,18 @@
             </Button>
          </children>
       </HBox>
+      <HBox prefHeight="46.0" prefWidth="450.0">
+         <children>
+            <ToggleButton fx:id="hardModeButton" mnemonicParsing="false" style="-fx-background-color: white;" text="HARD MODE">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="175.0" />
+               </HBox.margin>
+            </ToggleButton>
+         </children>
+      </HBox>
       <HBox fx:id="labelBox" alignment="CENTER" prefHeight="16.0" prefWidth="450.0">
          <children>
             <Label fx:id="numGuessesLabel" alignment="CENTER" text="Current Guesses: 0 " textFill="GREY">
