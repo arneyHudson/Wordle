@@ -33,7 +33,7 @@
          </children>
       </VBox>
       <Line endX="225.0" startX="-225.0" stroke="GREY" strokeWidth="1.5" />
-      <HBox alignment="CENTER" prefHeight="86.0" prefWidth="450.0">
+      <HBox alignment="CENTER" prefHeight="131.0" prefWidth="450.0">
          <children>
             <Button fx:id="hintButton" mnemonicParsing="false" onAction="#createHint" style="-fx-background-color: GRAY;" text="HINT" textFill="WHITE">
                <font>

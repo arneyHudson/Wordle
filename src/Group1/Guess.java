@@ -20,6 +20,9 @@ import javafx.util.Duration;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Guess class that takes in the parameters from the controller and updates the GUI accordingly
+ */
 public class Guess {
     @FXML
     private VBox mainDisplay;
@@ -88,6 +91,11 @@ public class Guess {
         setColor = new SetColor(this.wordleDisplay, this.wordle, this.userKeys, this.isHardMode);
     }
 
+    /**
+     * Make Guess method that contains a lot of code!!!
+     * It will go through whenever the player enters values into the text fields and when enter is pressed do a
+     * variety of different options. Also contains access to the admin panel
+     */
     @FXML
     public void makeGuess() {
         StringBuilder guess = new StringBuilder();
@@ -181,6 +189,9 @@ public class Guess {
         }
     }
 
+    /**
+     * Restart game method that re initializes the game as a whole and all the GUI components
+     */
     @FXML
     public void restartGame() {
         // reset keyboard and wordle display
