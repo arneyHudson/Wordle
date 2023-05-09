@@ -208,6 +208,31 @@ public class Wordle {
 
 
     /**
+     * Checks to make sure that the given word could theoretically fit in the hint.
+     * @return If the word could be a hint
+     */
+    private static boolean eligibleForHint(String theHint, String theTruth, Color[] colorBuffer){
+        Color[] compareBuffer = perWordLetterCheck(theHint, theTruth);
+        boolean ret = true;
+        int mimimumMatches = 0;
+        int compareMatches = 0;
+        for(int i = 0; i < colorBuffer.length && ret; ++i){
+            if(colorBuffer[i] == DIRECT_COLOR){
+                ret = compareBuffer[i] == DIRECT_COLOR;
+            } else {
+                if(colorBuffer[i] == INDIRECT_COLOR){
+                    ++mimimumMatches;
+                }
+                if(compareBuffer[i] == INDIRECT_COLOR || compareBuffer[i] == DIRECT_COLOR){
+                    ++compareMatches;
+                }
+            }
+        }
+        return ret && compareMatches >= mimimumMatches;
+    }
+
+
+    /**
      * Returns a list of words hints from the static method of the same name, using the instance variables
      *
      * As of note with the static method, the secret word will always be placed at the end of this list
@@ -233,18 +258,28 @@ public class Wordle {
      */
     public static List<String> getWordHints(String theTruth, Color[] colors,
                                                   List<String> words, int numHints){
-        final int CHANCE_DIVISOR = 1; // change as desired, performance vs difficulty
+        final int CHANCE_DIVISOR = 100; // change as desired, performance vs difficulty
+
+        if (colors == null){
+            colors = new Color[theTruth.length()];
+            for(int i = 0; i < theTruth.length(); ++i){
+                colors[i] = NONE_COLOR;
+            }
+        }
+
         List<String> ret = new ArrayList<>();
         while(ret.size() < numHints - 1){
             for(int i = 0; i < words.size() && ret.size() < numHints - 1; ++i){
-                if(perWordLetterCheck(words.get(i), theTruth) == colors){
+                if(eligibleForHint(words.get(i), theTruth, colors)){
                     if(Math.random() < (float)1/CHANCE_DIVISOR){
                         ret.add(words.get(i));
                     }
                 }
             }
         }
+
         ret.add(theTruth);
         return ret;
+
     }
 }
