@@ -165,7 +165,7 @@ public class Guess {
         int numCurrentGuesses = numGuessesList.size();
         numGuessesLabel.setText("Current Guesses: " + numCurrentGuesses);
 
-        if (numCurrentGuesses == 6 || correctGuess) {
+        if (numGuesses == 6 || correctGuess) {
             // If the game has been completed
             PauseTransition delay = new PauseTransition(Duration.seconds(2.5));
             if(correctGuess) {
