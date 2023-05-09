@@ -104,11 +104,7 @@ public class Guess {
         int col = wordleDisplay.getWordleGrid().getColumnCount();
         int row = wordleDisplay.getWordleGrid().getRowCount();
         int remain = wordle.getRemainingGuesses();
-
-        hardModeButton.setOnAction(event -> {
-            wordleController.toggleHardMode();
-            setHardMode(wordleController.isHardMode); // Update isHardMode in the Guess object
-        });
+        wordleController.setupHardModeButton();
 
         for (int i = 0; i < col; i++) {
             guess.append(((TextField) children.get(i + col * (row - remain))).getText());
@@ -169,7 +165,7 @@ public class Guess {
         int numCurrentGuesses = numGuessesList.size();
         numGuessesLabel.setText("Current Guesses: " + numCurrentGuesses);
 
-        if (numCurrentGuesses == 6 || correctGuess) {
+        if (numGuesses == 6 || correctGuess) {
             // If the game has been completed
             PauseTransition delay = new PauseTransition(Duration.seconds(2.5));
             if(correctGuess) {
