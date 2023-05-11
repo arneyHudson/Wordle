@@ -14,13 +14,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Holds all the file input/output methods used by the wordle application.
@@ -281,10 +275,13 @@ public class WordleFileIO {
     public static void fillWordArea(TextArea textArea){
         StringBuilder sb = new StringBuilder();
         sb.append("Guess Frequency:\n");
-        ArrayList<String> words = new java.util.ArrayList<>(WordleFileIO.WORD_FREQUENCY.keySet().stream().toList());
-        Collections.sort(words);
-        for(String word: words){
-            if(WORD_FREQUENCY.get(word) != 0) {
+        Map<String, Integer> sorted = new TreeMap<>(WORD_FREQUENCY);
+        List<Map.Entry<String, Integer>> save = new ArrayList<>(sorted.entrySet());
+        save.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+
+        for (Map.Entry<String, Integer> stringIntegerEntry : save) {
+            String word = stringIntegerEntry.getKey();
+            if (WORD_FREQUENCY.get(word) != 0) {
                 sb.append(word);
                 sb.append(": ");
                 sb.append(WORD_FREQUENCY.get(word));
