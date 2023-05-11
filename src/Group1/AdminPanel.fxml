@@ -29,6 +29,11 @@
                <font>
                   <Font name="Arial Bold" size="13.0" />
                </font></Button>
+            <Button mnemonicParsing="false" onAction="#textFileTest" style="-fx-background-color: gray;" text="Test Input/Output" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="13.0" />
+               </font>
+            </Button>
          </children>
       </HBox>
       <HBox prefHeight="100.0" prefWidth="200.0">

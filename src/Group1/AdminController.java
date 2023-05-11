@@ -162,4 +162,41 @@ public class AdminController {
     public static File getFile() {
         return selectedFile;
     }
+
+    @FXML
+    public void textFileTest(){
+        /*
+         * Get the file with a filechooser
+         * Run a local version of wordle with the selected SEED word
+         * Assume that the SEED and the other ones are of the same length
+         * Test input files will follow the similar formats
+         * BEGIN_TEST <- start of file
+         * BEGIN_RUN <run name> <- Creation of wordle object and name for log
+         * SEED <seed word> <- Seed word to use for all other tests
+         * WORD <word> <- word to test against the seed word
+         * ...
+         * END_RUN <- End of run, wordle object is popped off of stack and eaten by garbage collector
+         * BEGIN_RUN <run name>
+         * SEED <seed word>
+         * WORD <word>
+         * ...
+         * END_RUN
+         * END_TEST <- End of test file
+         *
+         * The output file produce after a run should look something akin to this
+         * Test:
+         * Run: <run name>
+         * Seed: <seed word>
+         * <word> <representation of color array output from comparison>
+         * ...
+         * Run: <run name>
+         * Seed: <seed word>
+         * <word> <representation of color array output from comparison>
+         *
+         * The representation of the color array output will be as follows
+         * X - Gray Color (miss)
+         * Y - Yellow Color (indirect hit)
+         * G - Green Color (direct hit)
+         */
+    }
 }
