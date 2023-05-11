@@ -213,6 +213,7 @@ public class Guess {
         correctGuess = false; // reset correct guess flag
         guessButton.setDisable(false); // enable guess button
         hintButton.setDisable(false); // enable the hint button
+        // TODO: Add code to re-enable the multi-hint button
         wordle.setColorBuffer(null);
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // remove the hint label
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());

@@ -157,10 +157,18 @@ public class WordleController<T> implements Initializable {
     public void createHint(){
         hintLabel.setText(getGuess().getWordle().getLetterHint(getGuess().getWordle().getSecretWord()).toUpperCase());
         hintLabel.setPrefWidth(28 * getGuess().getWordle().getSecretWord().length());
-        System.out.println(getGuess().getWordle().getWordHints(5));
-        // TODO: Make a new hint button for the multiword hint as opposed to just stucking it here, US20
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
+    }
+
+    @FXML
+    public void createMultiHint(){
+        System.out.println(getGuess().getWordle().getWordHints(5));
+        // TODO: Create button and label to hold the multi-hint info
+        // TODO: Make the number of hints a named constant that is scaled based on word length
+        // <label>.setText("Possible words:\n"+getGuess().getWordle().getWordHints(5));
+        // <label>.setPrefWidth(28 * 5 * getGuess().getWordle().getSecretWord().length());
+        // <button>.setDisable(true);
     }
 
 
