@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Guess {
     @FXML
-    private VBox mainDisplay;
+    private VBox gameDisplay;
     @FXML
     private VBox userKeys;
     @FXML
@@ -61,13 +61,13 @@ public class Guess {
     private boolean isHardMode;
     private ToggleButton hardModeButton;
 
-    public Guess(VBox mainDisplay, VBox userKeys, WordleDisplay wordleDisplay, Wordle wordle, Button guessButton,
+    public Guess(VBox gameDisplay, VBox userKeys, WordleDisplay wordleDisplay, Wordle wordle, Button guessButton,
                  List<Integer> numGuessesList, Label numGuessesLabel, Button playAgainButton, Button hintButton,
                  Label commonLetterLabel, Label averageNumGuessesLabel, Label commonGuessLabel,
                  Label hintLabel, int numGuesses, boolean correctGuess, int gamesPlayed, int totalNumGuesses,
                  WordleController wordleController, Line line, KeyboardDisplay keyboardDisplay, boolean isHardMode,
                  ToggleButton hardModeButton) {
-        this.mainDisplay = mainDisplay;
+        this.gameDisplay = gameDisplay;
         this.userKeys = userKeys;
         this.wordleDisplay = wordleDisplay;
         this.wordle = wordle;
@@ -202,11 +202,15 @@ public class Guess {
 
         wordleDisplay.getWordleGrid().getChildren().clear();
         keyboardDisplay = new KeyboardDisplay(userKeys);
-        wordle = new Wordle(); // reset the wordle
+        if(wordle.getCurrentGuessFile() != null){
+            wordle = new Wordle(wordle.getCurrentGuessFile());
+        }else {
+            wordle = new Wordle(); // reset the wordle
+        }
         wordleDisplay = new WordleDisplay(6, wordle.getSecretWord().length(), guessButton, wordle);
         wordleController.setWordLength(wordle.getSecretWord().length());
-        mainDisplay.getChildren().set(1, line);
-        mainDisplay.getChildren().set(2, wordleDisplay.getWordleGrid());
+        gameDisplay.getChildren().set(1, line);
+        gameDisplay.getChildren().set(2, wordleDisplay.getWordleGrid());
 
         numGuesses = 0; // reset the number of guesses
         numGuessesLabel.setText("Current Guesses: 0");
@@ -222,7 +226,7 @@ public class Guess {
         WordleFileIO.saveWordFreq();
         WordleFileIO.loadWordFreq();
         WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,
-                WordleFileIO.LOG_ON_PRESS, mainDisplay);
+                WordleFileIO.LOG_ON_PRESS, gameDisplay);
     }
 
     /**
