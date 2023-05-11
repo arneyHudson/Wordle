@@ -14,7 +14,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Holds all the file input/output methods used by the wordle application.
@@ -278,10 +284,12 @@ public class WordleFileIO {
         ArrayList<String> words = new java.util.ArrayList<>(WordleFileIO.WORD_FREQUENCY.keySet().stream().toList());
         Collections.sort(words);
         for(String word: words){
-            sb.append(word);
-            sb.append(": ");
-            sb.append(WordleFileIO.WORD_FREQUENCY.get(word));
-            sb.append("\n");
+            if(WORD_FREQUENCY.get(word) != 0) {
+                sb.append(word);
+                sb.append(": ");
+                sb.append(WORD_FREQUENCY.get(word));
+                sb.append("\n");
+            }
         }
         textArea.setText(sb.toString());
     }

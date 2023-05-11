@@ -27,13 +27,40 @@ public class Wordle {
     private int remainingGuesses;
     private final Map<Character, Paint> lettersGuessed;
     private final List<String> words = new ArrayList<>();
+    private final List<String> guesses = new ArrayList<>();
     private final String secretWord;
     private Color[] colorBuffer;
+    private File currentGuessFile;
+
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
         this.secretWord = generateSecretWord(AdminController.getFile());
         lettersGuessed = new HashMap<>();
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream("src/guess_lists/wordle-official.txt")))){
+            String word = in.readLine();
+            while(word != null){
+                guesses.add(word.toLowerCase());
+                word = in.readLine();
+            }
+        }catch(IOException e){
+            System.out.println("Error: could not find guess list");
+        }
+    }
+    public Wordle(File guessListFile){
+        currentGuessFile = guessListFile;
+        this.remainingGuesses = MAX_GUESSES;
+        this.secretWord = generateSecretWord(AdminController.getFile());
+        lettersGuessed = new HashMap<>();
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(guessListFile)))){
+            String word = in.readLine();
+            while(word != null){
+                guesses.add(word.toLowerCase());
+                word = in.readLine();
+            }
+        }catch(IOException e){
+            System.out.println("Error: could not find guess list");
+        }
     }
 
     public String getSecretWord(){
@@ -51,7 +78,7 @@ public class Wordle {
                 fileInputStream = new FileInputStream(wordListFile);
             } else {
                 // Defaults to the word list at the start
-                fileInputStream = new FileInputStream("src/Group1/wordle-official.txt");
+                fileInputStream = new FileInputStream("src/word_lists/wordle-official.txt");
             }
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
@@ -78,7 +105,7 @@ public class Wordle {
      * @author NZawarus
      */
     public boolean checkRealWord(String guess){
-        return words.contains(guess);
+        return guesses.contains(guess);
     }
 
 
@@ -204,6 +231,12 @@ public class Wordle {
     }
     public List<String> getWords(){
         return words;
+    }
+    public File getCurrentGuessFile(){
+        return currentGuessFile;
+    }
+    public void setCurrentGuessFile(File guessFile){
+        this.currentGuessFile = guessFile;
     }
 
 

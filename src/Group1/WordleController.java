@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -28,6 +29,10 @@ import java.util.*;
  */
 public class WordleController<T> implements Initializable {
 
+    @FXML
+    private TabPane tabs;
+    @FXML
+    private VBox gameDisplay;
     @FXML
     private VBox mainDisplay;
     @FXML
@@ -88,15 +93,16 @@ public class WordleController<T> implements Initializable {
         line.setStartX(0);
         line.setEndX(450);
         line.setStrokeWidth(1.5);
-        mainDisplay.getChildren().add(1, line);
-        mainDisplay.getChildren().add(2, wordleDisplay.getWordleGrid());
+        gameDisplay.getChildren().add(1, line);
+        gameDisplay.getChildren().add(2, wordleDisplay.getWordleGrid());
         playAgainButton.setDisable(true);
         adminPanelOpen = false;
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         setupHardModeButton();
 
-        guess = new Guess(mainDisplay, userKeys, wordleDisplay, wordle, guessButton,
+
+        guess = new Guess(gameDisplay, userKeys, wordleDisplay, wordle, guessButton,
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
                 correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay, isHardMode,
@@ -104,7 +110,7 @@ public class WordleController<T> implements Initializable {
 
         guess.setHardMode(isHardMode); // Set the initial isHardMode value in the Guess object
         WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,
-                WordleFileIO.LOG_ON_PRESS, mainDisplay);
+                WordleFileIO.LOG_ON_PRESS, gameDisplay);
     }
 
     /**
