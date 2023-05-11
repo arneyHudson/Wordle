@@ -50,7 +50,11 @@ public class WordleController<T> implements Initializable {
     @FXML
     private Button hintButton;
     @FXML
+    private Button multiHintButton;
+    @FXML
     private Label hintLabel;
+    @FXML
+    private Label multiHintLabel;
     @FXML
     private Label commonLetterLabel;
     @FXML
@@ -165,16 +169,17 @@ public class WordleController<T> implements Initializable {
         hintLabel.setPrefWidth(28 * getGuess().getWordle().getSecretWord().length());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
+        multiHintButton.setDisable(true);
     }
 
     @FXML
     public void createMultiHint(){
-        System.out.println(getGuess().getWordle().getWordHints(5));
         // TODO: Create button and label to hold the multi-hint info
         // TODO: Make the number of hints a named constant that is scaled based on word length
-        // <label>.setText("Possible words:\n"+getGuess().getWordle().getWordHints(5));
-        // <label>.setPrefWidth(28 * 5 * getGuess().getWordle().getSecretWord().length());
-        // <button>.setDisable(true);
+        multiHintLabel.setText("Possible words:\n"+getGuess().getWordle().getWordHints(5));
+        multiHintLabel.setPrefWidth(28 * 5 * getGuess().getWordle().getSecretWord().length());
+        multiHintButton.setDisable(true);
+        hintButton.setDisable(true);
     }
 
 
