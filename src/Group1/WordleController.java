@@ -71,6 +71,7 @@ public class WordleController<T> implements Initializable {
     private Guess guess;
     private KeyboardDisplay keyboardDisplay;
     boolean isHardMode;
+    boolean[] disableHint = {false}; // Declare a boolean array to track the state of the hint button
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -98,11 +99,9 @@ public class WordleController<T> implements Initializable {
         adminPanelOpen = false;
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
+        setupHardModeButton();
 
-        hardModeButton.setOnAction(event -> {
-            toggleHardMode();
-            guess.setHardMode(isHardMode); // Update isHardMode in the Guess object
-        });
+
         guess = new Guess(gameDisplay, userKeys, wordleDisplay, wordle, guessButton,
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
@@ -140,6 +139,23 @@ public class WordleController<T> implements Initializable {
         } else {
             hardModeButton.setStyle("-fx-background-color:white");
         }
+    }
+
+    /**
+     * Used to set up the hard mode button. Also used in guess. Will make it so that
+     */
+    public void setupHardModeButton() {
+        int col = wordleDisplay.getWordleGrid().getColumnCount();
+        int row = wordleDisplay.getWordleGrid().getRowCount();
+
+        hardModeButton.setOnAction(event -> {
+            toggleHardMode();
+            guess.setHardMode(isHardMode); // Update isHardMode in the Guess object
+            wordleDisplay.getWordleGrid().getChildren().get(col * (row - wordle.getRemainingGuesses())).requestFocus();
+
+            disableHint[0] = !disableHint[0]; // Toggle the value of disableHint
+            hintButton.setDisable(disableHint[0]); // Set the disable property of the hint button
+        });
     }
 
 
