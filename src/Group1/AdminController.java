@@ -60,7 +60,7 @@ public class AdminController {
         for(String word: WordleFileIO.WORD_FREQUENCY.keySet()) {
             int score = WordleFileIO.WORD_FREQUENCY.get(word);
             for(char letter: word.toCharArray()) {
-                letter =  Character.toUpperCase(letter);
+                letter = Character.toUpperCase(letter);
                 if(WordleFileIO.CHARACTER_FREQUENCY.containsKey(letter)) {
                     score += WordleFileIO.CHARACTER_FREQUENCY.get(letter);
                 }
@@ -129,7 +129,7 @@ public class AdminController {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select Text File");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-            fileChooser.setInitialDirectory(new File("txt_files"));
+            fileChooser.setInitialDirectory(new File("src/word_lists"));
             selectedFile = fileChooser.showOpenDialog(new Stage());
             if (selectedFile != null) {
                 // Read the contents of the selected file
@@ -146,6 +146,8 @@ public class AdminController {
                         }
                     }
                 }
+                String guessPath = selectedFile.getAbsolutePath().replace("word_lists","guess_lists");
+                wordleController.getGuess().getWordle().setCurrentGuessFile(new File(guessPath));
                 reader.close(); // Close the input reader
                 wordleController.getGuess().restartGame(); // Restart the game in the Guess instance
                 String fileContent = stringBuilder.toString();

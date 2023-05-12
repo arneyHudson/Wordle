@@ -275,13 +275,18 @@ public class WordleFileIO {
     public static void fillWordArea(TextArea textArea){
         StringBuilder sb = new StringBuilder();
         sb.append("Guess Frequency:\n");
-        ArrayList<String> words = new java.util.ArrayList<>(WordleFileIO.WORD_FREQUENCY.keySet().stream().toList());
-        Collections.sort(words);
-        for(String word: words){
-            sb.append(word);
-            sb.append(": ");
-            sb.append(WordleFileIO.WORD_FREQUENCY.get(word));
-            sb.append("\n");
+        Map<String, Integer> sorted = new TreeMap<>(WORD_FREQUENCY);
+        List<Map.Entry<String, Integer>> save = new ArrayList<>(sorted.entrySet());
+        save.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+
+        for (Map.Entry<String, Integer> stringIntegerEntry : save) {
+            String word = stringIntegerEntry.getKey();
+            if (WORD_FREQUENCY.get(word) != 0) {
+                sb.append(word);
+                sb.append(": ");
+                sb.append(WORD_FREQUENCY.get(word));
+                sb.append("\n");
+            }
         }
         textArea.setText(sb.toString());
     }
