@@ -50,7 +50,11 @@ public class WordleController<T> implements Initializable {
     @FXML
     private Button hintButton;
     @FXML
+    private Button multiHintButton;
+    @FXML
     private Label hintLabel;
+    @FXML
+    private Label multiHintLabel;
     @FXML
     private Label commonLetterLabel;
     @FXML
@@ -106,7 +110,7 @@ public class WordleController<T> implements Initializable {
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
                 correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay, isHardMode,
-                hardModeButton);
+                hardModeButton, multiHintButton, multiHintLabel);
 
         guess.setHardMode(isHardMode); // Set the initial isHardMode value in the Guess object
         WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,
@@ -165,6 +169,38 @@ public class WordleController<T> implements Initializable {
         hintLabel.setPrefWidth(28 * getGuess().getWordle().getSecretWord().length());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
+        multiHintButton.setDisable(true);
+    }
+
+    @FXML
+    public void createMultiHint(){
+        multiHintLabel.setText(listToString(shuffle(getGuess().getWordle().getWordHints(5))));
+        multiHintLabel.setPrefWidth(10 * 5 * getGuess().getWordle().getSecretWord().length());
+        multiHintButton.setDisable(true);
+        hintButton.setDisable(true);
+    }
+
+    private String listToString(List<String> strings){
+        String ret = "";
+        for(int i = 0; i < strings.size(); ++i){
+            ret += strings.get(i);
+            if(i != strings.size() -1){
+                ret+=" | ";
+            }
+        }
+        return ret;
+    }
+
+    private List<String> shuffle(List<String> strings){
+        String[] ret = new String[strings.size()];
+        for(int i = strings.size()-1; i >= 0; --i){
+            int index = (int)(Math.random()*strings.size());
+            while(ret[index] != null){
+                index = (int)(Math.random()*strings.size());
+            }
+            ret[index] = strings.get(i);
+        }
+        return Arrays.stream(ret).toList();
     }
 
 
