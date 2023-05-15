@@ -25,6 +25,7 @@ public class Main extends Application {
         WordleFileIO.initializeLogFile();
         WordleFileIO.loadMainCharacterFrequency();
         WordleFileIO.loadWordFreq();
+        WordleFileIO.loadHighScore();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/Group1/Wordle.fxml"));
         Parent root = loader.load();

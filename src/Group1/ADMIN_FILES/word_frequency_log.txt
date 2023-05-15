@@ -1699,7 +1699,7 @@ coupelet 0
 acidized 0
 somatism 0
 martin 0
-chord 0
+chord 1
 chore 0
 fiendful 0
 appetite 0
@@ -4028,7 +4028,7 @@ semispan 0
 crustily 0
 requiz 0
 bailouts 0
-seize 0
+seize 1
 myelitis 0
 locellus 0
 chevener 0
@@ -5739,7 +5739,7 @@ justiced 0
 mesitite 0
 nailwort 0
 reminder 0
-lover 0
+lover 1
 qurushes 0
 revels 0
 premier 0
@@ -5779,7 +5779,7 @@ latian 0
 beclothe 0
 picara 0
 averts 0
-raise 0
+raise 1
 goddamns 0
 revere 0
 reverb 0
@@ -6767,7 +6767,7 @@ presee 0
 unforded 0
 whirrick 0
 churn 0
-tithe 0
+tithe 1
 restitch 0
 defended 0
 preser 0
@@ -8852,7 +8852,7 @@ noesises 0
 flakelet 0
 tamperer 0
 decker 0
-fungi 0
+fungi 1
 foster 0
 arcanist 0
 toyman 0
@@ -9676,7 +9676,7 @@ civets 0
 rhizopod 0
 jockos 0
 poster 0
-snort 0
+snort 1
 bisson 0
 necker 0
 overtrod 0
@@ -11556,7 +11556,7 @@ gladiate 0
 napiform 0
 coequate 0
 oxysalts 0
-gully 0
+gully 1
 beresite 0
 spurting 0
 dobies 0
@@ -13347,7 +13347,7 @@ tillot 0
 burnoose 0
 achiotes 0
 garb 0
-taffy 0
+taffy 1
 ametrous 0
 portly 0
 salon 0
@@ -13382,7 +13382,7 @@ dilutive 0
 taisho 0
 murenger 0
 ankushes 0
-unfed 0
+unfed 1
 rubedity 0
 gats 0
 knacking 0
@@ -13871,7 +13871,7 @@ vanload 0
 chemis 0
 unnimbly 0
 fanums 0
-bigot 0
+bigot 1
 rentable 0
 mariachi 0
 braid 0
@@ -14007,7 +14007,7 @@ unhumane 0
 pourable 0
 cuttoo 0
 ferbam 0
-cider 0
+cider 1
 decumary 0
 comber 0
 bugs 0
@@ -14121,7 +14121,7 @@ irisroot 0
 leonardo 0
 zoophyte 0
 nagual 0
-taint 0
+taint 1
 tylopoda 0
 otorhinolaryngologic 0
 acidity 0
@@ -15000,7 +15000,7 @@ calvados 0
 minorate 0
 sabalote 0
 scotia 0
-snuck 0
+snuck 1
 cupful 0
 scotic 0
 traffick 0
@@ -16902,7 +16902,7 @@ larboard 0
 nucament 0
 lalang 0
 tarvia 0
-crazy 28
+crazy 29
 reaphook 0
 razor 0
 pioury 0
@@ -18885,7 +18885,7 @@ dipped 0
 incumber 0
 swanweed 0
 horseman 0
-bring 0
+bring 1
 brine 0
 sauce 0
 carryout 0
@@ -19146,7 +19146,7 @@ phimotic 0
 volcan 0
 slipup 0
 volcae 0
-bride 0
+bride 1
 edgingly 0
 alloxy 0
 devexity 0
@@ -21986,7 +21986,7 @@ dualisms 0
 flitwite 0
 luckly 0
 orgeat 0
-drawn 0
+drawn 1
 satury 0
 drawl 0
 acetin 0
@@ -25923,7 +25923,7 @@ baculoid 0
 nutpicks 0
 sceptral 0
 triodion 0
-eight 0
+eight 1
 occulted 0
 hemihdry 0
 cotele 0
@@ -26147,7 +26147,7 @@ bornitic 0
 aspiring 0
 enchisel 0
 surucucu 0
-dingo 0
+dingo 1
 faradaic 0
 daydream 0
 stobball 0
@@ -27198,7 +27198,7 @@ virgater 0
 virgates 0
 subsea 0
 selfward 0
-decor 0
+decor 1
 candid 0
 subheads 0
 dockside 0
@@ -28926,7 +28926,7 @@ multifid 0
 lasers 0
 batara 0
 fumade 0
-berth 0
+berth 1
 fortes 0
 shammish 0
 immature 0
@@ -31583,7 +31583,7 @@ mobbed 0
 syrphian 0
 sooth 0
 solidish 0
-sooty 0
+sooty 1
 fourness 0
 ratteens 0
 wishedly 0
@@ -31860,7 +31860,7 @@ planks 0
 galeodes 0
 physicophilosophical 0
 epicauta 0
-caddy 0
+caddy 1
 disbud 0
 overhope 0
 eucolite 0
@@ -33690,7 +33690,7 @@ precavae 0
 falconry 0
 slithery 0
 precaval 0
-stave 0
+stave 1
 mixtecan 0
 ctrl 0
 raptus 0
@@ -34368,7 +34368,7 @@ yule 0
 monist 0
 labelled 0
 telega 0
-staid 0
+staid 1
 outttore 0
 inners 0
 obolaria 0
@@ -35779,7 +35779,7 @@ laxist 0
 hear 0
 harten 0
 smashups 0
-frisk 0
+frisk 1
 theogony 0
 decius 0
 snuffman 0
@@ -36048,7 +36048,7 @@ unadjust 0
 windball 0
 danegelt 0
 clucky 0
-depot 0
+depot 1
 elegizes 0
 hemmed 0
 sound 0
@@ -36154,7 +36154,7 @@ plinks 0
 aponic 0
 corycian 0
 floreate 0
-baste 0
+baste 1
 quantile 0
 eolopile 0
 plateasm 0
@@ -37432,7 +37432,7 @@ culbuter 0
 repair 0
 euphonia 0
 steak 0
-steal 0
+steal 2
 advice 0
 copist 0
 almaciga 0
@@ -40810,7 +40810,7 @@ butchers 0
 enukki 0
 butchery 0
 promoted 0
-fella 0
+fella 1
 ribble 0
 autorail 0
 lastex 0
@@ -41914,7 +41914,7 @@ medicals 0
 hoggerel 0
 unmixt 0
 growlery 0
-giver 0
+giver 1
 enlist 0
 aposthia 0
 ebionize 0
@@ -42835,7 +42835,7 @@ cocobola 0
 knotting 0
 cannot 0
 parlours 0
-abbot 0
+abbot 1
 nicetish 0
 depark 0
 octet 0
@@ -44502,7 +44502,7 @@ stibiums 0
 yemeless 0
 poignado 0
 resupine 0
-ensue 0
+ensue 1
 soupiere 0
 blipping 0
 coach 0
@@ -44650,7 +44650,7 @@ fulgur 0
 alahee 0
 amenia 0
 eucrasia 0
-strut 0
+strut 1
 deseed 0
 nonuplet 0
 nonuples 0
@@ -45779,7 +45779,7 @@ typify 0
 yogasana 0
 sanest 0
 neuropharmacological 0
-stung 0
+stung 1
 moonbeam 0
 frumpish 0
 guarders 0
@@ -45795,7 +45795,7 @@ spongoid 0
 queers 0
 severe 0
 queery 0
-stunk 0
+stunk 1
 sarraf 0
 hypnic 0
 tarascan 0
@@ -45819,7 +45819,7 @@ kindle 0
 andriana 0
 mayhap 0
 panamist 0
-faint 0
+faint 1
 sandweed 0
 wedeling 0
 reliefer 0
@@ -45872,7 +45872,7 @@ pinnular 0
 pettiest 0
 bullfrog 0
 slippery 0
-vouch 0
+vouch 1
 metate 0
 larine 0
 seedball 0
@@ -46204,7 +46204,7 @@ beamless 0
 breadnut 0
 siloxane 0
 dozening 0
-stuck 0
+stuck 1
 miasma 0
 defalk 0
 ullucu 0
@@ -46254,7 +46254,7 @@ matzas 0
 study 0
 hums 0
 diag 0
-fever 0
+fever 1
 fibrotic 0
 srikanth 0
 totaling 0
@@ -47055,7 +47055,7 @@ terebras 0
 salvaged 0
 veleta 0
 scale 0
-scald 0
+scald 1
 chuchona 0
 jingoist 0
 fiberize 0
@@ -49173,7 +49173,7 @@ browless 0
 jadish 0
 sourdook 0
 vail 0
-hello 22
+hello 55
 wringers 0
 sarwan 0
 steepled 0
@@ -50178,7 +50178,7 @@ goutiest 0
 fierte 0
 teosinte 0
 streeler 0
-plunk 0
+plunk 1
 freudism 0
 liquated 0
 ashman 0
@@ -53729,7 +53729,7 @@ deafly 0
 quote 0
 thewlike 0
 quota 0
-scorn 0
+scorn 1
 accentor 0
 skimpier 0
 talweg 0
@@ -54658,7 +54658,7 @@ meritful 0
 alacha 0
 tonies 0
 nearside 0
-bound 0
+bound 1
 retainer 0
 oatcakes 0
 sergei 0
@@ -56317,7 +56317,7 @@ flexed 0
 hamber 0
 waldglas 0
 iffy 0
-agent 0
+agent 1
 macrural 0
 militia 0
 macruran 0
@@ -56747,7 +56747,7 @@ couronne 0
 buboes 0
 ungirt 0
 share 0
-shard 0
+shard 1
 juncus 0
 cucurbit 0
 autecism 0
@@ -58909,7 +58909,7 @@ theatre 0
 hepper 0
 corslets 0
 gibingly 0
-coven 0
+coven 1
 covey 0
 clavicle 0
 heppen 0
@@ -59965,7 +59965,7 @@ sheer 0
 sheet 0
 clonally 0
 sheen 0
-sheep 0
+sheep 1
 replevin 0
 langshan 0
 overwake 0
@@ -60250,7 +60250,7 @@ levied 0
 onrush 0
 sailer 0
 pannonic 0
-kneel 0
+kneel 1
 fifish 0
 courtage 0
 poleyn 0
@@ -61583,7 +61583,7 @@ rhea 0
 airsick 0
 simoniac 0
 sweety 0
-gayly 0
+gayly 1
 araeotic 0
 aperitif 0
 sweets 0
@@ -62026,7 +62026,7 @@ suaeda 0
 scalades 0
 bolsters 0
 mythos 0
-sully 0
+sully 1
 vugs 0
 bivial 0
 foggy 0
@@ -62358,7 +62358,7 @@ rile 0
 domboc 0
 culottes 0
 okayed 0
-medic 0
+medic 1
 mucors 0
 media 0
 shitheel 0
@@ -62648,7 +62648,7 @@ roaching 0
 beento 0
 earner 0
 exiles 0
-shire 0
+shire 1
 serranus 0
 exiler 0
 shirk 0
@@ -62996,7 +62996,7 @@ edda 0
 whirlies 0
 whirlier 0
 slunk 0
-agora 0
+agora 1
 nigrosin 0
 seatbelt 0
 cleanest 0
@@ -63120,7 +63120,7 @@ glycolic 0
 kurikata 0
 empasm 0
 hebdomad 0
-minus 0
+minus 1
 checking 0
 olfact 0
 halalcor 0
@@ -64361,7 +64361,7 @@ jumblers 0
 exegesis 0
 tacoma 0
 groose 0
-downy 0
+downy 1
 sunrooms 0
 boltonia 0
 reflow 0
@@ -64897,7 +64897,7 @@ nomadize 0
 conceded 0
 rivalism 0
 morass 0
-ninny 0
+ninny 1
 eggs 0
 rombos 0
 baklavas 0
@@ -67050,7 +67050,7 @@ conglobe 0
 ornithes 0
 equinox 0
 rvulsant 0
-shoal 0
+shoal 1
 mosswort 0
 misthink 0
 partie 0
@@ -67413,7 +67413,7 @@ sicilian 0
 bungtown 0
 piaffing 0
 chaste 0
-apply 0
+apply 1
 buckrams 0
 procourt 0
 impave 0
@@ -69640,7 +69640,7 @@ nardoo 0
 sofane 0
 had 0
 exoascus 0
-align 0
+align 1
 secure 0
 hae 0
 guided 0
@@ -71577,7 +71577,7 @@ icterous 0
 preworn 0
 sanative 0
 revuists 0
-alive 0
+alive 1
 arabizes 0
 rococo 0
 pursuit 0
@@ -71692,7 +71692,7 @@ macro 0
 kay 0
 promic 0
 hindoo 0
-thong 0
+thong 1
 superserviceableness 0
 ragtimey 0
 squeaker 0
@@ -72545,7 +72545,7 @@ lin 0
 geoffrey 0
 lip 0
 antacrid 0
-smelt 0
+smelt 1
 skimmers 0
 lit 0
 lis 0
@@ -72553,7 +72553,7 @@ slapping 0
 gnattier 0
 crabfish 0
 agroof 0
-homer 0
+homer 1
 thewed 0
 catocala 0
 foulmart 0
@@ -73426,7 +73426,7 @@ labidura 0
 senarian 0
 serology 0
 beltie 0
-alley 0
+alley 1
 selfcide 0
 spasms 0
 frostier 0
@@ -74013,7 +74013,7 @@ musqueto 0
 blimp 0
 swamphen 0
 now 0
-lanky 0
+lanky 1
 ennead 0
 strind 0
 cockeyes 0
@@ -76479,7 +76479,7 @@ axonemal 0
 cockatoo 0
 ghorkhar 0
 protei 0
-pried 0
+pried 1
 protea 0
 epichile 0
 procure 0
@@ -77463,7 +77463,7 @@ kickapoo 0
 fettered 0
 nomogram 0
 sky 0
-large 0
+large 1
 unpacker 0
 galilees 0
 myopes 0
@@ -78698,7 +78698,7 @@ survive 0
 gerendum 0
 prechill 0
 hound 0
-blown 0
+blown 1
 gainst 0
 markhors 0
 alioth 0
@@ -80780,7 +80780,7 @@ humanate 0
 rejector 0
 undoings 0
 wormwood 0
-joint 0
+joint 1
 separate 0
 alangine 0
 nearlier 0
@@ -81848,7 +81848,7 @@ neutrals 0
 profaned 0
 toughy 0
 tought 0
-bully 0
+bully 1
 toughs 0
 parental 0
 swifters 0
@@ -82895,7 +82895,7 @@ polyopia 0
 shimmied 0
 azores 0
 aumildar 0
-mauve 0
+mauve 1
 formally 0
 birching 0
 outran 0
@@ -83840,7 +83840,7 @@ strombus 0
 triazins 0
 derris 0
 sumbal 0
-reach 0
+reach 1
 react 0
 unsnugly 0
 setula 0
@@ -84489,7 +84489,7 @@ paegel 0
 chest 0
 regluing 0
 segued 0
-chess 0
+chess 1
 itauba 0
 involves 0
 involver 0
@@ -86236,7 +86236,7 @@ enseat 0
 laboured 0
 tuboid 0
 enseam 0
-burst 0
+burst 1
 enseal 0
 besprent 0
 amoretto 0
@@ -89142,7 +89142,7 @@ hellbred 0
 rebukers 0
 menthe 0
 modem 0
-model 0
+model 1
 axillant 0
 camellia 0
 concurso 0

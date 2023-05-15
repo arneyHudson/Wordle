@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -22,14 +23,40 @@
                      <children>
                         <VBox fx:id="gameDisplay" alignment="TOP_CENTER" layoutX="-1.0" prefHeight="700.0" prefWidth="450.0" spacing="2.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" text="Wordle" textFill="WHITE">
-                                 <font>
-                                    <Font name="Rockwell Condensed Bold" size="32.0" />
-                                 </font>
+                              <HBox fx:id="topBar" prefHeight="50.0" prefWidth="450.0" spacing="36.0">
+                                 <children>
+                                    <Label alignment="TOP_LEFT" maxWidth="125.0" minWidth="75.0" prefHeight="50.0" prefWidth="90.0" text="Time: 0.00" textFill="WHITE">
+                                       <font>
+                                          <Font name="Rockwell Condensed Bold" size="18.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Wordle" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Rockwell Condensed Bold" size="32.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label alignment="TOP_LEFT" maxWidth="125.0" minWidth="75.0" prefHeight="50.0" prefWidth="90.0" text="Best: 60.00" textFill="WHITE">
+                                       <font>
+                                          <Font name="Rockwell Condensed Bold" size="18.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
                                  <padding>
-                                    <Insets top="10.0" />
+                                    <Insets right="84.0" />
                                  </padding>
-                              </Label>
+                              </HBox>
                               <VBox fx:id="userKeys" prefHeight="20.0" prefWidth="450.0">
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
@@ -176,6 +203,62 @@
                      </children></AnchorPane>
             </content>
           </Tab>
+           <Tab text="High Score">
+              <content>
+                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                       <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="450.0" spacing="10.0" style="-fx-background-color: #1b1b1b;">
+                          <children>
+                             <Label alignment="CENTER" contentDisplay="CENTER" text="Wordle" textAlignment="CENTER" textFill="WHITE">
+                                <font>
+                                   <Font name="Rockwell Condensed Bold" size="32.0" />
+                                </font>
+                                <padding>
+                                   <Insets top="10.0" />
+                                </padding>
+                             </Label>
+                             <Line endX="225.0" startX="-225.0" stroke="GREY" strokeWidth="1.5" />
+                             <HBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="450.0" spacing="85.0">
+                                <children>
+                                   <Label alignment="CENTER" contentDisplay="CENTER" text="Word" textAlignment="CENTER" textFill="WHITE">
+                                      <font>
+                                         <Font name="Rockwell Condensed Bold" size="32.0" />
+                                      </font>
+                                      <padding>
+                                         <Insets top="10.0" />
+                                      </padding>
+                                   </Label>
+                                   <Label alignment="CENTER" contentDisplay="CENTER" text="Time" textAlignment="CENTER" textFill="WHITE">
+                                      <font>
+                                         <Font name="Rockwell Condensed Bold" size="32.0" />
+                                      </font>
+                                      <padding>
+                                         <Insets top="10.0" />
+                                      </padding>
+                                   </Label>
+                                   <Label alignment="CENTER" contentDisplay="CENTER" text="Guess" textAlignment="CENTER" textFill="WHITE">
+                                      <font>
+                                         <Font name="Rockwell Condensed Bold" size="32.0" />
+                                      </font>
+                                      <padding>
+                                         <Insets top="10.0" />
+                                      </padding>
+                                   </Label>
+                                </children>
+                             </HBox>
+                             <HBox fx:id="highScoreDisplay" prefHeight="450.0" prefWidth="450.0">
+                                <children>
+                                   <TextArea prefHeight="450.0" prefWidth="450.0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font></TextArea>
+                                </children>
+                             </HBox>
+                          </children>
+                       </VBox>
+                    </children></AnchorPane>
+              </content>
+           </Tab>
         </tabs>
       </TabPane>
    </children>
