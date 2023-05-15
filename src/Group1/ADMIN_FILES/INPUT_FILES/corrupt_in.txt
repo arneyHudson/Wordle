@@ -1,0 +1,6 @@
+BEGIN_TEST
+BEGIN_RUN the cursed run
+BEGIN_RUN the wrong run
+END_RUN
+BEGIN_TEST
+END_TEST
