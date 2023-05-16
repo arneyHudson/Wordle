@@ -27,13 +27,40 @@ public class Wordle {
     private int remainingGuesses;
     private final Map<Character, Paint> lettersGuessed;
     private final List<String> words = new ArrayList<>();
+    private final List<String> guesses = new ArrayList<>();
     private final String secretWord;
     private Color[] colorBuffer;
+    private File currentGuessFile;
+
 
     public Wordle() {
         this.remainingGuesses = MAX_GUESSES;
         this.secretWord = generateSecretWord(AdminController.getFile());
         lettersGuessed = new HashMap<>();
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream("src/guess_lists/wordle-official.txt")))){
+            String word = in.readLine();
+            while(word != null){
+                guesses.add(word.toLowerCase());
+                word = in.readLine();
+            }
+        }catch(IOException e){
+            System.out.println("Error: could not find guess list");
+        }
+    }
+    public Wordle(File guessListFile){
+        currentGuessFile = guessListFile;
+        this.remainingGuesses = MAX_GUESSES;
+        this.secretWord = generateSecretWord(AdminController.getFile());
+        lettersGuessed = new HashMap<>();
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(guessListFile)))){
+            String word = in.readLine();
+            while(word != null){
+                guesses.add(word.toLowerCase());
+                word = in.readLine();
+            }
+        }catch(IOException e){
+            System.out.println("Error: could not find guess list");
+        }
     }
 
     public String getSecretWord(){
@@ -51,7 +78,7 @@ public class Wordle {
                 fileInputStream = new FileInputStream(wordListFile);
             } else {
                 // Defaults to the word list at the start
-                fileInputStream = new FileInputStream("src/Group1/wordle-official.txt");
+                fileInputStream = new FileInputStream("src/word_lists/wordle-official.txt");
             }
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
@@ -78,7 +105,7 @@ public class Wordle {
      * @author NZawarus
      */
     public boolean checkRealWord(String guess){
-        return words.contains(guess);
+        return guesses.contains(guess);
     }
 
 
@@ -176,7 +203,7 @@ public class Wordle {
     }
 
     /**
-     * Meathod that takes in a guess and a secret word and checks if
+     * Method that takes in a guess and a secret word and checks if
      * any of the letters are in the secret word and adds them to the Map.
      * If the letter is in the word its saved as Color.GREEN and Color.GRAY
      * if it isn't
@@ -205,5 +232,87 @@ public class Wordle {
     public List<String> getWords(){
         return words;
     }
+    public File getCurrentGuessFile(){
+        return currentGuessFile;
+    }
+    public void setCurrentGuessFile(File guessFile){
+        this.currentGuessFile = guessFile;
+    }
 
+
+    /**
+     * Checks to make sure that the given word could theoretically fit in the hint.
+     * @return If the word could be a hint
+     */
+    private static boolean eligibleForHint(String theHint, String theTruth, Color[] colorBuffer){
+        Color[] compareBuffer = perWordLetterCheck(theHint, theTruth);
+        boolean ret = true;
+        int mimimumMatches = 0;
+        int compareMatches = 0;
+        for(int i = 0; i < colorBuffer.length && ret; ++i){
+            if(colorBuffer[i] == DIRECT_COLOR){
+                ret = compareBuffer[i] == DIRECT_COLOR;
+            } else {
+                if(colorBuffer[i] == INDIRECT_COLOR){
+                    ++mimimumMatches;
+                }
+                if(compareBuffer[i] == INDIRECT_COLOR || compareBuffer[i] == DIRECT_COLOR){
+                    ++compareMatches;
+                }
+            }
+        }
+        return ret && compareMatches >= mimimumMatches;
+    }
+
+
+    /**
+     * Returns a list of words hints from the static method of the same name, using the instance variables
+     *
+     * As of note with the static method, the secret word will always be placed at the end of this list
+     * It is therefore expected that the program will shuffle the list itself after calling this method
+     * @param numHints The number of hints to include, does not include the secret word.
+     * @return The list of hints including the secret word, unshuffled.
+     */
+    public List<String> getWordHints(int numHints){
+        return getWordHints(secretWord, colorBuffer, words, numHints);
+    }
+
+    /**
+     * For User Story 20, returns a list of words that fill the criteria of the given buffer, as well as
+     * the true word itself (passed in so that there is not unintentionally a repeat)
+     *
+     * Of note, the list is not shuffled so the 'true' word will always be the last entry
+     * Therefore, it is expected that the user actually shuffle the list of hints.
+     * @param theTruth The secret word
+     * @param colors The color buffer used to block out obvious fails
+     * @param words The list of word to pull the hints from
+     * @param numHints The number of hint words to put in the collection, not including the true word
+     * @return A list containing the hint words and the secret word
+     */
+    public static List<String> getWordHints(String theTruth, Color[] colors,
+                                                  List<String> words, int numHints){
+        final int CHANCE_DIVISOR = 100; // change as desired, performance vs difficulty
+
+        if (colors == null){
+            colors = new Color[theTruth.length()];
+            for(int i = 0; i < theTruth.length(); ++i){
+                colors[i] = NONE_COLOR;
+            }
+        }
+
+        List<String> ret = new ArrayList<>();
+        while(ret.size() < numHints - 1){
+            for(int i = 0; i < words.size() && ret.size() < numHints - 1; ++i){
+                if(eligibleForHint(words.get(i), theTruth, colors)){
+                    if(Math.random() < (float)1/CHANCE_DIVISOR){
+                        ret.add(words.get(i));
+                    }
+                }
+            }
+        }
+
+        ret.add(theTruth);
+        return ret;
+
+    }
 }

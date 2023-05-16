@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -31,6 +32,10 @@ import java.util.*;
 public class WordleController<T> implements Initializable {
 
     @FXML
+    private TabPane tabs;
+    @FXML
+    private VBox gameDisplay;
+    @FXML
     private VBox mainDisplay;
     @FXML
     private VBox userKeys;
@@ -47,7 +52,11 @@ public class WordleController<T> implements Initializable {
     @FXML
     private Button hintButton;
     @FXML
+    private Button multiHintButton;
+    @FXML
     private Label hintLabel;
+    @FXML
+    private Label multiHintLabel;
     @FXML
     private Label commonLetterLabel;
     @FXML
@@ -56,6 +65,10 @@ public class WordleController<T> implements Initializable {
     private Line line;
     @FXML
     private ToggleButton hardModeButton;
+    @FXML
+    private HBox topBar;
+    @FXML
+    private HBox highScoreDisplay;
     private final List<Integer> numGuessesList = new ArrayList<>();
     private int gamesPlayed;
     private int numGuesses;
@@ -83,30 +96,31 @@ public class WordleController<T> implements Initializable {
         wordle = new Wordle();
         WordleFileIO.initializeWordFreq(wordle.getWords());
         keyboardDisplay = new KeyboardDisplay(userKeys);
-        wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
+        wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle, topBar, highScoreDisplay);
         wordLength = 5;
         line = new Line();
         line.setStroke(Wordle.NONE_COLOR);
         line.setStartX(0);
         line.setEndX(450);
         line.setStrokeWidth(1.5);
-        mainDisplay.getChildren().add(1, line);
-        mainDisplay.getChildren().add(2, wordleDisplay.getWordleGrid());
+        gameDisplay.getChildren().add(1, line);
+        gameDisplay.getChildren().add(2, wordleDisplay.getWordleGrid());
         playAgainButton.setDisable(true);
         adminPanelOpen = false;
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
         setupHardModeButton();
 
-        guess = new Guess(mainDisplay, userKeys, wordleDisplay, wordle, guessButton,
+
+        guess = new Guess(gameDisplay, userKeys, wordleDisplay, wordle, guessButton,
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
                 correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay, isHardMode,
-                hardModeButton);
+                hardModeButton, topBar, highScoreDisplay, multiHintButton, multiHintLabel);
 
         guess.setHardMode(isHardMode); // Set the initial isHardMode value in the Guess object
         WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,
-                WordleFileIO.LOG_ON_PRESS, mainDisplay);
+                WordleFileIO.LOG_ON_PRESS, gameDisplay);
     }
 
     /**
@@ -165,6 +179,38 @@ public class WordleController<T> implements Initializable {
         hintLabel.setPrefWidth(28 * getGuess().getWordle().getSecretWord().length());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
+        multiHintButton.setDisable(true);
+    }
+
+    @FXML
+    public void createMultiHint(){
+        multiHintLabel.setText(listToString(shuffle(getGuess().getWordle().getWordHints(5))));
+        multiHintLabel.setPrefWidth(10 * 5 * getGuess().getWordle().getSecretWord().length());
+        multiHintButton.setDisable(true);
+        hintButton.setDisable(true);
+    }
+
+    private String listToString(List<String> strings){
+        String ret = "";
+        for(int i = 0; i < strings.size(); ++i){
+            ret += strings.get(i);
+            if(i != strings.size() -1){
+                ret+=" | ";
+            }
+        }
+        return ret;
+    }
+
+    private List<String> shuffle(List<String> strings){
+        String[] ret = new String[strings.size()];
+        for(int i = strings.size()-1; i >= 0; --i){
+            int index = (int)(Math.random()*strings.size());
+            while(ret[index] != null){
+                index = (int)(Math.random()*strings.size());
+            }
+            ret[index] = strings.get(i);
+        }
+        return Arrays.stream(ret).toList();
     }
 
 
