@@ -149,9 +149,7 @@ public class AdminController {
                 wordleController.getGuess().getWordle().setCurrentGuessFile(new File(guessPath));
                 reader.close(); // Close the input reader
                 wordleController.getGuess().restartGame(); // Restart the game in the Guess instance
-                String fileContent = stringBuilder.toString();
                 wordleController.closeAdmin(stage); // Close the Admin Panel
-                // System.out.println("File content: " + fileContent);
             }
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

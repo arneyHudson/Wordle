@@ -51,6 +51,8 @@ public class Guess {
     private SetColor setColor;
     private boolean isHardMode;
     private ToggleButton hardModeButton;
+    private boolean[] disableHint = {false}; // Declare a boolean array to track the state of the hint button
+
     private HBox topBar;
     private HBox highScoreDisplay;
 
@@ -101,6 +103,7 @@ public class Guess {
         int col = wordleDisplay.getWordleGrid().getColumnCount();
         int row = wordleDisplay.getWordleGrid().getRowCount();
         int remain = wordle.getRemainingGuesses();
+
         wordleController.setupHardModeButton();
 
         for (int i = 0; i < col; i++) {
@@ -180,6 +183,7 @@ public class Guess {
             playAgainButton.setDisable(false);
             playAgainButton.requestFocus();
             hintButton.setDisable(true);
+            wordleController.setupHardModeButton();
 
             playAgainButton.setOnAction(event -> restartGame());
         }
@@ -247,4 +251,5 @@ public class Guess {
     public void setHardMode(boolean isHardMode) {
         this.isHardMode = isHardMode;
     }
+
 }

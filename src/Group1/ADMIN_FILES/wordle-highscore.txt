@@ -1,7 +1,9 @@
+octal 60.0 6
 agent 0.93 0
 alive 60.0 6
 stave 1.11 0
 steal 0.82 0
+revue 60.0 6
 reach 60.0 6
 bring 3.78 1
 medic 60.0 6
@@ -19,6 +21,7 @@ sheep 0.76 1
 faint 60.0 6
 large 60.0 6
 apply 0.71 1
+moth 60.0 6
 stung 60.0 6
 lover 0.63 2
 thong 0.84 1
@@ -32,5 +35,6 @@ chord 60.0 6
 crazy 60.0 6
 ensue 0.75 2
 taffy 60.0 6
+erin 60.0 6
 snort 60.0 6
 END
