@@ -104,7 +104,7 @@ public class Guess {
         int row = wordleDisplay.getWordleGrid().getRowCount();
         int remain = wordle.getRemainingGuesses();
 
-        setupHardModeButton();
+        wordleController.setupHardModeButton();
 
         for (int i = 0; i < col; i++) {
             guess.append(((TextField) children.get(i + col * (row - remain))).getText());
@@ -250,20 +250,6 @@ public class Guess {
 
     public void setHardMode(boolean isHardMode) {
         this.isHardMode = isHardMode;
-    }
-
-    /**
-     * Used to set up the hard mode button. Also used in guess. Will make it so that
-     */
-    public void setupHardModeButton() {
-        int col = wordleDisplay.getWordleGrid().getColumnCount();
-        int row = wordleDisplay.getWordleGrid().getRowCount();
-        hardModeButton.setOnAction(event -> {
-            if(wordleDisplay.getWordleGrid().getChildren().size() > 0) {
-                wordleDisplay.getWordleGrid().getChildren().get(col * (row - wordle.getRemainingGuesses())).requestFocus();
-            }
-            wordleController.setupHardModeButton();
-        });
     }
 
 }
