@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,32 +26,19 @@ import java.util.List;
  * Guess class that takes in the parameters from the controller and updates the GUI accordingly
  */
 public class Guess {
-    @FXML
     private VBox gameDisplay;
-    @FXML
     private VBox userKeys;
-    @FXML
     private WordleDisplay wordleDisplay;
-    @FXML
     private Wordle wordle;
-    @FXML
     private Button guessButton;
     private final List<Integer> numGuessesList;
-    @FXML
     private Label numGuessesLabel;
-    @FXML
     private Button playAgainButton;
-    @FXML
     private Button hintButton;
-    @FXML
     private Button multiHintButton;
-    @FXML
     private Label commonLetterLabel;
-    @FXML
     private Label averageNumGuessesLabel;
-    @FXML
     private Label commonGuessLabel;
-    @FXML
     private KeyboardDisplay keyboardDisplay;
     private boolean correctGuess;
     private int numGuesses;
@@ -63,13 +51,15 @@ public class Guess {
     private SetColor setColor;
     private boolean isHardMode;
     private ToggleButton hardModeButton;
+    private HBox topBar;
+    private HBox highScoreDisplay;
 
     public Guess(VBox gameDisplay, VBox userKeys, WordleDisplay wordleDisplay, Wordle wordle, Button guessButton,
                  List<Integer> numGuessesList, Label numGuessesLabel, Button playAgainButton, Button hintButton,
                  Label commonLetterLabel, Label averageNumGuessesLabel, Label commonGuessLabel,
                  Label hintLabel, int numGuesses, boolean correctGuess, int gamesPlayed, int totalNumGuesses,
                  WordleController wordleController, Line line, KeyboardDisplay keyboardDisplay, boolean isHardMode,
-                 ToggleButton hardModeButton, Button multiHintButton, Label multiHintLabel) {
+                 ToggleButton hardModeButton, HBox topBar, HBox highScoreDisplay, Button multiHintButton, Label multiHintLabel) {
         this.gameDisplay = gameDisplay;
         this.userKeys = userKeys;
         this.wordleDisplay = wordleDisplay;
@@ -92,6 +82,8 @@ public class Guess {
         this.keyboardDisplay = keyboardDisplay;
         this.isHardMode = isHardMode;
         this.hardModeButton = hardModeButton;
+        this.topBar = topBar;
+        this.highScoreDisplay = highScoreDisplay;
         this.multiHintLabel = multiHintLabel;
         this.multiHintButton = multiHintButton;
         setColor = new SetColor(this.wordleDisplay, this.wordle, this.userKeys, this.isHardMode);
@@ -120,6 +112,7 @@ public class Guess {
             WordleFileIO.saveMainCharacterFrequency();
             WordleFileIO.addToWordFreq(guess.toString(), WordleFileIO.WORD_FREQUENCY);
             WordleFileIO.saveWordFreq();
+            WordleFileIO.saveHighScore();
             for (int i = 0; i < col; i++) {
                 children.get(i + col * (row - remain)).setDisable(true);
                 ((TextField) children.get(i + col * (row - remain))).setEditable(false);
@@ -142,6 +135,7 @@ public class Guess {
             numGuessesList.add(numGuesses++);
             if (guess.toString().equalsIgnoreCase(wordle.getSecretWord())) {
                 correctGuess = true;
+                wordleDisplay.setPlaying(false);
             }
         } else if(guess.toString().matches("^[xX]+$")) {
             wordleController.startAdminPanel(wordleController);
@@ -212,7 +206,7 @@ public class Guess {
         }else {
             wordle = new Wordle(); // reset the wordle
         }
-        wordleDisplay = new WordleDisplay(6, wordle.getSecretWord().length(), guessButton, wordle);
+        wordleDisplay = new WordleDisplay(6, wordle.getSecretWord().length(), guessButton, wordle, topBar, highScoreDisplay);
         wordleController.setWordLength(wordle.getSecretWord().length());
         gameDisplay.getChildren().set(1, line);
         gameDisplay.getChildren().set(2, wordleDisplay.getWordleGrid());

@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -39,6 +40,7 @@ public class WordleFileIO {
 
     public static HashMap<Character, Integer> CHARACTER_FREQUENCY = new HashMap<>();
     public static HashMap<String, Integer> WORD_FREQUENCY = new HashMap<>();
+    public static HashMap<String, String[]> HIGHSCORES = new HashMap<>();
     public static final Path CHAR_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/character_frequency_log.txt");
     public static final Path WORD_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/word_frequency_log.txt");
     public static Path LOG_PATH;
@@ -350,6 +352,40 @@ public class WordleFileIO {
      */
     private static String replaceColons(String in){
         return in.replace(':','-');
+    }
+
+    /**
+     * The loadHighScore method looks at the wordle-highscore text file and updates the highscore hashmap
+     */
+    public static void loadHighScore() {
+        try(Scanner in = new Scanner(new File("src/Group1/ADMIN_FILES/wordle-highscore.txt"))) {
+            String current = in.nextLine();
+            while (!current.equals(END_LINE)){
+                String[] line = current.split("\\s+");
+                HIGHSCORES.put(line[0], line);
+                current = in.nextLine();
+            }
+        } catch (IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
+    }
+
+    public static void saveHighScore() {
+        try(FileWriter out = new FileWriter("src/Group1/ADMIN_FILES/wordle-highscore.txt")){
+            for(String word: WordleFileIO.HIGHSCORES.keySet()) {
+                String[] line = WordleFileIO.HIGHSCORES.get(word);
+                out.write(line[0] + " " + line[1] + " " + line[2] + "\n");
+            }
+            out.write("END");
+        } catch (IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
     }
 
 }

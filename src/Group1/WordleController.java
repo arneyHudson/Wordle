@@ -63,6 +63,10 @@ public class WordleController<T> implements Initializable {
     private Line line;
     @FXML
     private ToggleButton hardModeButton;
+    @FXML
+    private HBox topBar;
+    @FXML
+    private HBox highScoreDisplay;
     private final List<Integer> numGuessesList = new ArrayList<>();
     private int gamesPlayed;
     private int numGuesses;
@@ -90,7 +94,7 @@ public class WordleController<T> implements Initializable {
         wordle = new Wordle();
         WordleFileIO.initializeWordFreq(wordle.getWords());
         keyboardDisplay = new KeyboardDisplay(userKeys);
-        wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
+        wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle, topBar, highScoreDisplay);
         wordLength = 5;
         line = new Line();
         line.setStroke(Wordle.NONE_COLOR);
@@ -110,7 +114,7 @@ public class WordleController<T> implements Initializable {
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
                 correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay, isHardMode,
-                hardModeButton, multiHintButton, multiHintLabel);
+                hardModeButton, topBar, highScoreDisplay, multiHintButton, multiHintLabel);
 
         guess.setHardMode(isHardMode); // Set the initial isHardMode value in the Guess object
         WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,

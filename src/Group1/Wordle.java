@@ -203,7 +203,7 @@ public class Wordle {
     }
 
     /**
-     * Meathod that takes in a guess and a secret word and checks if
+     * Method that takes in a guess and a secret word and checks if
      * any of the letters are in the secret word and adds them to the Map.
      * If the letter is in the word its saved as Color.GREEN and Color.GRAY
      * if it isn't
