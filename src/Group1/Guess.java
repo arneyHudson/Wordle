@@ -60,6 +60,8 @@ public class Guess {
     private SetColor setColor;
     private boolean isHardMode;
     private ToggleButton hardModeButton;
+    private boolean[] disableHint = {false}; // Declare a boolean array to track the state of the hint button
+
 
     public Guess(VBox mainDisplay, VBox userKeys, WordleDisplay wordleDisplay, Wordle wordle, Button guessButton,
                  List<Integer> numGuessesList, Label numGuessesLabel, Button playAgainButton, Button hintButton,
@@ -104,7 +106,8 @@ public class Guess {
         int col = wordleDisplay.getWordleGrid().getColumnCount();
         int row = wordleDisplay.getWordleGrid().getRowCount();
         int remain = wordle.getRemainingGuesses();
-        wordleController.setupHardModeButton();
+
+        setupHardModeButton();
 
         for (int i = 0; i < col; i++) {
             guess.append(((TextField) children.get(i + col * (row - remain))).getText());
@@ -181,6 +184,7 @@ public class Guess {
             playAgainButton.setDisable(false);
             playAgainButton.requestFocus();
             hintButton.setDisable(true);
+            wordleController.setupHardModeButton();
 
             playAgainButton.setOnAction(event -> restartGame());
         }
@@ -241,4 +245,19 @@ public class Guess {
     public void setHardMode(boolean isHardMode) {
         this.isHardMode = isHardMode;
     }
+
+    /**
+     * Used to set up the hard mode button. Also used in guess. Will make it so that
+     */
+    public void setupHardModeButton() {
+        int col = wordleDisplay.getWordleGrid().getColumnCount();
+        int row = wordleDisplay.getWordleGrid().getRowCount();
+        hardModeButton.setOnAction(event -> {
+            if(wordleDisplay.getWordleGrid().getChildren().size() > 0) {
+                wordleDisplay.getWordleGrid().getChildren().get(col * (row - wordle.getRemainingGuesses())).requestFocus();
+            }
+            wordleController.setupHardModeButton();
+        });
+    }
+
 }

@@ -1,8 +1,10 @@
 package Group1;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -139,13 +141,17 @@ public class WordleController<T> implements Initializable {
      * Used to set up the hard mode button. Also used in guess. Will make it so that
      */
     public void setupHardModeButton() {
-        int col = wordleDisplay.getWordleGrid().getColumnCount();
-        int row = wordleDisplay.getWordleGrid().getRowCount();
-
         hardModeButton.setOnAction(event -> {
             toggleHardMode();
             guess.setHardMode(isHardMode); // Update isHardMode in the Guess object
-            wordleDisplay.getWordleGrid().getChildren().get(col * (row - wordle.getRemainingGuesses())).requestFocus();
+
+            int col = wordleDisplay.getWordleGrid().getColumnCount();
+            int row = wordleDisplay.getWordleGrid().getRowCount();
+            Node textfield;
+            if(wordleDisplay.getWordleGrid().getChildren().size() > 0) {
+                textfield = wordleDisplay.getWordleGrid().getChildren().get(col * (row - wordle.getRemainingGuesses()));
+                textfield.requestFocus();
+            }
 
             disableHint[0] = !disableHint[0]; // Toggle the value of disableHint
             hintButton.setDisable(disableHint[0]); // Set the disable property of the hint button
