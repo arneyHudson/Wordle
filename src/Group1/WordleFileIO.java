@@ -1,12 +1,20 @@
 
 package Group1;
 
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -16,11 +24,26 @@ public class WordleFileIO {
 
     private static final String CHAR_DICT_LINE = "BEGIN_CHAR_DICT";
     private static final String END_LINE = "END";
+    /**
+     * An EventHandler that will log the input of any keypress during the program's execution
+     */
+    public static final EventHandler<KeyEvent> LOG_ON_PRESS = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent keyEvent) {
+            try {
+                logInput(keyEvent.getCode().getName());
+            } catch(IOException e){
+                System.err.print("Error logging");
+            }
+        }
+    };
 
     public static HashMap<Character, Integer> CHARACTER_FREQUENCY = new HashMap<>();
     public static HashMap<String, Integer> WORD_FREQUENCY = new HashMap<>();
-    public static Path CHAR_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/character_frequency_log.txt");
-    public static Path WORD_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/word_frequency_log.txt");
+    public static HashMap<String, String[]> HIGHSCORES = new HashMap<>();
+    public static final Path CHAR_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/character_frequency_log.txt");
+    public static final Path WORD_FREQ_PATH = Path.of("src/Group1/ADMIN_FILES/word_frequency_log.txt");
+    public static Path LOG_PATH;
 
     /**
      * Returns a dictionary of each character and its frequency of being guessed in the application
@@ -254,13 +277,18 @@ public class WordleFileIO {
     public static void fillWordArea(TextArea textArea){
         StringBuilder sb = new StringBuilder();
         sb.append("Guess Frequency:\n");
-        ArrayList<String> words = new java.util.ArrayList<>(WordleFileIO.WORD_FREQUENCY.keySet().stream().toList());
-        Collections.sort(words);
-        for(String word: words){
-            sb.append(word);
-            sb.append(": ");
-            sb.append(WordleFileIO.WORD_FREQUENCY.get(word));
-            sb.append("\n");
+        Map<String, Integer> sorted = new TreeMap<>(WORD_FREQUENCY);
+        List<Map.Entry<String, Integer>> save = new ArrayList<>(sorted.entrySet());
+        save.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+
+        for (Map.Entry<String, Integer> stringIntegerEntry : save) {
+            String word = stringIntegerEntry.getKey();
+            if (WORD_FREQUENCY.get(word) != 0) {
+                sb.append(word);
+                sb.append(": ");
+                sb.append(WORD_FREQUENCY.get(word));
+                sb.append("\n");
+            }
         }
         textArea.setText(sb.toString());
     }
@@ -271,4 +299,93 @@ public class WordleFileIO {
             }
         }
     }
+
+    /**
+     * Creates a new log file and assigns it to the class log file for the current run of the application
+     */
+    public static void initializeLogFile() throws IOException{
+        LOG_PATH = Path.of("src/Group1/ADMIN_FILES/LOG_FILES/"+replaceColons(LocalDateTime.now().toString())+".txt");
+        appendToFile(LOG_PATH, "BEGIN_LOG\n");
+    }
+
+    /**
+     * Appends the string to a given file
+     * @param filePath The file path to append to;
+     * @param appendTo The words to append;
+     * @throws IOException Thrown if there is a problem appending
+     */
+    public static void appendToFile(Path filePath, String appendTo) throws IOException{
+        try( FileWriter out = new FileWriter(filePath.toFile(), true)){
+            out.write(appendTo);
+        }
+    }
+
+    /**
+     * Logs input to the current log_path using the local time.
+     * @param input The input to log
+     * @throws IOException Thrown if there is an issue appending to the file.
+     */
+    public static void logInput(String input) throws IOException{
+        appendToFile(LOG_PATH, replaceColons(LocalTime.now().toString())+": "+input+'\n');
+    }
+
+    /**
+     * Recursively attaches a given KeyEvent handler to every child of a given node
+     * @param type The type of the KeyEvent
+     * @param handler The handler to attach
+     * @param parent The parent node to begin the recursive call on.
+     */
+    public static void attachHandlerToAllInHierarchy(EventType<KeyEvent> type,
+                                                     EventHandler<KeyEvent> handler, Node parent){
+        if(parent instanceof Pane){
+            for (Node n:((Pane)parent).getChildren()) {
+                attachHandlerToAllInHierarchy(type, handler, n);
+            }
+        }
+        parent.addEventHandler(type, handler);
+    }
+
+    /**
+     * Simple method to replace colons
+     * @param in The string to replace colons for
+     * @return A string with colons replaced with dashes
+     */
+    private static String replaceColons(String in){
+        return in.replace(':','-');
+    }
+
+    /**
+     * The loadHighScore method looks at the wordle-highscore text file and updates the highscore hashmap
+     */
+    public static void loadHighScore() {
+        try(Scanner in = new Scanner(new File("src/Group1/ADMIN_FILES/wordle-highscore.txt"))) {
+            String current = in.nextLine();
+            while (!current.equals(END_LINE)){
+                String[] line = current.split("\\s+");
+                HIGHSCORES.put(line[0], line);
+                current = in.nextLine();
+            }
+        } catch (IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
+    }
+
+    public static void saveHighScore() {
+        try(FileWriter out = new FileWriter("src/Group1/ADMIN_FILES/wordle-highscore.txt")){
+            for(String word: WordleFileIO.HIGHSCORES.keySet()) {
+                String[] line = WordleFileIO.HIGHSCORES.get(word);
+                out.write(line[0] + " " + line[1] + " " + line[2] + "\n");
+            }
+            out.write("END");
+        } catch (IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("IOException");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
+    }
+
 }

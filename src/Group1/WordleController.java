@@ -1,12 +1,17 @@
 package Group1;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
@@ -27,6 +32,10 @@ import java.util.*;
 public class WordleController<T> implements Initializable {
 
     @FXML
+    private TabPane tabs;
+    @FXML
+    private VBox gameDisplay;
+    @FXML
     private VBox mainDisplay;
     @FXML
     private VBox userKeys;
@@ -43,13 +52,23 @@ public class WordleController<T> implements Initializable {
     @FXML
     private Button hintButton;
     @FXML
+    private Button multiHintButton;
+    @FXML
     private Label hintLabel;
+    @FXML
+    private Label multiHintLabel;
     @FXML
     private Label commonLetterLabel;
     @FXML
     private Label commonGuessLabel;
     @FXML
     private Line line;
+    @FXML
+    private ToggleButton hardModeButton;
+    @FXML
+    private HBox topBar;
+    @FXML
+    private HBox highScoreDisplay;
     private final List<Integer> numGuessesList = new ArrayList<>();
     private int gamesPlayed;
     private int numGuesses;
@@ -61,6 +80,8 @@ public class WordleController<T> implements Initializable {
     private WordleDisplay wordleDisplay;
     private Guess guess;
     private KeyboardDisplay keyboardDisplay;
+    boolean isHardMode;
+    boolean[] disableHint = {false}; // Declare a boolean array to track the state of the hint button
 
     /**
      * Runs at the startup of the application setting up all the main parts
@@ -75,23 +96,31 @@ public class WordleController<T> implements Initializable {
         wordle = new Wordle();
         WordleFileIO.initializeWordFreq(wordle.getWords());
         keyboardDisplay = new KeyboardDisplay(userKeys);
-        wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle);
+        wordleDisplay = new WordleDisplay(6, 5, guessButton, wordle, topBar, highScoreDisplay);
         wordLength = 5;
         line = new Line();
         line.setStroke(Wordle.NONE_COLOR);
         line.setStartX(0);
         line.setEndX(450);
         line.setStrokeWidth(1.5);
-        mainDisplay.getChildren().add(1, line);
-        mainDisplay.getChildren().add(2, wordleDisplay.getWordleGrid());
+        gameDisplay.getChildren().add(1, line);
+        gameDisplay.getChildren().add(2, wordleDisplay.getWordleGrid());
         playAgainButton.setDisable(true);
         adminPanelOpen = false;
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // create a hint label with blank spaces
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
-        guess = new Guess(mainDisplay, userKeys, wordleDisplay, wordle, guessButton,
+        setupHardModeButton();
+
+
+        guess = new Guess(gameDisplay, userKeys, wordleDisplay, wordle, guessButton,
                 numGuessesList, numGuessesLabel, playAgainButton, hintButton,
                 commonLetterLabel, averageNumGuessesLabel, commonGuessLabel, hintLabel, numGuesses,
-                correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay);
+                correctGuess, gamesPlayed, totalNumGuesses, this, line, keyboardDisplay, isHardMode,
+                hardModeButton, topBar, highScoreDisplay, multiHintButton, multiHintLabel);
+
+        guess.setHardMode(isHardMode); // Set the initial isHardMode value in the Guess object
+        WordleFileIO.attachHandlerToAllInHierarchy(KeyEvent.KEY_PRESSED,
+                WordleFileIO.LOG_ON_PRESS, gameDisplay);
     }
 
     /**
@@ -107,6 +136,42 @@ public class WordleController<T> implements Initializable {
         return guess;
     }
 
+    /**
+     * Used by the hard mode button that simply changes the background color of the button
+     * as well as the boolean value that controls hard mode
+     * @author Hudson Arney
+     */
+    @FXML
+    public void toggleHardMode() {
+        isHardMode = hardModeButton.isSelected();
+        if (isHardMode) {
+            hardModeButton.setStyle("-fx-background-color:red");
+        } else {
+            hardModeButton.setStyle("-fx-background-color:white");
+        }
+    }
+
+    /**
+     * Used to set up the hard mode button. Also used in guess. Will make it so that
+     */
+    public void setupHardModeButton() {
+        hardModeButton.setOnAction(event -> {
+            toggleHardMode();
+            guess.setHardMode(isHardMode); // Update isHardMode in the Guess object
+
+            int col = wordleDisplay.getWordleGrid().getColumnCount();
+            int row = wordleDisplay.getWordleGrid().getRowCount();
+            Node textfield;
+            if(wordleDisplay.getWordleGrid().getChildren().size() > 0) {
+                textfield = wordleDisplay.getWordleGrid().getChildren().get(col * (row - wordle.getRemainingGuesses()));
+                textfield.requestFocus();
+            }
+
+            disableHint[0] = !disableHint[0]; // Toggle the value of disableHint
+            hintButton.setDisable(disableHint[0]); // Set the disable property of the hint button
+        });
+    }
+
 
     @FXML
     public void createHint(){
@@ -114,6 +179,38 @@ public class WordleController<T> implements Initializable {
         hintLabel.setPrefWidth(28 * getGuess().getWordle().getSecretWord().length());
         // Optional code to increase difficulty by only allowing one hint per game
         hintButton.setDisable(true);
+        multiHintButton.setDisable(true);
+    }
+
+    @FXML
+    public void createMultiHint(){
+        multiHintLabel.setText(listToString(shuffle(getGuess().getWordle().getWordHints(5))));
+        multiHintLabel.setPrefWidth(10 * 5 * getGuess().getWordle().getSecretWord().length());
+        multiHintButton.setDisable(true);
+        hintButton.setDisable(true);
+    }
+
+    private String listToString(List<String> strings){
+        String ret = "";
+        for(int i = 0; i < strings.size(); ++i){
+            ret += strings.get(i);
+            if(i != strings.size() -1){
+                ret+=" | ";
+            }
+        }
+        return ret;
+    }
+
+    private List<String> shuffle(List<String> strings){
+        String[] ret = new String[strings.size()];
+        for(int i = strings.size()-1; i >= 0; --i){
+            int index = (int)(Math.random()*strings.size());
+            while(ret[index] != null){
+                index = (int)(Math.random()*strings.size());
+            }
+            ret[index] = strings.get(i);
+        }
+        return Arrays.stream(ret).toList();
     }
 
 
@@ -226,5 +323,6 @@ public class WordleController<T> implements Initializable {
             }
         }
     }
+
 
 }

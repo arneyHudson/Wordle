@@ -18,6 +18,7 @@ public class Animations {
     @FXML
     private static Pane failedPane;
     private static final ArrayList<Label> warningLabels = new ArrayList<>();
+
     public static void displayCongrats(Pane parent) {
         Label label = new Label("Great");
         label.setStyle("-fx-font-family: Arial; -fx-background-color: white; -fx-font-weight: bold; " +

@@ -1,0 +1,16 @@
+BEGIN_TEST
+BEGIN_RUN the first run
+SEED adobe
+WORD abode
+WORD crumb
+WORD broth
+WORD throb
+END_RUN
+BEGIN_RUN gibberish
+SEED googoogaga
+WORD pepperonio
+WORD nososimple
+WORD howdydoody
+WORD googoogaga
+END_RUN
+END_TEST
