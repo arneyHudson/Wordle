@@ -220,6 +220,8 @@ public class Guess {
         wordle.setColorBuffer(null);
         hintLabel.setText("[_] ".repeat(wordle.getSecretWord().length())); // remove the hint label
         hintLabel.setPrefWidth(28 * wordle.getSecretWord().length());
+        multiHintLabel.setText("");
+        multiHintLabel.setPrefWidth(10 * 5 * wordle.getSecretWord().length());
         playAgainButton.setDisable(true); // disable play again button
         setColor = new SetColor(wordleDisplay, wordle, userKeys, isHardMode);
         WordleFileIO.initializeWordFreq(wordle.getWords());
